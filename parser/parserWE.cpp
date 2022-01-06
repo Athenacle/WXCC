@@ -14,7 +14,7 @@ int Parser::parserWarningCount = 0;
 int Parser::parserErrorCount = 0;
 
 namespace{
-	char *parserWarnings[] =
+	const char *parserWarnings[] =
 	{
 		"NULL",
 
@@ -24,7 +24,7 @@ namespace{
 		"PW02: empty declaration.\n"
 		/* PAR_WARNING_EMPTY_DECLARATION */
 	};
-	char *parserErrors[] =
+	const char *parserErrors[] =
 	{
 		"NULL",
 
@@ -66,7 +66,7 @@ void Parser::parserWarning(int warningType, ...) const
 	case PAR_WARNING_EMPTY_TRANSLATION_UNIT:
 	case PAR_WARNING_EMPTY_DECLARATION:
 	
-		fprintf(wxccErr, parserWarnings[warningType]);
+		fprintf(wxccErr, "%s", parserWarnings[warningType]);
 		break;
 	default:assert(0);
 	}
@@ -109,8 +109,8 @@ void Parser::parserError(int errorType,...) const
 			va_list ap;
 			va_start(ap, errorType);
 			int c1 = va_arg(ap, int);
-			char c2 = va_arg(ap, char);
-			char c3 = va_arg(ap, char);
+			char c2 = static_cast<char>(va_arg(ap, int));
+			char c3 = static_cast<char>(va_arg(ap, int));
 			fprintf(wxccErr, parserErrors[errorType], 
 				c1, c2, c3);
 			va_end(ap);
@@ -121,7 +121,7 @@ void Parser::parserError(int errorType,...) const
 			va_list ap;
 			
 			va_start(ap, errorType);
-			char c = va_arg(ap, char);
+			char c = static_cast<char>(va_arg(ap, int));
 			const char *str = va_arg(ap, const char*);
 			int i =  va_arg(ap, int);
 			fprintf(wxccErr, parserErrors[errorType],c ,str,i);

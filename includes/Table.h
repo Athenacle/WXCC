@@ -79,7 +79,7 @@ namespace NS_TABLE
 	public:
 		static bool cmp(const K &, const T&)
 		{
-			;
+			return false;
 		}
 	};
 

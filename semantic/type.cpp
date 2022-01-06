@@ -60,6 +60,7 @@ Type::Type( TYPE_OPERATOR _oper, Type* _baseType,int _arrEls, Type* _list,
 	size = _size;
 	base_type = _baseType;
 	u.a.nElements = 0;
+	u.f.paraList = NULL;
 	if (_oper == TO_CHAR)
 		size = 1;
 	else if (_oper == TO_DOUBLE)

@@ -42,7 +42,7 @@ namespace
 	};
 
 	const int DW_LACK_PARA_LIST = 1;
-	char *declWarning[] =
+	const char *declWarning[] =
 	{
 		"NULL",
 

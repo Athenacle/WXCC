@@ -202,7 +202,7 @@ protected:
 	} x;
 
 	char *outString[20];
-	Tree& operator= (Tree&){}
+
 #ifdef IR_DEBUG
 	char nodeName[12];
 #endif

@@ -147,7 +147,7 @@ Tree * Tree::LEAtree(Tree *tr, Type& ty)
 
 void Tree::emit( const char* string, FILE* out)
 {
-	fprintf(out, string);
+	fprintf(out, "%s", string);
 }
 
 Tree * Tree::PLUStree(const Tree*left, const Tree *right )

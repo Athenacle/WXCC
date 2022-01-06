@@ -17,7 +17,7 @@ namespace
 {
 	const int TE_ERR_REDECL = 1;
 
-	char *tableError[] =
+	const char *tableError[] =
 	{
 		"NULL",
 

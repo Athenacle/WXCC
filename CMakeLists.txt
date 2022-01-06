@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 
 project(WXCC CXX)
+set(CMAKE_CXX_STANDARD 20)
 
 set(SRC_FILES   Env/Env.cpp Env/symbol.cpp Env/symbol.cpp
                 inter/semantic.cpp inter/tree.cpp
@@ -12,3 +13,4 @@ set(SRC_FILES   Env/Env.cpp Env/symbol.cpp Env/symbol.cpp
 
 add_executable(${PROJECT_NAME} main.cpp ${SRC_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC includes/)
+target_compile_options(${PROJECT_NAME} PUBLIC -Wall)

@@ -12,7 +12,7 @@
 namespace
 {
 	//char *semWarnings[] =
-	char *semErrors[] =
+	const char *semErrors[] =
 	{
 		"NULL",
 
@@ -39,7 +39,7 @@ void semError(int errType, ...)
 	switch (errType)
 	{
 	case SEM_ERR_TOO_TYPE:
-		fprintf(wxccErr, semErrors[errType]);
+		fprintf(wxccErr, "%s", semErrors[errType]);
 		break;
 	case USE_MY_STR_SSD:
 		{

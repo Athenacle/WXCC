@@ -36,6 +36,7 @@ class Env
 	Env& setDownEnv(Env &env)
 	{
 		this->down = &env;
+		return *this;
 	}
 public:
 	Env(Env* _up = NULL, Env *_down = NULL, scope _sc = S_LOCAL, int _level = 0)
