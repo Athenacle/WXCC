@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.14)
 project(WXCC CXX)
 set(CMAKE_CXX_STANDARD 20)
 
-set(SRC_FILES   Env/Env.cpp Env/symbol.cpp Env/symbol.cpp
+set(SRC_FILES   env/environment.cpp env/symbol.cpp env/symbol.cpp
                 inter/semantic.cpp inter/tree.cpp
                 lex/input.cpp lex/lex.cpp lex/lexDebug.cpp  lex/lexWE.cpp
                 parser/decl.cpp parser/expr.cpp parser/parser.cpp parser/parserTool.cpp
