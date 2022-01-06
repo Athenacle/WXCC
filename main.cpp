@@ -18,38 +18,34 @@ FILE *wxccErr;
 
 void HandleArg(int argc, char *argv[])
 {
-	wxccErr = NULL;
-	if (argc == 1)
-		fatalError("no input file.");
-	else
-		if (argc == 2)
-		{
-			char *outDest = argv[1];
-			if (*outDest == '-' && *(outDest + 1) == 'o')
-			{
-				wxccErr = fopen(outDest + 2 ,"w+");
-			}
-		}
+    wxccErr = NULL;
+    if (argc == 1)
+        fatalError("no input file.");
+    else if (argc == 2) {
+        char *outDest = argv[1];
+        if (*outDest == '-' && *(outDest + 1) == 'o') {
+            wxccErr = fopen(outDest + 2, "w+");
+        }
+    }
 }
 
 void initCompiler(void)
 {
-	Type::initTO2c();
-	NS_BASE_TYPE::InitBaseTypes();
+    Type::initTO2c();
+    NS_BASE_TYPE::InitBaseTypes();
 }
 
 
 int main(int argc, char *argv[])
 {
-
-	HandleArg(argc, argv);
-	if (wxccErr == NULL)
-		wxccErr = stdout;
-	initCompiler();
-	Lex	lexer(argv[1]);
-	Parser	par(lexer);
-	Env*	globalEnv = new Env();
-	globalEnv->setGlobal();
-	par.begin_parse(*globalEnv);
-	return 0xdeadbeef;
+    HandleArg(argc, argv);
+    if (wxccErr == NULL)
+        wxccErr = stdout;
+    initCompiler();
+    Lex lexer(argv[1]);
+    Parser par(lexer);
+    Env *globalEnv = new Env();
+    globalEnv->setGlobal();
+    par.begin_parse(*globalEnv);
+    return 0xdeadbeef;
 }

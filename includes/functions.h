@@ -18,49 +18,42 @@
 
 class Function : public WXCC
 {
-	Identifier &funName;
-	Env& local;
-	//idTable parameterTable;
-	int parameterCount;
+    Identifier &funName;
+    Env &local;
+    //idTable parameterTable;
+    int parameterCount;
 
-	IR *chain;
+    IR *chain;
 
-	const Type *parameterList;
-	const Type &retType;
-	
-	bool isVar;			//变参函数
-	int parseParameters(void);
+    const Type *parameterList;
+    const Type &retType;
+
+    bool isVar;  //变参函数
+    int parseParameters(void);
+
 public:
-	Function(Identifier &id, Env &globaler)
-		:funName(id), local(globaler), retType(id.getBaseType())
-	{
-		IR();
-		assert(id.ty->getTYOP() == TO_FUNCTION);
-		chain = NULL;
-		isVar = false;
-		parameterList = &id.ty->getParaList();
-		parameterCount = parseParameters();
-		fprintf(wxccErr, "\n");
-	}
+    Function(Identifier &id, Env &globaler)
+        : funName(id), local(globaler), retType(id.getBaseType())
+    {
+        IR();
+        assert(id.ty->getTYOP() == TO_FUNCTION);
+        chain = NULL;
+        isVar = false;
+        parameterList = &id.ty->getParaList();
+        parameterCount = parseParameters();
+        fprintf(wxccErr, "\n");
+    }
 
-	Env& getFuncEnv(void) const
-	{
-		return this->local;
-	}
+    Env &getFuncEnv(void) const
+    {
+        return this->local;
+    }
 
-	void setIR(IR* ir)
-	{
-		this->chain = ir;
-	}
+    void setIR(IR *ir)
+    {
+        this->chain = ir;
+    }
 };
-
-
-
-
-
-
-
-
 
 
 #endif

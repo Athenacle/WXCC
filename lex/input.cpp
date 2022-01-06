@@ -18,45 +18,43 @@ NS_LEX_PODS::Position *Lex::currentPos = NULL;
 
 int Lex::fillBuffer(void)
 {
-	static int isFinish = 0;
-	static int readNum = 0;
-	int readSize;
+    static int isFinish = 0;
+    static int readNum = 0;
+    int readSize;
 
-	readSize = (int)fread(buffer, sizeof(char), LEX_BUFFER_SIZE, sourceFile);
-	readNum += readSize;
-	if (readSize < LEX_BUFFER_SIZE && feof(sourceFile))
-	{
-		isFinish = 1;
-		/* all context has been read into buffer that means
+    readSize = (int)fread(buffer, sizeof(char), LEX_BUFFER_SIZE, sourceFile);
+    readNum += readSize;
+    if (readSize < LEX_BUFFER_SIZE && feof(sourceFile)) {
+        isFinish = 1;
+        /* all context has been read into buffer that means
 		the source file is smaller
 		* than 4kb
 		*/
-		buffer[readSize] = '\0';
-		buffer[readSize + 1] = EOF;
-	}
-	return isFinish;
+        buffer[readSize] = '\0';
+        buffer[readSize + 1] = EOF;
+    }
+    return isFinish;
 }
 
 int Lex::initLex(const char *_filename)
 {
-	char *name = new char[(strlen(_filename) + 1)];
-	sourceFile = fopen(_filename, "r");
+    char *name = new char[(strlen(_filename) + 1)];
+    sourceFile = fopen(_filename, "r");
 
-	strcpy(name, _filename);
-	/*
+    strcpy(name, _filename);
+    /*
 	* in order to re-syn line number using #line token.
 	* try to avoid memory leak.
 	*/
-	currentPos->filename = name;
-	if (sourceFile == NULL)
-	{
-		sprintf(tmpBuffer, "open file %s error.", _filename);
-		fatalError(tmpBuffer);
-	}
-	fillBuffer();
-	currentToken->token_pos = currentPos;
-	currentPos->line = 1;
-	currentPos->place = 0;
-	currentToken->token_type = NS_LEX_CONSTANTS::T_NONE;
-	return 0;
+    currentPos->filename = name;
+    if (sourceFile == NULL) {
+        sprintf(tmpBuffer, "open file %s error.", _filename);
+        fatalError(tmpBuffer);
+    }
+    fillBuffer();
+    currentToken->token_pos = currentPos;
+    currentPos->line = 1;
+    currentPos->place = 0;
+    currentToken->token_type = NS_LEX_CONSTANTS::T_NONE;
+    return 0;
 }

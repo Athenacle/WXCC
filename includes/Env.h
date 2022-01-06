@@ -14,85 +14,86 @@
 using namespace NS_SC;
 using namespace NS_TABLE;
 
-typedef	Table<Identifier*, const char*> idTable;
-typedef Table<Symbol*, const char*>	strTable;
-
+typedef Table<Identifier*, const char*> idTable;
+typedef Table<Symbol*, const char*> strTable;
 
 
 class Env
 {
-	Env	*up;		// more global
-	Env	*down;		// more local
-	
-	scope	sc;
-	int	scope_level;
+    Env* up;    // more global
+    Env* down;  // more local
 
-	int idCounts;
-	int funcCounts;
+    scope sc;
+    int scope_level;
 
-	idTable	localID;
-	idTable localFunc;
+    int idCounts;
+    int funcCounts;
 
-	Env& setDownEnv(Env &env)
-	{
-		this->down = &env;
-		return *this;
-	}
+    idTable localID;
+    idTable localFunc;
+
+    Env& setDownEnv(Env& env)
+    {
+        this->down = &env;
+        return *this;
+    }
+
 public:
-	Env(Env* _up = NULL, Env *_down = NULL, scope _sc = S_LOCAL, int _level = 0)
-		:localID(), localFunc()
-	{
-		up = _up;
-		down = _down;
-		sc = _sc;
-		scope_level = _level + 1;
+    Env(Env* _up = NULL, Env* _down = NULL, scope _sc = S_LOCAL, int _level = 0)
+        : localID(), localFunc()
+    {
+        up = _up;
+        down = _down;
+        sc = _sc;
+        scope_level = _level + 1;
 
-		idCounts = 0;
-		funcCounts = 0;
-	}
+        idCounts = 0;
+        funcCounts = 0;
+    }
 
-	Env& EnterEnv(Env &downEnv);
+    Env& EnterEnv(Env& downEnv);
 
-	Env& ExitEnv(void);
+    Env& ExitEnv(void);
 
-	void newIdentifier(Identifier* id);
+    void newIdentifier(Identifier* id);
 
-	void setGlobal(void)
-	{
-		this->scope_level = 0;
-		this->sc = S_GLOBAL;
-	}
+    void setGlobal(void)
+    {
+        this->scope_level = 0;
+        this->sc = S_GLOBAL;
+    }
 
-	bool isGlobal(void)
-	{
-		return this->scope_level == 0;
-	}
+    bool isGlobal(void)
+    {
+        return this->scope_level == 0;
+    }
 
-	int getLevel(void) const
-	{
-		return this->scope_level;
-	}
+    int getLevel(void) const
+    {
+        return this->scope_level;
+    }
 
-	Identifier* findID(const char* name)
-	{
-		return this->localID.existAllScope(name);
-	}
+    Identifier* findID(const char* name)
+    {
+        return this->localID.existAllScope(name);
+    }
 
-	Identifier* findFUNC(const char* name)
-	{
-		return this->localFunc.existAllScope(name);
-	}
+    Identifier* findFUNC(const char* name)
+    {
+        return this->localFunc.existAllScope(name);
+    }
 };
 
-namespace NS_TABLE{
-template<>
-class CMP<Identifier*, const char*>
+namespace NS_TABLE
 {
-public:
-	static bool cmp(Identifier *id, const char* str)
-	{
-		return strcmp(id->getIDName(), str) == 0;
-	}
-};
-}
+    template <>
+    class CMP<Identifier*, const char*>
+    {
+    public:
+        static bool cmp(Identifier* id, const char* str)
+        {
+            return strcmp(id->getIDName(), str) == 0;
+        }
+    };
+}  // namespace NS_TABLE
 #endif

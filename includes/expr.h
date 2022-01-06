@@ -8,46 +8,39 @@
 
 class Expr : public Block
 {
-	Tree *exprTree;
+    Tree *exprTree;
 
-	void printIR(void)
-	{
+    void printIR(void) {}
 
-	}
-	
 public:
-	Expr(Tree *tree = NULL)
-		:Block()
-	{
-		exprTree = tree;
-		/*const char *pc = Label::nextLabel();
+    Expr(Tree *tree = NULL) : Block()
+    {
+        exprTree = tree;
+        /*const char *pc = Label::nextLabel();
 		char *buf = new char[strlen(pc) + 5];
 		sprintf(buf, "%s : \n", pc);
 		IR *ir = new IR(buf);*/
-		this->nextList = IRList::makeIRList(*new IR(""));
-	}
+        this->nextList = IRList::makeIRList(*new IR(""));
+    }
 
 
-	~Expr()
-	{
+    ~Expr() {}
 
-	}
+    IR *appendIR(IR *)
+    {
+        return 0;
+    }
 
-	IR* appendIR(IR *)
-	{
-		return 0;
-	}
+    Tree *setTree(Tree *tree)
+    {
+        exprTree = tree;
+        return tree;
+    }
 
-	Tree* setTree(Tree *tree)
-	{
-		exprTree = tree;
-		return tree;
-	}
-
-	const Tree& getTree(void)
-	{
-		return *exprTree;
-	}
+    const Tree &getTree(void)
+    {
+        return *exprTree;
+    }
 };
 
 

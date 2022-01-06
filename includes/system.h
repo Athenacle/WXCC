@@ -28,13 +28,13 @@
 #define USING_STDERR
 
 #ifdef WIN32
-#pragma warning(disable: 4996)	/* MS deprecation		*/
-#pragma warning(disable: 4710)	/* un-inlined function		*/
-#pragma warning(disable: 4820)	/* struct padding		*/
-#pragma warning(disable: 4514)	/* unused inline remove		*/
-#pragma warning(disable: 4061)	/* unprocessed enum s in switch	*/
-#pragma warning(disable: 4986)	/* unmatched exception		*/
-#pragma warning(disable: 4350)	/* unmatched exception		*/
+#pragma warning(disable : 4996) /* MS deprecation		*/
+#pragma warning(disable : 4710) /* un-inlined function		*/
+#pragma warning(disable : 4820) /* struct padding		*/
+#pragma warning(disable : 4514) /* unused inline remove		*/
+#pragma warning(disable : 4061) /* unprocessed enum s in switch	*/
+#pragma warning(disable : 4986) /* unmatched exception		*/
+#pragma warning(disable : 4350) /* unmatched exception		*/
 #endif
 
 /// system includes.
@@ -57,13 +57,12 @@
 #include <vector>
 class WXCC
 {
-
 };
 
 extern FILE *wxccErr;
 extern int errCount;
 extern int warningCount;
-void fatalError(const char*);
+void fatalError(const char *);
 
 #define GD_OUTPUT
 

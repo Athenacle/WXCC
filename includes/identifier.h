@@ -19,107 +19,103 @@ using namespace NS_BASE_TYPE;
 //using namespace NS_IR;
 
 
-
 class Identifier : public Symbol, TemportaryVariable
 {
+    friend class Function;
+    Type* ty;
+    bool isConst;
+    bool isVolatile;
+    IR* assign;
+    const char* name;
 
-	friend class Function;
-	Type *ty;
-	bool isConst;
-	bool isVolatile;
-	IR *assign;
-	const char *name;
+    Identifier& operator=(Identifier);
 
-	Identifier& operator = (Identifier);
 
-	
-	const Type& getType(void) const
-	{
-		return *this->ty;
-	}
+    const Type& getType(void) const
+    {
+        return *this->ty;
+    }
 
-	const Type& getBaseType(void) const
-	{
-		return this->ty->getBaseType();
-	}
+    const Type& getBaseType(void) const
+    {
+        return this->ty->getBaseType();
+    }
+
 public:
-	Identifier(Token *_tok, scope _sc, storage_type _st, int _level,
-		Type* _ty = NS_BASE_TYPE::voidType, Symbol *_sy = NULL)
-		:Symbol(_tok,_sc,_st,_level,_sy), TemportaryVariable()
-	{
-		ty = _ty;
-	
-		name = _tok->token_value.id_name;
-	}
-	Identifier(const Symbol &_sy, Type *_ty)
-		:Symbol(_sy), ty(_ty), TemportaryVariable()
-	{
-		name = _sy.getIDName();
-	}
+    Identifier(Token* _tok,
+               scope _sc,
+               storage_type _st,
+               int _level,
+               Type* _ty = NS_BASE_TYPE::voidType,
+               Symbol* _sy = NULL)
+        : Symbol(_tok, _sc, _st, _level, _sy), TemportaryVariable()
+    {
+        ty = _ty;
 
-	Identifier()
-		:Symbol(NULL, S_LOCAL, ST_AUTO,0), name(NULL)
-	{	
-		
-	}
+        name = _tok->token_value.id_name;
+    }
+    Identifier(const Symbol& _sy, Type* _ty) : Symbol(_sy), ty(_ty), TemportaryVariable()
+    {
+        name = _sy.getIDName();
+    }
 
-	~Identifier()
-	{
-		delete ty;
-	}
+    Identifier() : Symbol(NULL, S_LOCAL, ST_AUTO, 0), name(NULL) {}
 
-	const char* getIDName(void) const
-	{
-		return name;
-	}
+    ~Identifier()
+    {
+        delete ty;
+    }
 
-	const char* getTYPEName(void)
-	{
-		return ty->getTYPEName();
-	}
+    const char* getIDName(void) const
+    {
+        return name;
+    }
 
-	bool inline isID(void) const
-	{
-		return !isFunction();
-	}
+    const char* getTYPEName(void)
+    {
+        return ty->getTYPEName();
+    }
 
-	bool inline isFunction(void) const
-	{
-		return ty->getTYOP() == NS_TYPE_OP::TO_FUNCTION;
-	}
+    bool inline isID(void) const
+    {
+        return !isFunction();
+    }
 
-	int inline getSymbolLine(void) const
-	{
-		return this->tok->token_pos->line;
-	}
+    bool inline isFunction(void) const
+    {
+        return ty->getTYOP() == NS_TYPE_OP::TO_FUNCTION;
+    }
 
-	void useID(void)
-	{
-		useSymbol();
-	}
+    int inline getSymbolLine(void) const
+    {
+        return this->tok->token_pos->line;
+    }
 
-	Type& getType(void)
-	{
-		return *ty;
-	}
+    void useID(void)
+    {
+        useSymbol();
+    }
 
-	const char* getIDname(void) const
-	{
-		return this->tok->token_value.string;
-	}
+    Type& getType(void)
+    {
+        return *ty;
+    }
 
-	const char* setIDname(const char* n)
-	{
-		return name = this->tok->token_value.string = n;
-	}
+    const char* getIDname(void) const
+    {
+        return this->tok->token_value.string;
+    }
 
-	unsigned long getHash(void)
-	{
-		return NS_LEX_TOOLS::strHash(this->getIDName());
-	}
+    const char* setIDname(const char* n)
+    {
+        return name = this->tok->token_value.string = n;
+    }
 
+    unsigned long getHash(void)
+    {
+        return NS_LEX_TOOLS::strHash(this->getIDName());
+    }
 };
-
 
 
 #endif
