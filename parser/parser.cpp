@@ -5,12 +5,12 @@
 *
 */
 
-#include "../includes/system.h"
-#include "../includes/lex.h"
-#include "../includes/type.h"
-#include "../includes/symbol.h"
-#include "../includes/parser.h"
-#include "../includes/exception.h"
+#include "system.h"
+#include "lex.h"
+#include "type.h"
+#include "symbol.h"
+#include "parser.h"
+#include "exception.h"
 
 using namespace NS_LEX_CONSTANTS;
 using namespace NS_SC;

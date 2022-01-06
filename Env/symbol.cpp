@@ -5,8 +5,8 @@
 *
 */
 
-#include "../includes/tools.h"
-#include "../includes/symbol.h"
+#include "tools.h"
+#include "symbol.h"
 
 
 void Symbol::setValue(Token * _tok) 

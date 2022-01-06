@@ -83,6 +83,7 @@ public:
 	}
 };
 
+namespace NS_TABLE{
 template<>
 class CMP<Identifier*, const char*>
 {
@@ -92,5 +93,5 @@ public:
 		return strcmp(id->getIDName(), str) == 0;
 	}
 };
-
+}
 #endif

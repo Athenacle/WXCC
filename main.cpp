@@ -5,12 +5,12 @@
 *
 */
 
-#include "../includes/system.h"
-#include "../includes/lex.h"
-#include "../includes/tools.h"
-#include "../includes/parser.h"
-#include "../includes/symbol.h"
-#include "../includes/type.h"
+#include "system.h"
+#include "lex.h"
+#include "tools.h"
+#include "parser.h"
+#include "symbol.h"
+#include "type.h"
 
 int errorCount = 0;
 int warningCount = 0;

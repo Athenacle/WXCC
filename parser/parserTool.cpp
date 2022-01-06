@@ -4,9 +4,9 @@
 * Feb 9, 2013
 *
 */
-#include "../includes/system.h"
-#include "../includes/lex.h"
-#include "../includes/parser.h"
+#include "system.h"
+#include "lex.h"
+#include "parser.h"
 
 using namespace NS_LEX_CONSTANTS;
 

@@ -191,23 +191,35 @@ namespace NS_LEX_CONSTANTS{
 	* 0x0011  [	0		0		0		0]
 	*		FL/INT		U/S		LONG		INT/CHAR
 	*/
-	enum NUMBER_TYPE
+
+const uint32_t  NT_NONE = 0X0011ffff;
+const uint32_t  NT_SI = 0x00110001;	 /* SIGNED	INT  */
+const uint32_t  NT_UI = 0x00110101;	 /* UNSIGNED	INT  */
+const uint32_t  NT_SL = 0x00110011;	 /* SIGNED	LONG */
+const uint32_t  NT_UL = 0x00110111;	 /* UNSIGNED	LONG */
+const uint32_t  NT_CH = 0x00110103;	 /* UNSIGNED	CHAR */
+const uint32_t  NT_FL = 0x00111000;	 /* FLOAT	     */
+const uint32_t  NT_DB = 0x00111010;	 /* DOUBLE	     */
+#define NT_LONG_MASK		(0X00110010)
+#define NT_UNSIGNED_MASK	(0x00110100)
+#define NT_LD			(NT_DB)		/* LONG DOUBLE */
+	class NUMBER_TYPE
 	{
-		NT_NONE = 0X0011ffff,
-		NT_SI   = 0x00110001,	/* SIGNED	INT  */
-		NT_UI	= 0x00110101,	/* UNSIGNED	INT  */
-		NT_SL	= 0x00110011,	/* SIGNED	LONG */
-		NT_UL	= 0x00110111,	/* UNSIGNED	LONG */
-		NT_CH	= 0x00110103,	/* UNSIGNED	CHAR */
-		NT_FL	= 0x00111000,	/* FLOAT	     */
-		NT_DB	= 0x00111010	/* DOUBLE	     */
+		uint32_t _type;
+public:
+		NUMBER_TYPE():_type(NT_NONE){}
+
+		NUMBER_TYPE(uint32_t type):_type(type){}
+
+		bool operator==(const uint32_t other) const {
+			return _type == other;
+		}
+
+		uint32_t type() const { return _type; }
 	};
 
 	NUMBER_TYPE& operator |= (NUMBER_TYPE &, unsigned long);
 
-#define NT_LONG_MASK		(0X00110010)
-#define NT_UNSIGNED_MASK	(0x00110100)
-#define NT_LD			(NT_DB)		/* LONG DOUBLE */
 };//namespace LEX_CONSTANTS
 
 using namespace NS_LEX_CONSTANTS;

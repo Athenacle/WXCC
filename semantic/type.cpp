@@ -5,10 +5,10 @@
 *
 */
 
-#include "../includes/type.h"
-#include "../includes/tools.h"
-#include "../includes/semantic.h"
-#include "../includes/exception.h"
+#include "type.h"
+#include "tools.h"
+#include "semantic.h"
+#include "exception.h"
 
 //using namespace NS_SEMACTIC;
 using namespace NS_TYPE_OP;
@@ -27,7 +27,7 @@ namespace
 	const int TE_FUNC_RET_ARR  = 4;
 	const int TE_FUNC_NEED_FUNC = 5;
 	const int TE_ARR_CONT_FUNC = 6;
-	char *typeError[] =
+	const char *typeError[] =
 	{
 		"NULL",
 
@@ -43,7 +43,7 @@ namespace
 
 		"TE06: Line %3d: Array cannot contain functions.\n"
 	};
-	char *typeWarning[] =
+	const char *typeWarning[] =
 	{
 		"NULL",
 
@@ -86,7 +86,7 @@ const TypeException& Type::checkType( const Type &ty, TypeException &te )
 
 	if (ty.type_op == TO_ARRAY)
 		if (ty.base_type->type_op == TO_FUNCTION)
-			__asm{int 3};
+			{/* asm {int 3} */}
 	//TODO: an array whose element is functions.
 
 	int meetSigned = 0;
@@ -353,11 +353,12 @@ namespace NS_BASE_TYPE{
 		delete pvType;
 	}
 };
-
+/*
 const char* TypeException::toString( void ) const
 {
 	return ex;
 }
+*/
 
 TypeException::~TypeException()
 {}

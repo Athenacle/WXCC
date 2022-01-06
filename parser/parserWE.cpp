@@ -6,9 +6,9 @@
 *
 */
 
-#include "../includes/system.h"
-#include "../includes/lex.h"
-#include "../includes/parser.h"
+#include "system.h"
+#include "lex.h"
+#include "parser.h"
 
 int Parser::parserWarningCount = 0;
 int Parser::parserErrorCount = 0;

@@ -4,10 +4,10 @@
 * April 4, 2013
 *
 */
-#include "../includes/system.h"
-#include "../includes/semantic.h"
-#include "../includes/tree.h"
-#include "../includes/stmt.h"
+#include "system.h"
+#include "semantic.h"
+#include "tree.h"
+#include "stmt.h"
 
 using namespace std;
 
@@ -53,11 +53,10 @@ IR::IR()
 {
 	nextIR = NULL;
 	preIR = NULL;
-	IRstring = NULL;
 	currentIR = this;
 }
 
-IR::IR(char* str, bool append)
+IR::IR(const char* str, bool append)
 {
 	this->IRstring = str;
 	if (append)
@@ -145,7 +144,7 @@ void IR::print(IR *begin, FILE *dest)
 		tp = tp->nextIR;
 		if (tp == NULL)
 			break;
-		fprintf(dest, tp->IRstring, tp->dest);
+		fprintf(dest, tp->IRstring.c_str(), tp->dest);
 	} while (1);
 }
 

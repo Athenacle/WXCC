@@ -4,13 +4,13 @@
  * April 4, 2013
  */
 
-#include "../includes/system.h"
-#include "../includes/lex.h"
-#include "../includes/type.h"
-#include "../includes/symbol.h"
-#include "../includes/parser.h"
-#include "../includes/exception.h"
-#include "../includes/identifier.h"
+#include "system.h"
+#include "lex.h"
+#include "type.h"
+#include "symbol.h"
+#include "parser.h"
+#include "exception.h"
+#include "identifier.h"
 
 using namespace NS_LEX_CONSTANTS;
 using namespace NS_SC;
@@ -24,7 +24,7 @@ namespace
 	const int DE_MORE_DECL_WITH_FUNC = 3;
 	const int DE_LACK_FUNC_PROTO = 4;
 
-	char *declError[] =
+	const char *declError[] =
 	{
 		"NULL",
 
@@ -87,7 +87,7 @@ meet_comma:
 	{
 		parserError(PAR_ERR_NEED_VAR_D, cur->token_pos->line);
 		goto typeErrFinish;
-	}
+	} else {
 	nST->first->setScope(sc, env.getLevel());
 	const TypeException &tyChk = Type::check(*nST->second);
 	Identifier *id = NULL;
@@ -137,7 +137,7 @@ typeErr:
 				goto meet_comma;
 			//错误处理准则： 不断丢弃输入，直至遇到分号或标识符
 		}
-	}
+	} }
 typeErrFinish:
 	isFinish = true;
 	return declared;

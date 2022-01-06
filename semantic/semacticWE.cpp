@@ -5,8 +5,8 @@
 * March 7, 2013
 *
 */
-#include "../includes/type.h"
-#include "../includes/semantic.h"
+#include "type.h"
+#include "semantic.h"
 
 
 namespace

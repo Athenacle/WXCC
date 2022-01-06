@@ -67,7 +67,7 @@ public:
 	IR *preIR;
 	Label *dest;
 	static IR *currentIR;
-	char *IRstring;
+	std::string IRstring;
 	
 	
 	
@@ -78,7 +78,7 @@ public:
 
 	const char* getIRstring(void) const
 	{
-		return IRstring;
+		return IRstring.c_str();
 	}
 
 	void reSetString(char* str)
@@ -88,7 +88,7 @@ public:
 
 	static void print(IR*, FILE *dest = wxccErr);
 	
-	IR(char*, bool = true);
+	IR(const char*, bool = true);
 	IR(Label&, bool = true);
 	IR();
 	~IR(){}

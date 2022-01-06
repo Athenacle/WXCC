@@ -4,13 +4,13 @@
 * April 7, 2013
 */
 
-#include "../includes/tree.h"
-#include "../includes/parser.h"
-#include "../includes/lex.h"
-#include "../includes/env.h"
-#include "../includes/identifier.h"
-#include "../includes/expr.h"
-#include "../includes/system.h"
+#include "tree.h"
+#include "parser.h"
+#include "lex.h"
+#include "Env.h"
+#include "identifier.h"
+#include "expr.h"
+#include "system.h"
 
 using NS_LEX_TOOLS::isASSIGN;
 using namespace NS_EXPRE_IR;
@@ -227,7 +227,7 @@ Tree* Parser::c_parser_unary_expr(Env& env) const
 			else
 			{
 				assert(0);
-				//·Ç·¨µÄ¼ä½ÓÑ°Ö·
+				//ï¿½Ç·ï¿½ï¿½Ä¼ï¿½ï¿½Ñ°Ö·
 				//e.g: int i; *i;
 			}
 			break;
@@ -252,7 +252,7 @@ Tree* Parser::c_parser_unary_expr(Env& env) const
 			if (tp->getType().getTYOP() == TO_POINTER)
 			{
 				assert(0);
-				//¶ÔÖ¸ÕëÊ¹ÓÃ -
+				//ï¿½ï¿½Ö¸ï¿½ï¿½Ê¹ï¿½ï¿½ -
 			}
 			tp = Tree::MINUStree(Tree::CONSTtree(0), tp);
 			break;
@@ -262,7 +262,7 @@ Tree* Parser::c_parser_unary_expr(Env& env) const
 			if (tp->getType().getTYOP() == TO_POINTER)
 			{
 				assert(0);
-				//¶ÔÖ¸ÕëÊ¹ÓÃ +
+				//ï¿½ï¿½Ö¸ï¿½ï¿½Ê¹ï¿½ï¿½ +
 			}
 			tp = Tree::PLUStree(Tree::CONSTtree(0), tp);
 			break;

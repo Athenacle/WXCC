@@ -1,6 +1,6 @@
-#include "../includes/tree.h"
-#include "../includes/type.h"
-#include "../includes/expr.h"
+#include "tree.h"
+#include "type.h"
+#include "expr.h"
 
 using namespace NS_EXPRE_IR;
 
@@ -10,7 +10,7 @@ namespace
 	const int NOTARRAY = 2;
 	const int NEED_LVALUE = 3;
 
-	char *treeError[] = 
+	const char *treeError[] = 
 	{
 		"NULL",
 
@@ -70,7 +70,8 @@ Tree * Tree::CONSTtree(int i)
 	tp->setValue(i);
 #ifdef GD_OUTPUT
 	char buf[20];
-	itoa(i, buf, 10);
+	// itoa(i, buf, 10);
+	snprintf(buf, 20, "%d", i);
 	tp->treeString = strdup(buf);
 #endif
 	return tp;
@@ -201,7 +202,7 @@ Tree * Tree::MINUStree(const Tree*left, const Tree *right)
 
 Tree * Tree::CONDtree(Tree *, const Tree *, const Tree *)
 {
-	__asm{int 3}
+	// __asm{int 3}
 	return 0;
 }
 

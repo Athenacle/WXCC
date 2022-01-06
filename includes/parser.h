@@ -14,6 +14,7 @@
 #include "tree.h"
 #include "stmt.h"
 #include "expr.h"
+#include "functions.h"
 #include <map>
 
 using namespace NS_LEX_CONSTANTS;
@@ -43,7 +44,7 @@ class Parser
 {
 	friend class Tree;
 private:
-	mutable Lex &theLexer;
+	Lex &theLexer;
 	mutable NS_LEX_PODS::Token *cur;
 	mutable NS_LEX_PODS::Token *prepre;
 	mutable bool isFinish;

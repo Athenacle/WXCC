@@ -4,10 +4,10 @@
 * January 21, 2013
 *
 */
-#include "../includes/system.h"
-#include "../includes/lex.h"
-#include "../includes/symbol.h"
-#include "../includes/tools.h"
+#include "system.h"
+#include "lex.h"
+#include "symbol.h"
+#include "tools.h"
 
 using namespace NS_LEX_CONSTANTS;
 using namespace NS_LEX_PODS;
@@ -318,7 +318,7 @@ parseFloatError:
 
 NUMBER_TYPE& NS_LEX_CONSTANTS::operator |= (NUMBER_TYPE &nt, unsigned long mask)
 {
-	unsigned long ult = static_cast<unsigned long>(nt);
+	unsigned long ult = static_cast<unsigned long>(nt.type());
 	ult = ult | mask;
 	nt = static_cast<NUMBER_TYPE>(ult);
 	return nt;

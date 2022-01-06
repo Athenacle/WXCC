@@ -5,9 +5,9 @@
 *
 */
 
-#include "../includes/lex.h"
-#include "../includes/tools.h"
-#include "../includes/symbol.h"
+#include "lex.h"
+#include "tools.h"
+#include "symbol.h"
 
 FILE *sourceFile;
 

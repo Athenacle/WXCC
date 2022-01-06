@@ -5,10 +5,10 @@
 *
 */
 
-#include "../includes/lex.h"
+#include "lex.h"
 
 namespace{
-	char *lexWarnings[] =
+	const char *lexWarnings[] =
 	{
 		"NULL",
 		"LW01: penitential floating point number overflow.\n",
@@ -19,7 +19,7 @@ namespace{
 		"\t\t\t\t\t\tThe number %s will be ignored.\n"
 	};
 
-	char *lexErrors[] =
+	const char *const lexErrors[] =
 	{
 		"NULL",
 		"LE01: a newline character exist in the string constant or char constant.\n",
@@ -109,10 +109,10 @@ void Lex::lexerError(int errorType, const char *message, ...) const
 	switch (errorType)
 	{
 	case LEX_ERROR_STRING_MEET_NEWLINE:		/* 1 */
-		fprintf(wxccErr, lexErrors[LEX_ERROR_STRING_MEET_NEWLINE]);
+		fprintf(wxccErr, "%s", lexErrors[LEX_ERROR_STRING_MEET_NEWLINE]);
 		break;
 	case LEX_ERROR_STRING_MEET_EOF:			/* 2 */
-		fprintf(wxccErr, lexErrors[LEX_ERROR_STRING_MEET_EOF]);
+		fprintf(wxccErr, "%s", lexErrors[LEX_ERROR_STRING_MEET_EOF]);
 		break;
 	case LEX_ERROR_ILL_SUFFIX :			/* 3 */
 		fprintf(wxccErr, lexErrors[LEX_ERROR_ILL_SUFFIX], message);
@@ -124,7 +124,7 @@ void Lex::lexerError(int errorType, const char *message, ...) const
 		fprintf(wxccErr, lexErrors[LEX_ERROR_ILL_TOKEN], *message);
 		break;
 	case LEX_ERROR_STRING_TOO_LONG:
-		fprintf(wxccErr, lexErrors[LEX_ERROR_STRING_TOO_LONG]);
+		fprintf(wxccErr, "%s", lexErrors[LEX_ERROR_STRING_TOO_LONG]);
 		break;
 	case LEX_ERROR_ILL_CHAR_IN_HEX:
 		fprintf(wxccErr, lexErrors[LEX_ERROR_ILL_CHAR_IN_HEX], *message);
@@ -133,13 +133,13 @@ void Lex::lexerError(int errorType, const char *message, ...) const
 		fprintf(wxccErr, lexErrors[LEX_ERROR_ILL_CHAR_IN_OCT], *message);
 		break;
 	case LEX_ERROR_CHAR_CON_TOO_LONG:
-		fprintf(wxccErr, lexErrors[LEX_ERROR_CHAR_CON_TOO_LONG]);
+		fprintf(wxccErr, "%s", lexErrors[LEX_ERROR_CHAR_CON_TOO_LONG]);
 		break;
 	case LEX_ERROR_ILL_FLO_SUFFIX:
 		fprintf(wxccErr, lexErrors[LEX_ERROR_ILL_FLO_SUFFIX], message);
 		break;
 	case LEX_ERROR_ILL_FLO_NUMBER:
-		fprintf(wxccErr, lexErrors[LEX_ERROR_ILL_FLO_SUFFIX]);
+		fprintf(wxccErr, "%s", lexErrors[LEX_ERROR_ILL_FLO_SUFFIX]);
 		break;
 	case LEX_ERROR_FLOATING_OVERFLOW:
 		fprintf(wxccErr, lexErrors[LEX_ERROR_FLOATING_OVERFLOW], message);

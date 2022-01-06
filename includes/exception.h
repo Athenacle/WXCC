@@ -15,7 +15,7 @@ protected:
 
 	
 public:
-	virtual const char* toString(void)
+	virtual const char* toString(void) const
 	{
 		return ex;
 	}

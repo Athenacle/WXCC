@@ -71,7 +71,7 @@ public:
 		:Exception(tp, st){}
 
 
-	void TypeException::setException( int, const char*);
+	void setException( int, const char*);
 	virtual ~TypeException();
 };
 

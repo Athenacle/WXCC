@@ -48,7 +48,6 @@ namespace NS_TABLE
 			K, unsigned long, K*, K>
 	{
 		const K *kPtr;
-		typedef iterator<std::random_access_iterator_tag, K> iter;
 	public:
 		typedef iterator<std::random_access_iterator_tag, K> iter;
 
@@ -247,7 +246,7 @@ put:
 			return find(t);
 		}
 
-		Table_iter begin(void)
+		auto begin(void)
 		{
 			item* firstItem = tbl;
 			for (int i = 0;i < tableSize; i++)

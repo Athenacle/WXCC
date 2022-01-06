@@ -5,7 +5,7 @@
 *
 */
 
-#include "../includes/system.h"
+#include "system.h"
 
 void fatalError(const char *message)
 {

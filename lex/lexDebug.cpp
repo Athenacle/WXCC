@@ -4,7 +4,7 @@
 * January 23, 2013
 *
 */
-#include "../includes/lex.h"
+#include "lex.h"
 #ifdef LEX_DEBUG
 
 static char *lexDebugInfo_OP[] =

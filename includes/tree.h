@@ -11,7 +11,7 @@
 
 #include "lex.h"
 #include "type.h"
-#include "env.h"
+#include "Env.h"
 #include "system.h"
 
 namespace NS_EXPRE_IR

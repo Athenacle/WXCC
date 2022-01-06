@@ -4,15 +4,15 @@
 * April 4, 2013
 */
 
-#include "../includes/system.h"
-#include "../includes/lex.h"
-#include "../includes/type.h"
-#include "../includes/symbol.h"
-#include "../includes/parser.h"
-#include "../includes/exception.h"
-#include "../includes/identifier.h"
-#include "../includes/functions.h"
-#include "../includes/expr.h"
+#include "system.h"
+#include "lex.h"
+#include "type.h"
+#include "symbol.h"
+#include "parser.h"
+#include "exception.h"
+#include "identifier.h"
+#include "functions.h"
+#include "expr.h"
 
 using namespace NS_LEX_TOOLS;
 
@@ -20,7 +20,7 @@ namespace
 {
 	const int PE_DECL_AFTER_STMT = 1;
 
-	char *stmtErrors[] = 
+	const char *stmtErrors[] = 
 	{
 		"NULL",
 

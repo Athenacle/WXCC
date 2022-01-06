@@ -1,15 +1,15 @@
 //#include "../includes/Env.h"
 
 
-#include "../includes/system.h"
-#include "../includes/lex.h"
-#include "../includes/type.h"
-#include "../includes/symbol.h"
-#include "../includes/parser.h"
-#include "../includes/exception.h"
-#include "../includes/identifier.h"
-#include "../includes/Table.h"
-#include "../includes/semantic.h"
+#include "system.h"
+#include "lex.h"
+#include "type.h"
+#include "symbol.h"
+#include "parser.h"
+#include "exception.h"
+#include "identifier.h"
+#include "Table.h"
+#include "semantic.h"
 
 
 
