@@ -33,7 +33,7 @@ namespace NS_SC
 
 using namespace NS_SC;
 
-class Symbol : public WXCC
+class Symbol
 {
 protected:
     Token *tok;          /* token		*/

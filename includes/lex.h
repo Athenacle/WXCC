@@ -228,7 +228,7 @@ using namespace NS_LEX_CONSTANTS;
 
 namespace NS_LEX_PODS
 {
-    class Number : public WXCC
+    class Number
     {
     public:
         NS_LEX_CONSTANTS::TYPE type;              /* T_INT_CON T_FLOAT_CON T_CHAR_CON */
@@ -252,7 +252,7 @@ namespace NS_LEX_PODS
         Position(const char *file, int l = 1, int p = 0) : filename(file), line(l), place(p) {}
     };
 
-    class Token : public WXCC
+    class Token
     {
     public:
         NS_LEX_CONSTANTS::TYPE token_type;

@@ -75,7 +75,7 @@ public:
 };
 
 
-class Type : public WXCC
+class Type
 {
     friend class Function;
 

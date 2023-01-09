@@ -55,9 +55,6 @@
 #include <utility>
 #include <iterator>
 #include <vector>
-class WXCC
-{
-};
 
 extern FILE *wxccErr;
 extern int errCount;

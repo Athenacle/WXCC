@@ -16,7 +16,7 @@
 #include "identifier.h"
 #include "environment.h"
 
-class Function : public WXCC
+class Function
 {
     Identifier &funName;
     Env &local;
