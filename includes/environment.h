@@ -7,7 +7,7 @@
 #ifndef ENV_H
 #define ENV_H
 
-#include "Table.h"
+#include "table.h"
 #include "identifier.h"
 #include "symbol.h"
 

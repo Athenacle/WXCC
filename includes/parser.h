@@ -10,7 +10,7 @@
 
 #include "lex.h"
 #include "type.h"
-#include "Env.h"
+#include "environment.h"
 #include "tree.h"
 #include "stmt.h"
 #include "expr.h"
@@ -23,20 +23,20 @@ using namespace NS_TYPE_OP;
 
 /* marcos for syntax warnings and errors. */
 #define PAR_WARNING_EMPTY_TRANSLATION_UNIT 1
-#define PAR_WARNING_EMPTY_DECLARATION 2
+#define PAR_WARNING_EMPTY_DECLARATION      2
 
-#define PAR_ERR_NEED_TYPE 1
-#define PAR_ERR_NEED_C_CC 2
-#define PAR_ERR_NEED_C_CS 3
-#define PAR_ERR_NEED_SS 4
-#define PAR_ERR_UNMATCHED_KEY 6
+#define PAR_ERR_NEED_TYPE                  1
+#define PAR_ERR_NEED_C_CC                  2
+#define PAR_ERR_NEED_C_CS                  3
+#define PAR_ERR_NEED_SS                    4
+#define PAR_ERR_UNMATCHED_KEY              6
 
-#define PAR_ERR_NEED_VAR_D 95
-#define PAR_ERR_INT_STR 96
-#define PAR_ERR_STR_INT 97
+#define PAR_ERR_NEED_VAR_D                 95
+#define PAR_ERR_INT_STR                    96
+#define PAR_ERR_STR_INT                    97
 
-#define PAR_ERR_INT 0xfedcba
-#define PARER_WE_USE_STRING 0xabcdef
+#define PAR_ERR_INT                        0xfedcba
+#define PARER_WE_USE_STRING                0xabcdef
 
 typedef std::pair<Symbol*, Type*> ST;
 

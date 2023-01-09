@@ -12,8 +12,8 @@
 using namespace NS_LEX_CONSTANTS;
 using namespace NS_LEX_PODS;
 
-#define GET -1
-#define BACK 0
+#define GET       -1
+#define BACK      0
 #define LOOKAHEAD 1
 
 Lex::Lex(const char* filename)

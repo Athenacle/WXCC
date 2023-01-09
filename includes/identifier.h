@@ -12,7 +12,7 @@
 #include "lex.h"
 #include "type.h"
 #include "symbol.h"
-#include "Table.h"
+#include "table.h"
 #include "semantic.h"
 
 using namespace NS_BASE_TYPE;

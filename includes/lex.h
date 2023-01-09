@@ -8,9 +8,9 @@
 #ifndef LEX_HEADER
 #define LEX_HEADER
 
-#include "../includes/system.h"
+#include "system.h"
 
-#define BLOCK_SIZE 4096
+#define BLOCK_SIZE     4096
 #define LEX_BLOCK_SIZE (BLOCK_SIZE + 2) /* 4098 */
 #undef LEX_BUFFER_SIZE
 #define LEX_BUFFER_SIZE (LEX_BLOCK_SIZE * 2) /* 8196 */
@@ -22,25 +22,25 @@
 * all error and warning string is defined in the file lexWarningError.c
 */
 
-#define LEX_ERROR_STRING_MEET_NEWLINE 1
-#define LEX_ERROR_STRING_MEET_EOF 2
-#define LEX_ERROR_ILL_SUFFIX 3
-#define LEX_ERROR_ILL_CHAR_IN_HEX 4
-#define LEX_ERROR_ILL_TOKEN 5
-#define LEX_ERROR_ICON_TOO_BIG 6
-#define LEX_ERROR_STRING_TOO_LONG 7
-#define LEX_ERROR_CHAR_CON_TOO_LONG 8
-#define LEX_ERROR_ILL_CHAR_ESC 9
-#define LEX_ERROR_ILL_FLO_SUFFIX 10
-#define LEX_ERROR_ILL_FLO_NUMBER 11
-#define LEX_ERROR_FLOATING_OVERFLOW 12
-#define LEX_ERROR_FLT_OVERFLOW 13
-#define LEX_ERROR_ILL_CHAR_IN_OCT 14
+#define LEX_ERROR_STRING_MEET_NEWLINE     1
+#define LEX_ERROR_STRING_MEET_EOF         2
+#define LEX_ERROR_ILL_SUFFIX              3
+#define LEX_ERROR_ILL_CHAR_IN_HEX         4
+#define LEX_ERROR_ILL_TOKEN               5
+#define LEX_ERROR_ICON_TOO_BIG            6
+#define LEX_ERROR_STRING_TOO_LONG         7
+#define LEX_ERROR_CHAR_CON_TOO_LONG       8
+#define LEX_ERROR_ILL_CHAR_ESC            9
+#define LEX_ERROR_ILL_FLO_SUFFIX          10
+#define LEX_ERROR_ILL_FLO_NUMBER          11
+#define LEX_ERROR_FLOATING_OVERFLOW       12
+#define LEX_ERROR_FLT_OVERFLOW            13
+#define LEX_ERROR_ILL_CHAR_IN_OCT         14
 
-#define LEX_WARNING_ILL_MACRO_TOKEN 2
+#define LEX_WARNING_ILL_MACRO_TOKEN       2
 #define LEX_WARNING_OCT_HEX_NOT_IMPLEMENT 3
 
-#define EOT 0xdeadbeef
+#define EOT                               0xdeadbeef
 /* EOT means End  Of Token.
 * It indicates the end of input source file.
 * Magic Number
@@ -197,9 +197,9 @@ namespace NS_LEX_CONSTANTS
     const uint32_t NT_CH = 0x00110103; /* UNSIGNED	CHAR */
     const uint32_t NT_FL = 0x00111000; /* FLOAT	     */
     const uint32_t NT_DB = 0x00111010; /* DOUBLE	     */
-#define NT_LONG_MASK (0X00110010)
+#define NT_LONG_MASK     (0X00110010)
 #define NT_UNSIGNED_MASK (0x00110100)
-#define NT_LD (NT_DB) /* LONG DOUBLE */
+#define NT_LD            (NT_DB) /* LONG DOUBLE */
     class NUMBER_TYPE
     {
         uint32_t _type;

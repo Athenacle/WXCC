@@ -8,7 +8,7 @@
 #include "parser.h"
 #include "exception.h"
 #include "identifier.h"
-#include "Table.h"
+#include "table.h"
 #include "semantic.h"
 
 

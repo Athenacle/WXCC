@@ -13,10 +13,10 @@
 //using namespace NS_SEMACTIC;
 using namespace NS_TYPE_OP;
 
-#define TYPE_ERR_TOO_TYPES 1
+#define TYPE_ERR_TOO_TYPES    1
 #define TYPE_ERR_BOTH_USIGNED 2
 
-#define TYPE_WARN_USFN 1
+#define TYPE_WARN_USFN        1
 
 
 std::map<NS_TYPE_OP::TYPE_OPERATOR, const char *> Type::to2c;

@@ -8,7 +8,7 @@
 #ifndef TOOLS_H
 #define TOOLS_H
 
-#include "../includes/system.h"
+#include "system.h"
 
 void fatalError(const char *message);
 //a fatal error happened. Handle it and exit the compiler.
@@ -17,8 +17,8 @@ void fatalError(const char *message);
 * It works as a memory pool.
 * Do not use the C library malloc()/free(), it need too much system call.
 */
-#define MM_BASE_BUFF (1 << 20) /* initlize memory buffer base size:1MB   */
-#define MM_INC_BUFF (1 << 19)  /* memory buffer increament size   :512KB */
+#define MM_BASE_BUFF    (1 << 20) /* initlize memory buffer base size:1MB   */
+#define MM_INC_BUFF     (1 << 19) /* memory buffer increament size   :512KB */
 #define MM_HEADER_COUNT (1 << 10)
 
 struct block_header {

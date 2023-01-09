@@ -19,7 +19,7 @@ void semError(int errType, ...);
 void semWarning(int errType, ...);
 #define SEM_INVAILD_USE 1
 
-#define USE_MY_STR_SSD 0xabcdef
+#define USE_MY_STR_SSD  0xabcdef
 
 class TemportaryVariable
 {

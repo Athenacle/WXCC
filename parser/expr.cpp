@@ -7,7 +7,7 @@
 #include "tree.h"
 #include "parser.h"
 #include "lex.h"
-#include "Env.h"
+#include "environment.h"
 #include "identifier.h"
 #include "expr.h"
 #include "system.h"
