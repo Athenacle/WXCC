@@ -54,7 +54,7 @@ public:
 
         name = _tok->token_value.id_name;
     }
-    Identifier(const Symbol& _sy, Type* _ty) : Symbol(_sy), ty(_ty), TemportaryVariable()
+    Identifier(const Symbol& _sy, Type* _ty) : Symbol(_sy), TemportaryVariable(), ty(_ty)
     {
         name = _sy.getIDName();
     }

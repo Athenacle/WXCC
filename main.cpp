@@ -1,4 +1,4 @@
-﻿/* main function
+/* main function
 * Wang Xiaochun
 * zjjhwxc@gmail.com
 * January 20, 2013

@@ -1,4 +1,4 @@
-﻿/* type header
+/* type header
 * WangXiaochun
 * zjjhwxc(at)gmail.com
 * Mar 6, 2013

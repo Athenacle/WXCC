@@ -1,4 +1,4 @@
-﻿/* lexer header.
+/* lexer header.
 * Wang Xiaochun
 * zjjhwxc@gmail.com
 * January 20, 2013

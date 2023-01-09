@@ -1,4 +1,4 @@
-﻿/* syntax parser header.
+/* syntax parser header.
 * WangXiaochun
 * zjjhwxc(at)gmail.com
 * Feb 9, 2013

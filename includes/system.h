@@ -1,4 +1,4 @@
-﻿/* system configure.
+/* system configure.
 * Wang Xiaochun
 * zjjhwxc@gmail.com
 * January 20, 2013

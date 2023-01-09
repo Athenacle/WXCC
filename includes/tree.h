@@ -80,7 +80,7 @@ public:
     void printTree(FILE *fp = wxccErr) const;
 
     Tree(Node_OP _op, const Type &ty, const Tree *_left = NULL, const Tree *_right = NULL)
-        : resultType(ty), nodeOP(_op), left(_left), right(_right)
+        : left(_left), right(_right), resultType(ty), nodeOP(_op)
     {
         conditionT = NULL;
         x.i_val = 0;
@@ -88,7 +88,7 @@ public:
     }
 
     Tree(Node_OP _op, const Tree *_left = NULL, const Tree *_right = NULL)
-        : resultType(_left->getType()), nodeOP(_op), left(_left), right(_right)
+        : left(_left), right(_right), resultType(_left->getType()), nodeOP(_op)
     {
         conditionT = NULL;
         x.i_val = 0;

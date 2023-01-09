@@ -1,4 +1,4 @@
-﻿/* symbol table header
+/* symbol table header
 * Wang Xiaochun
 * zjjhwxc@gmail.com
 * January 23, 2013

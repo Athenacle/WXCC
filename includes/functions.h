@@ -1,4 +1,4 @@
-﻿/* syntax parser-function headers.
+/* syntax parser-function headers.
  * WangXiaochun
  * zjjhwxc(at)gmail.com
  * April 4, 2013

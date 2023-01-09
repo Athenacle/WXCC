@@ -1,4 +1,4 @@
-﻿/* Environment header.
+/* Environment header.
  * WangXiaochun
  * zjjhwxc(at)gmail.com
  * April 4, 2013

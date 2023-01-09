@@ -19,17 +19,14 @@ public:
 
 class Stmt_Select : public Stmt
 {
-    ;
 };
 
 class Stmt_Iter : public Stmt
 {
-    ;
 };
 
 class Stmt_Block : public Stmt
 {
-    ;
 };
 
 
