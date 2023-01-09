@@ -11,7 +11,7 @@
 #include "exception.h"
 
 //using namespace NS_SEMACTIC;
-using namespace NS_TYPE_OP;
+using namespace type_operator;
 
 #define TYPE_ERR_TOO_TYPES    1
 #define TYPE_ERR_BOTH_USIGNED 2
@@ -19,7 +19,7 @@ using namespace NS_TYPE_OP;
 #define TYPE_WARN_USFN        1
 
 
-std::map<NS_TYPE_OP::TYPE_OPERATOR, const char *> Type::to2c;
+std::map<type_operator::TYPE_OPERATOR, const char *> Type::to2c;
 
 namespace
 {
@@ -56,13 +56,13 @@ Type::Type(TYPE_OPERATOR _oper,
            int _align,
            void *_symbol)
 {
-    this->sym = NULL;
-    this->name = NULL;
+    this->sym = nullptr;
+    this->name = nullptr;
     type_op = _oper;
     size = _size;
     base_type = _baseType;
     u.a.nElements = 0;
-    u.f.paraList = NULL;
+    u.f.paraList = nullptr;
     if (_oper == TO_CHAR)
         size = 1;
     else if (_oper == TO_DOUBLE)
@@ -71,7 +71,7 @@ Type::Type(TYPE_OPERATOR _oper,
         size = _arrEls * _baseType->size;
         u.a.nElements = _arrEls;
     } else if (_oper == TO_FUNCTION) {
-        size = NS_TYPE_OP::NO_LIMIT;
+        size = type_operator::NO_LIMIT;
         u.f.paraList = _list;
     }
     align = _align;
@@ -94,7 +94,7 @@ const TypeException &Type::checkType(const Type &ty, TypeException &te)
     int meetFloat = 0;
 
     const Type *tpp = &ty;
-    for (; tpp != NULL; tpp = tpp->base_type) {
+    for (; tpp != nullptr; tpp = tpp->base_type) {
         if (matchBaseType(*tpp))
             meetBaseType++;
         if (tpp->type_op == TO_SIGNED)
@@ -148,7 +148,7 @@ char *Type::print(char *buffer)
                 Type *ty = this->u.f.paraList;
             paraPrint:
                 ptr = ty->print(ptr);
-                if (ty != NULL) {
+                if (ty != nullptr) {
                     ty = ty->u.f.paraList;
                     goto paraPrint;
                 }
@@ -163,7 +163,7 @@ char *Type::print(char *buffer)
         } else if (type_op == TO_FUNCPARA) {
             char *ptr = base_type->print(buffer);
 
-            if (u.f.paraList != NULL) {
+            if (u.f.paraList != nullptr) {
                 ptr += sprintf(ptr, ", ");
                 return u.f.paraList->print(ptr);
             } else
@@ -207,7 +207,7 @@ const TypeException &Type::checkFunction(const Type &ty, TypeException &te)
         te.setError(typeError[TE_FUNC_RET_FUNC]);
     if (ty.base_type->type_op == TO_ARRAY)
         te.setError(typeError[TE_FUNC_RET_ARR]);
-    if (ty.u.f.paraList == NULL)
+    if (ty.u.f.paraList == nullptr)
         te.setError("internal error.");
     else {
         Type::checkPara(*ty.u.f.paraList, te);
@@ -220,7 +220,7 @@ const TypeException &Type::checkFunction(const Type &ty, TypeException &te)
 
 const TypeException &Type::checkPara(const Type &para, TypeException &te)
 {
-    if (para.u.f.paraList == NULL)
+    if (para.u.f.paraList == nullptr)
         return te;
     else {
         if (para.u.f.paraList->type_op != TO_FUNCPARA)
@@ -286,7 +286,7 @@ namespace NS_BASE_TYPE
     void InitBaseTypes(void)
     {
         try {
-            charType = new Type(TO_CHAR, NULL, 1);
+            charType = new Type(TO_CHAR, nullptr, 1);
             ucharType = new Type(TO_UNSIGNED, charType, 1);
             scharType = new Type(TO_SIGNED, charType, 1);
 
@@ -300,7 +300,7 @@ namespace NS_BASE_TYPE
             ulongType = new Type(TO_UNSIGNED, longType);
 
             floatType = new Type(TO_FLOAT);
-            doubleType = new Type(TO_DOUBLE, NULL, 8);
+            doubleType = new Type(TO_DOUBLE, nullptr, 8);
 
             voidType = new Type(TO_VOID);
             pvType = new Type(TO_POINTER, voidType);

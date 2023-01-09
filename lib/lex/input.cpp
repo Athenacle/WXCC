@@ -10,11 +10,12 @@
 #include "symbol.h"
 
 FILE *sourceFile;
+using namespace lex;
 
-char Lex::buffer[LEX_BUFFER_SIZE + 4];
-char Lex::tmpBuffer[TMPBUFFER_SIZE];
-NS_LEX_PODS::Token *Lex::currentToken = NULL;
-NS_LEX_PODS::Position *Lex::currentPos = NULL;
+char lex::Lex::buffer[LEX_BUFFER_SIZE + 4];
+char lex::Lex::tmpBuffer[TMPBUFFER_SIZE];
+lex::types::Token *Lex::currentToken = nullptr;
+lex::types::Position *Lex::currentPos = nullptr;
 
 int Lex::fillBuffer(void)
 {
@@ -47,7 +48,7 @@ int Lex::initLex(const char *_filename)
 	* try to avoid memory leak.
 	*/
     currentPos->filename = name;
-    if (sourceFile == NULL) {
+    if (sourceFile == nullptr) {
         sprintf(tmpBuffer, "open file %s error.", _filename);
         fatalError(tmpBuffer);
     }
@@ -55,6 +56,6 @@ int Lex::initLex(const char *_filename)
     currentToken->token_pos = currentPos;
     currentPos->line = 1;
     currentPos->place = 0;
-    currentToken->token_type = NS_LEX_CONSTANTS::T_NONE;
+    currentToken->token_type = constants::T_NONE;
     return 0;
 }

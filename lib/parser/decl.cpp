@@ -12,10 +12,11 @@
 #include "exception.h"
 #include "identifier.h"
 
-using namespace NS_LEX_CONSTANTS;
-using namespace NS_SC;
-using namespace NS_LEX_TOOLS;
-using namespace NS_TYPE_OP;
+using namespace lex;
+using namespace constants;
+using namespace scope;
+using namespace tools;
+using namespace type_operator;
 
 namespace
 {
@@ -54,7 +55,7 @@ int Parser::c_parser_translation_unit(Env &env) const
     Env *curEnv = &env;
     for (; lexRet != EOT; n++) {
         if (matchQualifier(*cur) || isBaseType(*cur)) {
-            c_parser_declaration(*curEnv, NS_SC::S_GLOBAL);
+            c_parser_declaration(*curEnv, scope::S_GLOBAL);
         } else if (matchOP(*cur, OP_LEFTBRACE)) {
             Env nextEnv;
             env = env.EnterEnv(nextEnv);
@@ -66,22 +67,22 @@ int Parser::c_parser_translation_unit(Env &env) const
     return 0;
 }
 
-int Parser::c_parser_declaration(Env &env, NS_SC::scope sc) const
+int Parser::c_parser_declaration(Env &env, scope::Scope sc) const
 {
     int declared = 0;
     isFinish = false;
     pushBack();
-    Type *ty = c_parser_declaration_specifiers(NULL);
-    ST *nST = NULL;
+    Type *ty = c_parser_declaration_specifiers(nullptr);
+    ST *nST = nullptr;
 meet_comma:
     nST = c_parser_declarator(ty);
-    if (nST == NULL) {
+    if (nST == nullptr) {
         parserError(PAR_ERR_NEED_VAR_D, cur->token_pos->line);
         goto typeErrFinish;
     } else {
         nST->first->setScope(sc, env.getLevel());
         const TypeException &tyChk = Type::check(*nST->second);
-        Identifier *id = NULL;
+        Identifier *id = nullptr;
         if (tyChk.no_exception()) {
             id = new Identifier(*nST->first, nST->second);
             env.newIdentifier(id);
@@ -208,9 +209,9 @@ cptql:
 
 ST *Parser::c_parser_direct_declarator(Type *ty) const
 {
-    ST *retST = NULL;
-    Token *curTo = NULL;
-    Type *retTY = NULL;
+    ST *retST = nullptr;
+    Token *curTo = nullptr;
+    Type *retTY = nullptr;
     next();
     if (isID(*cur)) {
         curTo = mkToken();
@@ -263,7 +264,7 @@ Type *Parser::c_parser_direct_declatator_opt(Type *ty) const
 
 Type *Parser::c_parser_parameter_type_list(void) const
 {
-    Type *parameterList = NULL;
+    Type *parameterList = nullptr;
     next();
     if (matchOP(*cur, OP_RIGHTBRACK))  // no parameter. eg. void foo();
     {
@@ -278,14 +279,14 @@ Type *Parser::c_parser_parameter_type_list(void) const
         {
             pushBack();
         paraList:
-            Type *retTY = c_parser_declaration_specifiers(NULL);
+            Type *retTY = c_parser_declaration_specifiers(nullptr);
             ST *retST = c_parser_declarator(retTY);
-            if (retST != NULL) {
+            if (retST != nullptr) {
                 retST->second =
                     new Type(TO_FUNCPARA, retST->second, 0, parameterList, 4, 4, retST->first);
                 //retST->second->setSym(retST->first);
                 //Type::setAsPara(*(retST->second));
-                if (parameterList == NULL)
+                if (parameterList == nullptr)
                     parameterList = retST->second;
                 else
                     parameterList->nextPara(retST->second);

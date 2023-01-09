@@ -8,6 +8,7 @@
 #include "tools.h"
 #include "symbol.h"
 
+using namespace scope;
 
 void Symbol::setValue(Token *_tok)
 {
@@ -28,7 +29,7 @@ void Symbol::setValue(Token *_tok)
     }
 }
 
-Symbol::Symbol(Token *_tok, scope _sc, storage_type _st, int _level, Symbol *_sy)
+Symbol::Symbol(Token *_tok, Scope _sc, StorageType _st, int _level, Symbol *_sy)
 {
     tok = _tok;
     sc = _sc;
@@ -36,7 +37,7 @@ Symbol::Symbol(Token *_tok, scope _sc, storage_type _st, int _level, Symbol *_sy
     up = _sy;
     ref = 0;
     level = _level;
-    next = NULL;
+    next = nullptr;
     setValue(_tok);
 }
 

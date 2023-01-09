@@ -12,10 +12,11 @@
 #include "parser.h"
 #include "exception.h"
 
-using namespace NS_LEX_CONSTANTS;
-using namespace NS_SC;
-using namespace NS_LEX_TOOLS;
-using namespace NS_TYPE_OP;
+using namespace lex;
+using namespace constants;
+using namespace scope;
+using namespace tools;
+using namespace type_operator;
 
 int currentLevel = S_GLOBAL;
 std::map<KEYWORD, TYPE_OPERATOR> Parser::key2to;
@@ -122,13 +123,13 @@ void Parser::InitOp2c(void)
 int Parser::next(void) const
 {
     int ret = 0;
-    if (prepre != NULL) {
+    if (prepre != nullptr) {
         pre = prepre;
         cur = pre;
-        prepre = NULL;
-    } else if (pre != NULL) {
+        prepre = nullptr;
+    } else if (pre != nullptr) {
         cur = pre;
-        pre = NULL;
+        pre = nullptr;
     } else {
         ret = theLexer.getNextToken();
         cur = theLexer.getToken();

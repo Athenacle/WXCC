@@ -14,7 +14,8 @@
 #include "functions.h"
 #include "expr.h"
 
-using namespace NS_LEX_TOOLS;
+using namespace lex;
+using namespace lex::tools;
 
 namespace
 {
@@ -32,8 +33,8 @@ int Function::parseParameters(void)
 {
     int paraNum = 0;
     const Type *paraList = parameterList;
-    Identifier *parameter = NULL;
-    for (; paraList != NULL; paraNum++) {
+    Identifier *parameter = nullptr;
+    for (; paraList != nullptr; paraNum++) {
         if (paraList->getTYOP() == TO_VOID) {
             if (paraNum == 0) {
                 break;
@@ -54,7 +55,7 @@ ST *Parser::c_parser_funtion_definition(Env &globalEnv, Identifier &id) const
 {
     Env newEnv;
     Env &localEnv = globalEnv.EnterEnv(newEnv);
-    ST *retST = NULL;
+    ST *retST = nullptr;
     Function fun(id, localEnv);
     fprintf(wxccErr,
             "Function %s Begin. Type: %s.--------------------- \n\n",
@@ -80,32 +81,32 @@ Block *Parser::c_parser_compound_statement(Env &curEnv) const
 {
     Env local;
     Env &curE = curEnv.EnterEnv(local);
-    Block *blockIR = NULL;
+    Block *blockIR = nullptr;
     Block *ret = new Block();
     ret->codeBegin = new IR("");
     ret->nextList = IRList::makeIRList(*new IR(""));
-    ret->breakList = NULL;
+    ret->breakList = nullptr;
     next();
     for (; isBaseType(*cur);) {
-        c_parser_declaration(curE, NS_SC::S_LOCAL);
+        c_parser_declaration(curE, Scope::S_LOCAL);
         next();
     }
     while (!matchOP(*cur, OP_RIGHTBRACE)) {
         blockIR = c_parser_statement(curE);
         //pushBack();
         next();
-        if (blockIR != NULL) {
-            if (blockIR->nextList != NULL) {
+        if (blockIR != nullptr) {
+            if (blockIR->nextList != nullptr) {
                 ret->nextList = IRList::mergeChain(*ret->nextList, *blockIR->nextList);
             }
-            if (blockIR->breakList != NULL) {
-                if (ret->breakList == NULL)
+            if (blockIR->breakList != nullptr) {
+                if (ret->breakList == nullptr)
                     ret->breakList = blockIR->breakList;
                 else
                     ret->nextList = IRList::mergeChain(*ret->breakList, *blockIR->breakList);
             }
-            if (blockIR->continueList != NULL) {
-                if (ret->continueList == NULL)
+            if (blockIR->continueList != nullptr) {
+                if (ret->continueList == nullptr)
                     ret->continueList = blockIR->continueList;
                 else
                     ret->continueList =
@@ -166,15 +167,15 @@ Block *Parser::c_parser_select_statement(Env &env) const
             IRList *tmp = IRList::mergeChain(*falseStmt->nextList, irBefore);
             stmt->nextList = IRList::mergeChain(*tmp, *falseStmt->nextList);
 
-            if (falseStmt->breakList != NULL) {
-                if (stmt->breakList != NULL) {
+            if (falseStmt->breakList != nullptr) {
+                if (stmt->breakList != nullptr) {
                     stmt->breakList = IRList::mergeChain(*stmt->breakList, *falseStmt->breakList);
                 } else {
                     stmt->breakList = falseStmt->breakList;
                 }
             }
-            if (falseStmt->continueList != NULL) {
-                if (stmt->continueList != NULL) {
+            if (falseStmt->continueList != nullptr) {
+                if (stmt->continueList != nullptr) {
                     stmt->continueList =
                         IRList::mergeChain(*stmt->continueList, *falseStmt->continueList);
                 } else {
@@ -185,7 +186,7 @@ Block *Parser::c_parser_select_statement(Env &env) const
         } else {
             stmt->nextList = condExpr->getTree().falseList;
             next();
-            if (trueStmt != NULL && trueStmt->nextList != NULL)
+            if (trueStmt != nullptr && trueStmt->nextList != nullptr)
                 stmt->nextList =
                     IRList::mergeChain(*condExpr->getTree().falseList, *trueStmt->nextList);
         }
@@ -198,7 +199,7 @@ Block *Parser::c_parser_select_statement(Env &env) const
 
 Block *Parser::c_parser_statement(Env &curEnv) const
 {
-    Block *stmt = NULL;
+    Block *stmt = nullptr;
     if (matchOP(*cur, OP_LEFTBRACE))  //meet '{' , a new block.
         return c_parser_compound_statement(curEnv);
 
@@ -435,10 +436,10 @@ Block *Parser::c_parser_iter_while(Env &env) const
     endLabel = new Label();
     endIR = new IR("%s : \n");
 
-    if (stmt->breakList != NULL) {
+    if (stmt->breakList != nullptr) {
         IRList::backPatch(*stmt->breakList, *endLabel);
     }
-    if (stmt->continueList != NULL) {
+    if (stmt->continueList != nullptr) {
         IRList::backPatch(*stmt->continueList, *condLabel);
     }
     IRList::backPatch(*endIR, *endLabel);

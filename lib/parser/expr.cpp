@@ -12,13 +12,14 @@
 #include "expr.h"
 #include "system.h"
 
-using NS_LEX_TOOLS::isASSIGN;
+using namespace lex;
+using tools::isASSIGN;
 using namespace NS_EXPRE_IR;
-using namespace NS_LEX_CONSTANTS;
+using namespace constants;
 
 Expr *Parser::c_parser_expressions(Env &env) const
 {
-    Expr *exprIR = NULL;
+    Expr *exprIR = nullptr;
 
     try {
         Tree *tr = c_parser_base_expressions(env, 0);
@@ -39,7 +40,7 @@ Tree *Parser::c_parser_base_expressions(Env &env, MAYBE_UNUSED int k) const
     //stop: IF ID } 0
     Tree *tp = c_parser_expressions_1(env, 0);
     while (*cur == OP_COMMA) {
-        MAYBE_UNUSED Tree *ret = NULL;
+        MAYBE_UNUSED Tree *ret = nullptr;
         next();
         ret = c_parser_expressions_1(env, 0);
         //tp = new Tree(RIGHT, ret->getType(), NULL, ret);
@@ -65,8 +66,8 @@ Tree *Parser::c_parser_expressions_1(Env &env, MAYBE_UNUSED int k) const
 Tree *Parser::c_parser_dispatch_comp_assignment(const OP op, Tree *leftT, Env &env) const
 {
     int _op = op;
-    Tree *tr = NULL;
-    Tree *rightT = NULL;
+    Tree *tr = nullptr;
+    Tree *rightT = nullptr;
 
 
     rightT = c_parser_expressions_1(env, 0);
@@ -148,8 +149,8 @@ Tree *Parser::c_parser_expressions_3(Env &env, int k) const
         for (k1 = op2l[cur->token_value.op]; k1 >= k; k1--) {
             while (op2l[cur->token_value.op] == k1 && !isASSIGN(*cur)) {
                 OP op = cur->token_value.op;
-                Tree *rightT = NULL;
-                MAYBE_UNUSED Tree *leftT = NULL;
+                Tree *rightT = nullptr;
+                MAYBE_UNUSED Tree *leftT = nullptr;
                 if (op == OP_LOGOR) {
                     next();
                     Tree *rightT = c_parser_expressions_3(env, 4);
@@ -179,19 +180,19 @@ void Parser::c_parser_expression_recover(void) const
 
 Tree *Parser::c_parser_unary_expr(Env &env) const
 {
-    Tree *tp = NULL;
+    Tree *tp = nullptr;
     TYPE ty = cur->token_type;
-    const Type *objectType = NULL;
+    const Type *objectType = nullptr;
     MAYBE_UNUSED size_t size;
     TYPE_OPERATOR to;
     MAYBE_UNUSED Node_OP nop;
-    if (ty == T_OPERATOR && !NS_LEX_TOOLS::matchOP(*cur, OP_LEFTBRACK)) {
+    if (ty == T_OPERATOR && !tools::matchOP(*cur, OP_LEFTBRACK)) {
         OP _op = cur->token_value.op;
         switch (_op) {
             case OP_MULT:
                 next();
                 tp = c_parser_unary_expr(env);
-                if (tp == NULL)
+                if (tp == nullptr)
                     assert(0);
                 objectType = &tp->getType();
 
@@ -210,7 +211,7 @@ Tree *Parser::c_parser_unary_expr(Env &env) const
             case OP_BITAND:  //lea
                 next();
                 tp = c_parser_unary_expr(env);
-                if (tp == NULL)
+                if (tp == nullptr)
                     assert(0);
                 if (tp->getNOP() == NOP_CNST) {
                     assert(0);
@@ -249,7 +250,7 @@ Tree *Parser::c_parser_unary_expr(Env &env) const
                 next();
                 if (*cur == T_ID) {
                     Identifier *id = env.findID(cur->token_value.id_name);
-                    if (id == NULL)
+                    if (id == nullptr)
                         assert(0);
                     else {
                         size = id->getType().getSize();
@@ -257,13 +258,13 @@ Tree *Parser::c_parser_unary_expr(Env &env) const
                 } else {
                     if (*cur == OP_LEFTBRACK) {
                         next();
-                        if (NS_LEX_TOOLS::isBaseType(*cur)) {
-                            Type *ty = c_parser_declaration_type_specifiers(NULL);
+                        if (tools::isBaseType(*cur)) {
+                            Type *ty = c_parser_declaration_type_specifiers(nullptr);
                             size = ty->getSize();
                             delete ty;
                         } else if (*cur == T_ID) {
                             Identifier *id = env.findID(cur->token_value.id_name);
-                            if (id == NULL)
+                            if (id == nullptr)
                                 assert(0);
                             else {
                                 size = id->getType().getSize();
@@ -323,10 +324,10 @@ Tree *Parser::c_parser_expr_func_call(Env &env, Tree *funcID) const
     const Type *paraList = &funcID->getType().getParaList();
     next();
     char buf[20];
-    for (; paraList != NULL; paraList = &paraList->getParaList()) {
+    for (; paraList != nullptr; paraList = &paraList->getParaList()) {
         const Tree *arg = c_parser_expressions_2(env);
-        const char *argString = NULL;
-        if (arg->t != NULL) {
+        const char *argString = nullptr;
+        if (arg->t != nullptr) {
             argString = arg->t->toString();
         } else {
             argString = arg->toString();
@@ -350,13 +351,13 @@ Tree *Parser::c_parser_expr_func_call(Env &env, Tree *funcID) const
 
 Tree *Parser::c_parser_primary_expr(Env &env) const
 {
-    Tree *tp = NULL;
+    Tree *tp = nullptr;
     const char *pc;
     switch (cur->token_type) {
         case T_ID:
             pc = cur->token_value.id_name;
             tp = Tree::IDtree(env, pc);
-            if (tp == NULL) {
+            if (tp == nullptr) {
                 char buf[40];
                 sprintf(buf, "EE01 %%d: undeclared identifier %s\n", pc);
                 parserError(PAR_ERR_INT_STR, buf, cur->token_pos->line);
@@ -370,7 +371,7 @@ Tree *Parser::c_parser_primary_expr(Env &env) const
         case T_STRING:
             break;
         case T_OPERATOR: {
-            if (NS_LEX_TOOLS::matchOP(*cur, OP_LEFTBRACK)) {
+            if (tools::matchOP(*cur, OP_LEFTBRACK)) {
                 next();
                 Expr *expr = c_parser_expressions(env);
                 if (Tree::isCmpTree(&expr->getTree())) {

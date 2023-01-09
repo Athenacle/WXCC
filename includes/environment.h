@@ -11,7 +11,7 @@
 #include "identifier.h"
 #include "symbol.h"
 
-using namespace NS_SC;
+using namespace scope;
 using namespace NS_TABLE;
 
 typedef Table<Identifier*, const char*> idTable;
@@ -23,7 +23,7 @@ class Env
     Env* up;    // more global
     Env* down;  // more local
 
-    scope sc;
+    Scope sc;
     int scope_level;
 
     int idCounts;
@@ -39,7 +39,7 @@ class Env
     }
 
 public:
-    Env(Env* _up = NULL, Env* _down = NULL, scope _sc = S_LOCAL, int _level = 0)
+    Env(Env* _up = nullptr, Env* _down = nullptr, Scope _sc = S_LOCAL, int _level = 0)
         : localID(), localFunc()
     {
         up = _up;

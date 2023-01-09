@@ -18,7 +18,7 @@ FILE *wxccErr;
 
 void HandleArg(int argc, char *argv[])
 {
-    wxccErr = NULL;
+    wxccErr = nullptr;
     if (argc == 1)
         fatalError("no input file.");
     else if (argc == 2) {
@@ -39,10 +39,10 @@ void initCompiler(void)
 int main(int argc, char *argv[])
 {
     HandleArg(argc, argv);
-    if (wxccErr == NULL)
+    if (wxccErr == nullptr)
         wxccErr = stdout;
     initCompiler();
-    Lex lexer(argv[1]);
+    lex::Lex lexer(argv[1]);
     Parser par(lexer);
     Env *globalEnv = new Env();
     globalEnv->setGlobal();

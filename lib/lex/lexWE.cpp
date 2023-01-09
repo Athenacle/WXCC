@@ -7,6 +7,8 @@
 
 #include "lex.h"
 
+using namespace lex;
+
 namespace
 {
     const char *lexWarnings[] = {

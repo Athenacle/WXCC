@@ -13,7 +13,7 @@ class Expr : public Block
     void printIR(void) {}
 
 public:
-    Expr(Tree *tree = NULL) : Block()
+    Expr(Tree *tree = nullptr) : Block()
     {
         exprTree = tree;
         /*const char *pc = Label::nextLabel();

@@ -12,7 +12,7 @@
 #include "exception.h"
 #include "semantic.h"
 
-namespace NS_TYPE_OP
+namespace type_operator
 {
     /* enum type_operator
 	* 0x0100
@@ -59,9 +59,9 @@ namespace NS_TYPE_OP
 	*	so, set the size field of the function type to NO_LIMIT.
 	* Just a magic number, nothing else.
 	*/
-};  // namespace NS_TYPE_OP
+};  // namespace type_operator
 
-using namespace NS_TYPE_OP;
+using namespace type_operator;
 
 
 class TypeException : public Exception
@@ -129,13 +129,13 @@ class Type
     }
 
 public:
-    explicit Type(NS_TYPE_OP::TYPE_OPERATOR = NS_TYPE_OP::TO_VOID,
-                  Type * = NULL,
+    explicit Type(type_operator::TYPE_OPERATOR = type_operator::TO_VOID,
+                  Type * = nullptr,
                   int = 0,
-                  Type * = NULL,
+                  Type * = nullptr,
                   int = 4,
                   int = 4,
-                  void * = NULL);
+                  void * = nullptr);
 
     int getSize(void) const
     {
@@ -148,7 +148,7 @@ public:
         return *ty;
     }
 
-    NS_TYPE_OP::TYPE_OPERATOR getTYOP(void) const
+    type_operator::TYPE_OPERATOR getTYOP(void) const
     {
         return this->type_op;
     }
@@ -160,7 +160,7 @@ public:
 
     void setSym(Symbol *sy)
     {
-        if (sym == NULL)
+        if (sym == nullptr)
             sym = new Symbol(*sy);
         else
             assert(0);

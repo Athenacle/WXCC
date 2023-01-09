@@ -8,14 +8,15 @@
 #include "lex.h"
 #include "parser.h"
 
-using namespace NS_LEX_CONSTANTS;
+using namespace lex;
+using namespace types;
 
 int Parser::tokenCompare(int compareTo) const
 {
     /*__asm{
 	int 3
 	}*/
-    NS_LEX_PODS::Token *to = theLexer.getToken();
+    types::Token *to = theLexer.getToken();
     //TODO: THIS FUNCTION NEED TO BE TESTED.
     if ((compareTo & TYPE_SSQ) == TYPE_SSQ)
         return to->token_type == T_KEY

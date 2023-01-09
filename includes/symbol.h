@@ -11,17 +11,17 @@
 #include "lex.h"
 #include <iterator>
 using std::iterator;
-using namespace NS_LEX_PODS;
-using namespace NS_LEX_CONSTANTS;
+using namespace lex::types;
+using namespace lex::constants;
 
 #undef HASH_TABLE_SIZE
 #define HASH_TABLE_SIZE 256
 
-namespace NS_SC
+namespace scope
 {
-    enum scope { S_NONE = 0x00080000, S_CONSTANTS, S_LABELS, S_GLOBAL, S_PARAMETER, S_LOCAL };
+    enum Scope { S_NONE = 0x00080000, S_CONSTANTS, S_LABELS, S_GLOBAL, S_PARAMETER, S_LOCAL };
 
-    enum storage_type {
+    enum StorageType {
         ST_NONE = 0x00100000, /* used for different kinds of constants.*/
         ST_AUTO,
         ST_REGISTER,
@@ -29,19 +29,18 @@ namespace NS_SC
         ST_EXTERN,
         ST_TYPEDEF
     };
-};  // namespace NS_SC
+};  // namespace scope
 
-using namespace NS_SC;
 
 class Symbol
 {
 protected:
-    Token *tok;          /* token		*/
-    scope sc;            /* enum scope		*/
-    storage_type sclass; /* enum storage_type	*/
-    int level;           /* scope level		*/
-    Symbol *up;          /* link			*/
-    int ref;             /* reference times	*/
+    Token *tok;                /* token		*/
+    scope::Scope sc;           /* enum scope		*/
+    scope::StorageType sclass; /* enum storage_type	*/
+    int level;                 /* scope level		*/
+    Symbol *up;                /* link			*/
+    int ref;                   /* reference times	*/
     union {
         int i_v;
         float f_v;
@@ -59,7 +58,7 @@ protected:
     }
 
 public:
-    Symbol(Token *, scope, storage_type, int, Symbol * = NULL);
+    Symbol(Token *, scope::Scope, scope::StorageType, int, Symbol * = nullptr);
 
     Symbol(const Symbol &sy)
     {
@@ -73,7 +72,7 @@ public:
     }
 
     virtual ~Symbol();
-    void setScope(scope _sc, int _lev)
+    void setScope(scope::Scope _sc, int _lev)
     {
         sc = _sc;
         level = _lev;

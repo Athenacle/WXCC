@@ -37,7 +37,7 @@ public:
     {
         IR();
         assert(id.ty->getTYOP() == TO_FUNCTION);
-        chain = NULL;
+        chain = nullptr;
         isVar = false;
         parameterList = &id.ty->getParaList();
         parameterCount = parseParameters();

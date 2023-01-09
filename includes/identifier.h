@@ -43,11 +43,11 @@ class Identifier : public Symbol, TemportaryVariable
 
 public:
     Identifier(Token* _tok,
-               scope _sc,
-               storage_type _st,
+               scope::Scope _sc,
+               scope::StorageType _st,
                int _level,
                Type* _ty = NS_BASE_TYPE::voidType,
-               Symbol* _sy = NULL)
+               Symbol* _sy = nullptr)
         : Symbol(_tok, _sc, _st, _level, _sy), TemportaryVariable()
     {
         ty = _ty;
@@ -59,7 +59,7 @@ public:
         name = _sy.getIDName();
     }
 
-    Identifier() : Symbol(NULL, S_LOCAL, ST_AUTO, 0), name(NULL) {}
+    Identifier() : Symbol(nullptr, scope::S_LOCAL, scope::ST_AUTO, 0), name(nullptr) {}
 
     ~Identifier()
     {
@@ -83,7 +83,7 @@ public:
 
     bool inline isFunction(void) const
     {
-        return ty->getTYOP() == NS_TYPE_OP::TO_FUNCTION;
+        return ty->getTYOP() == type_operator::TO_FUNCTION;
     }
 
     int inline getSymbolLine(void) const
@@ -113,7 +113,7 @@ public:
 
     unsigned long getHash(void)
     {
-        return NS_LEX_TOOLS::strHash(this->getIDName());
+        return lex::tools::strHash(this->getIDName());
     }
 };
 

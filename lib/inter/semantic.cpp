@@ -47,12 +47,12 @@ void Label::print(FILE *fp) const
     fprintf(fp, "%s: \n", labelString);
 }
 
-IR *IR::currentIR = NULL;
+IR *IR::currentIR = nullptr;
 
 IR::IR()
 {
-    nextIR = NULL;
-    preIR = NULL;
+    nextIR = nullptr;
+    preIR = nullptr;
     currentIR = this;
 }
 
@@ -130,7 +130,7 @@ char *IRList::patch(IR &ir, const char *l, int length)
 
 void IR::print(IR *begin, FILE *dest)
 {
-    assert(begin->preIR == NULL);
+    assert(begin->preIR == nullptr);
     IR *tp = begin;
     /*while (tp != NULL)
 	{
@@ -139,7 +139,7 @@ void IR::print(IR *begin, FILE *dest)
 	}*/
     do {
         tp = tp->nextIR;
-        if (tp == NULL)
+        if (tp == nullptr)
             break;
         fprintf(dest, tp->IRstring.c_str(), tp->dest);
     } while (1);
@@ -159,7 +159,7 @@ IR::IR(Label &l, bool append)
 IR *IR::appendIR(IR *first, IR *second)
 {
     second->nextIR = first->nextIR;
-    if (first->nextIR != NULL)
+    if (first->nextIR != nullptr)
         first->nextIR->preIR = second;
     second->preIR = first;
     first->nextIR = second;
@@ -173,15 +173,15 @@ IR *IR::appendIRBlock(IR *place, IR *block)
     IR *placeNext = place->nextIR;
     IR *blockEnd = block;
 
-    block->preIR->nextIR = NULL;
+    block->preIR->nextIR = nullptr;
 
-    while (blockEnd->nextIR != NULL)
+    while (blockEnd->nextIR != nullptr)
         blockEnd = blockEnd->nextIR;
     place->nextIR = block;
     block->preIR = place;
     blockEnd->nextIR = placeNext;
     placeNext->preIR = blockEnd;
-    block->preIR->nextIR = NULL;
+    block->preIR->nextIR = nullptr;
     reSetCurrent();
     return block->preIR;
 }
@@ -190,7 +190,7 @@ IR *IR::appendIRBlock(IR *place, IR *block)
 void IR::reSetCurrent(void)
 {
     IR *newCur = currentIR;
-    while (newCur->nextIR != NULL)
+    while (newCur->nextIR != nullptr)
         newCur = newCur->nextIR;
     currentIR = newCur;
 }
@@ -199,7 +199,7 @@ void IR::reSetCurrent(void)
 IR *IR::reSetCurrentFirst(IR *last)
 {
     IR *newCur = last;
-    while (newCur->preIR != NULL)
+    while (newCur->preIR != nullptr)
         newCur = newCur->preIR;
     return newCur;
 }

@@ -97,7 +97,7 @@ public:
     {
         currentIR->nextIR = ir;
         ir->preIR = currentIR;
-        ir->nextIR = NULL;
+        ir->nextIR = nullptr;
         currentIR = ir;
         return currentIR;
     }
@@ -142,7 +142,14 @@ public:
     IRList *continueList;
     IRList *breakList;
 
-    Block() : codeBegin(NULL), codeEnd(NULL), nextList(NULL), continueList(NULL), breakList(NULL) {}
+    Block()
+        : codeBegin(nullptr),
+          codeEnd(nullptr),
+          nextList(nullptr),
+          continueList(nullptr),
+          breakList(nullptr)
+    {
+    }
 };
 
 

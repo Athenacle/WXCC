@@ -79,21 +79,21 @@ public:
 
     void printTree(FILE *fp = wxccErr) const;
 
-    Tree(Node_OP _op, const Type &ty, const Tree *_left = NULL, const Tree *_right = NULL)
+    Tree(Node_OP _op, const Type &ty, const Tree *_left = nullptr, const Tree *_right = nullptr)
         : left(_left), right(_right), resultType(ty), nodeOP(_op)
     {
-        conditionT = NULL;
+        conditionT = nullptr;
         x.i_val = 0;
-        t = NULL;
+        t = nullptr;
     }
 
-    Tree(Node_OP _op, const Tree *_left = NULL, const Tree *_right = NULL)
+    Tree(Node_OP _op, const Tree *_left = nullptr, const Tree *_right = nullptr)
         : left(_left), right(_right), resultType(_left->getType()), nodeOP(_op)
     {
-        conditionT = NULL;
+        conditionT = nullptr;
         x.i_val = 0;
         sign = US_S;
-        t = NULL;
+        t = nullptr;
     }
 
     Node_OP getNOP(void) const

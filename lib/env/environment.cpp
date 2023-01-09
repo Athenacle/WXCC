@@ -11,6 +11,7 @@
 #include "table.h"
 #include "semantic.h"
 
+using namespace scope;
 
 namespace
 {
@@ -28,9 +29,9 @@ namespace
 Env& Env::ExitEnv(void)
 {
     Env* ret = this->up;
-    this->down = NULL;
-    if (this->up != NULL) {
-        this->up->down = NULL;
+    this->down = nullptr;
+    if (this->up != nullptr) {
+        this->up->down = nullptr;
         ret->scope_level--;
     }
     localFunc.exitBlock();
@@ -44,7 +45,7 @@ void Env::newIdentifier(Identifier* id)
 {
     if (id->isID()) {
         Identifier* idret = localID.existCurrentScope(id->getIDName());
-        if (idret == NULL) {
+        if (idret == nullptr) {
             localID.PutIntoTable(id, id->getIDName());
             idCounts++;
         } else {
@@ -56,7 +57,7 @@ void Env::newIdentifier(Identifier* id)
         }
     } else {
         Identifier* funcRet = localFunc.existCurrentScope(id->getIDName());
-        if (funcRet == NULL) {
+        if (funcRet == nullptr) {
             localFunc.PutIntoTable(id, id->getIDName());
             funcCounts++;
         } else {

@@ -57,16 +57,16 @@ BinFunction NS_EXPRE_IR::op2fun(const OP _op)
         default:
             assert(0);
     }
-    return NULL;
+    return nullptr;
 }
 
 Tree *Tree::IDtree(Env &env, const char *IDname)
 {
     Identifier *id = env.findID(IDname);
-    if (id == NULL)
+    if (id == nullptr)
         id = env.findFUNC(IDname);
-    if (id == NULL)
-        return NULL;
+    if (id == nullptr)
+        return nullptr;
     id->useID();
     Tree *tp = new Tree(NOP_ID, id->getType());
 #ifdef GD_OUTPUT
@@ -79,7 +79,7 @@ Tree *Tree::IDtree(Env &env, const char *IDname)
 
 Tree *Tree::CONSTtree(int i)
 {
-    Tree *tp = new Tree(NOP_CNST, *NS_BASE_TYPE::intType, NULL, NULL);
+    Tree *tp = new Tree(NOP_CNST, *NS_BASE_TYPE::intType, nullptr, nullptr);
     tp->setValue(i);
 #ifdef GD_OUTPUT
     char buf[20];
@@ -117,7 +117,7 @@ Tree *Tree::INDRtree(const Tree *tree, const Type &ty)
 
 Tree *Tree::ASGNtree(const Tree *left, const Tree *right)
 {
-    Tree *ret = NULL;
+    Tree *ret = nullptr;
     const Type &t = left->getType();
     if (t.getTYOP() == TO_ARRAY || t.getTYOP() == TO_FUNCTION) {
         ExprExcetion *ee = new ExprExcetion();
@@ -127,14 +127,14 @@ Tree *Tree::ASGNtree(const Tree *left, const Tree *right)
     } else {
         ret = new Tree(NOP_ASGN, left->getType(), left, right);
         char buf[20];
-        const char *rightStr = NULL;
-        const char *leftStr = NULL;
-        if (right->t != NULL)
+        const char *rightStr = nullptr;
+        const char *leftStr = nullptr;
+        if (right->t != nullptr)
             rightStr = right->t->toString();
         else
             rightStr = right->toString();
 
-        if (left->t != NULL)
+        if (left->t != nullptr)
             leftStr = left->t->toString();
         else
             leftStr = left->toString();
@@ -168,12 +168,12 @@ Tree *Tree::PLUStree(const Tree *left, const Tree *right)
 #ifdef GD_OUTPUT
     char buf[20];
     const char *rightStr, *leftStr;
-    if (right->t != NULL)
+    if (right->t != nullptr)
         rightStr = right->t->toString();
     else
         rightStr = right->toString();
 
-    if (left->t != NULL)
+    if (left->t != nullptr)
         leftStr = left->t->toString();
     else
         leftStr = left->toString();
@@ -193,12 +193,12 @@ Tree *Tree::MINUStree(const Tree *left, const Tree *right)
 #ifdef GD_OUTPUT
     char buf[20];
     const char *rightStr, *leftStr;
-    if (right->t != NULL)
+    if (right->t != nullptr)
         rightStr = right->t->toString();
     else
         rightStr = right->toString();
 
-    if (left->t != NULL)
+    if (left->t != nullptr)
         leftStr = left->t->toString();
     else
         leftStr = left->toString();
@@ -225,12 +225,12 @@ Tree *Tree::MODtree(const Tree *left, const Tree *right)
 #ifdef GD_OUTPUT
     char buf[20];
     const char *rightStr, *leftStr;
-    if (right->t != NULL)
+    if (right->t != nullptr)
         rightStr = right->t->toString();
     else
         rightStr = right->toString();
 
-    if (left->t != NULL)
+    if (left->t != nullptr)
         leftStr = left->t->toString();
     else
         leftStr = left->toString();
@@ -249,12 +249,12 @@ Tree *Tree::BITORtree(const Tree *left, const Tree *right)
 #ifdef GD_OUTPUT
     char buf[20];
     const char *rightStr, *leftStr;
-    if (right->t != NULL)
+    if (right->t != nullptr)
         rightStr = right->t->toString();
     else
         rightStr = right->toString();
 
-    if (left->t != NULL)
+    if (left->t != nullptr)
         leftStr = left->t->toString();
     else
         leftStr = left->toString();
@@ -274,12 +274,12 @@ Tree *Tree::BITANDtree(const Tree *left, const Tree *right)
 #ifdef GD_OUTPUT
     char buf[20];
     const char *rightStr, *leftStr;
-    if (right->t != NULL)
+    if (right->t != nullptr)
         rightStr = right->t->toString();
     else
         rightStr = right->toString();
 
-    if (left->t != NULL)
+    if (left->t != nullptr)
         leftStr = left->t->toString();
     else
         leftStr = left->toString();
@@ -299,12 +299,12 @@ Tree *Tree::MULTtree(const Tree *left, const Tree *right)
 #ifdef GD_OUTPUT
     char buf[20];
     const char *rightStr, *leftStr;
-    if (right->t != NULL)
+    if (right->t != nullptr)
         rightStr = right->t->toString();
     else
         rightStr = right->toString();
 
-    if (left->t != NULL)
+    if (left->t != nullptr)
         leftStr = left->t->toString();
     else
         leftStr = left->toString();
@@ -324,12 +324,12 @@ Tree *Tree::BITXORtree(const Tree *left, const Tree *right)
 #ifdef GD_OUTPUT
     char buf[20];
     const char *rightStr, *leftStr;
-    if (right->t != NULL)
+    if (right->t != nullptr)
         rightStr = right->t->toString();
     else
         rightStr = right->toString();
 
-    if (left->t != NULL)
+    if (left->t != nullptr)
         leftStr = left->t->toString();
     else
         leftStr = left->toString();
@@ -349,12 +349,12 @@ Tree *Tree::DIVtree(const Tree *left, const Tree *right)
 #ifdef GD_OUTPUT
     char buf[20];
     const char *rightStr, *leftStr;
-    if (right->t != NULL)
+    if (right->t != nullptr)
         rightStr = right->t->toString();
     else
         rightStr = right->toString();
 
-    if (left->t != NULL)
+    if (left->t != nullptr)
         leftStr = left->t->toString();
     else
         leftStr = left->toString();
@@ -374,12 +374,12 @@ Tree *Tree::SHLtree(const Tree *left, const Tree *right)
 #ifdef GD_OUTPUT
     char buf[20];
     const char *rightStr, *leftStr;
-    if (right->t != NULL)
+    if (right->t != nullptr)
         rightStr = right->t->toString();
     else
         rightStr = right->toString();
 
-    if (left->t != NULL)
+    if (left->t != nullptr)
         leftStr = left->t->toString();
     else
         leftStr = left->toString();
@@ -399,12 +399,12 @@ Tree *Tree::SHRtree(const Tree *left, const Tree *right)
 #ifdef GD_OUTPUT
     char buf[20];
     const char *rightStr, *leftStr;
-    if (right->t != NULL)
+    if (right->t != nullptr)
         rightStr = right->t->toString();
     else
         rightStr = right->toString();
 
-    if (left->t != NULL)
+    if (left->t != nullptr)
         leftStr = left->t->toString();
     else
         leftStr = left->toString();

@@ -17,8 +17,8 @@
 #include "functions.h"
 #include <map>
 
-using namespace NS_LEX_CONSTANTS;
-using namespace NS_TYPE_OP;
+using namespace lex::constants;
+using namespace type_operator;
 
 
 /* marcos for syntax warnings and errors. */
@@ -45,11 +45,11 @@ class Parser
     friend class Tree;
 
 private:
-    Lex& theLexer;
-    mutable NS_LEX_PODS::Token* cur;
-    mutable NS_LEX_PODS::Token* prepre;
+    lex::Lex& theLexer;
+    mutable lex::types::Token* cur;
+    mutable lex::types::Token* prepre;
     mutable bool isFinish;
-    mutable NS_LEX_PODS::Token* pre;
+    mutable lex::types::Token* pre;
 
     static std::map<KEYWORD, TYPE_OPERATOR> key2to;
     static std::map<OP, char> op2c;
@@ -69,17 +69,17 @@ private:
 
     void pushBack(void) const
     {
-        if (pre == NULL) {
+        if (pre == nullptr) {
             pre = cur;
-        } else if (prepre == NULL) {
+        } else if (prepre == nullptr) {
             prepre = pre;
             pre = cur;
         } else
             assert(0);
-        cur = NULL;
+        cur = nullptr;
     }
 
-    void setPC(NS_LEX_PODS::Token* _cur, NS_LEX_PODS::Token* _pre) const
+    void setPC(lex::types::Token* _cur, lex::types::Token* _pre) const
     {
         cur = _cur;
         pre = _pre;
@@ -98,7 +98,7 @@ private:
 
     //--declaration
     int c_parser_translation_unit(Env&) const;
-    int c_parser_declaration(Env&, NS_SC::scope) const;
+    int c_parser_declaration(Env&, scope::Scope) const;
     Type* c_parser_declaration_specifiers(Type*) const;
     Type* c_parser_declaration_type_specifiers(Type*) const;
     Type* c_parser_declaration_type_specifiers_opt(Type* ty) const;
@@ -159,12 +159,12 @@ private:
 
 public:
     ~Parser();
-    explicit Parser(Lex& lexer) : theLexer(lexer)
+    explicit Parser(lex::Lex& lexer) : theLexer(lexer)
     {
         initParser();
 
         isFinish = false;
-        prepre = pre = cur = NULL;
+        prepre = pre = cur = nullptr;
     }
 
     void begin_parse(Env& env) const;

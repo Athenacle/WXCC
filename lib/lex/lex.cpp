@@ -11,8 +11,9 @@
 #include "symbol.h"
 #include "tools.h"
 
-using namespace NS_LEX_CONSTANTS;
-using namespace NS_LEX_PODS;
+using namespace lex;
+using namespace constants;
+using namespace types;
 
 #define GET       -1
 #define BACK      0
@@ -298,7 +299,7 @@ Number* Lex::tryParseFloatNumber(char* numberBuffer, Number** dest)
         goto parseFloatError;
     } else {
         errno = 0;
-        result = strtod((char*)tmpBuffer, NULL);
+        result = strtod((char*)tmpBuffer, nullptr);
         if (errno == ERANGE) {
             lexerError(LEX_ERROR_FLOATING_OVERFLOW, tmpBuffer);
             goto parseFloatError;
@@ -325,11 +326,11 @@ parseFloatError:
     return *dest;
 }
 
-NUMBER_TYPE& NS_LEX_CONSTANTS::operator|=(NUMBER_TYPE& nt, unsigned long mask)
+NumberType& constants::operator|=(NumberType& nt, unsigned long mask)
 {
     unsigned long ult = static_cast<unsigned long>(nt.type());
     ult = ult | mask;
-    nt = static_cast<NUMBER_TYPE>(ult);
+    nt = static_cast<NumberType>(ult);
     return nt;
 }
 
@@ -558,7 +559,7 @@ parOctNumFinish:
 
 int Lex::newNumber(char* numBuffer, int radix)
 {
-    Number* ret = NULL;
+    Number* ret = nullptr;
     switch (radix) {
         case 10:
             ret = tryParseDecNumber(numBuffer);
@@ -676,7 +677,7 @@ int Lex::identifier(char* start)
     return T_ID;
 }
 
-NS_LEX_CONSTANTS::KEYWORD Lex::letter(char peek)
+constants::KEYWORD Lex::letter(char peek)
 {
     char* p = tmpBuffer;
     switch (*p = peek) {
@@ -1472,7 +1473,7 @@ stringParse:
     for (t = getNextChar(GET); t != '"'; t = getNextChar(GET), lengthCount++) {
         if (lengthCount == TMPBUFFER_SIZE) {
             if (errTimes == 0) {
-                lexerError(LEX_ERROR_STRING_TOO_LONG, NULL);
+                lexerError(LEX_ERROR_STRING_TOO_LONG, nullptr);
             }
             errTimes = 1;
             tp = tmpBuffer;
@@ -1480,12 +1481,12 @@ stringParse:
             continue;
         }
         if (t == '\n') {
-            lexerError(LEX_ERROR_STRING_MEET_NEWLINE, NULL);
+            lexerError(LEX_ERROR_STRING_MEET_NEWLINE, nullptr);
             //currentPos->line++;
             break;
         }
         if (t == EOF) {
-            lexerError(2, NULL);
+            lexerError(2, nullptr);
             fatalError("meet a EOF in a string constant.");
         }
         if (t == '\\') {
@@ -1527,19 +1528,19 @@ int Lex::parseCharConstant(void)
     for (; t != '\''; t = getNextChar(GET), lengthCount++) {
         if (lengthCount == TMPBUFFER_SIZE) {
             if (errTimes == 0) {
-                lexerError(LEX_ERROR_CHAR_CON_TOO_LONG, NULL);
+                lexerError(LEX_ERROR_CHAR_CON_TOO_LONG, nullptr);
             }
             errTimes = 1;
             lengthCount = 0;
             tp = tmpBuffer;
         }
         if (t == '\n') {
-            lexerError(LEX_ERROR_STRING_MEET_NEWLINE, NULL);
+            lexerError(LEX_ERROR_STRING_MEET_NEWLINE, nullptr);
             //currentPos->line++;
             break;
         }
         if (t == EOF) {
-            lexerError(2, NULL);
+            lexerError(2, nullptr);
             fatalError("meet a EOF in a string constant.");
         }
         *tp++ = t;
@@ -1552,7 +1553,7 @@ int Lex::parseCharConstant(void)
         result = (result << 8) + getAChar(tp, &charLength);
         tp += charLength;
         if (lengthCount >= 4) {
-            lexerError(LEX_ERROR_CHAR_CON_TOO_LONG, NULL);
+            lexerError(LEX_ERROR_CHAR_CON_TOO_LONG, nullptr);
             lengthCount = 0;
         }
     }
@@ -1673,20 +1674,20 @@ end:
 }
 
 
-NS_LEX_PODS::Token::Token(KEYWORD key)
+types::Token::Token(KEYWORD key)
 {
     token_pos = new Position(*Lex::currentPos);
     token_type = T_KEY;
     token_value.keyword = key;
 }
 
-NS_LEX_PODS::Token::Token(NS_LEX_CONSTANTS::TYPE ty, const char* cc)
+types::Token::Token(constants::TYPE ty, const char* cc)
 {
     token_pos = new Position(*Lex::currentPos);
     token_type = ty;
     token_value.string = cc;
 }
-NS_LEX_PODS::Token::Token(Number* n)
+types::Token::Token(Number* n)
 {
     token_pos = new Position(*Lex::currentPos);
     if (n->numberType == NT_FL || n->numberType == NT_DB)
@@ -1696,14 +1697,14 @@ NS_LEX_PODS::Token::Token(Number* n)
     token_value.numVal = n;
 }
 
-NS_LEX_PODS::Token::Token(Token& tok) : token_type(tok.token_type)
+types::Token::Token(Token& tok) : token_type(tok.token_type)
 {
     token_pos = new Position(*Lex::currentPos);
     token_value.numVal = tok.token_value.numVal;
 }
 
 
-unsigned long NS_LEX_TOOLS::strHash(const char* st)
+unsigned long tools::strHash(const char* st)
 {
     // Knuth[1973b]: TAOCP Vol2
     unsigned long hash = 1315423911ul;
