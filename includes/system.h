@@ -10,7 +10,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#if defined USE_CONFIG_H && !defined WIN32
+#if defined HAVE_CONFIG_H && !defined WIN32
 #define DEBUG
 #define _DEBUG
 #include "config.h"

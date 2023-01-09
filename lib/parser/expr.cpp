@@ -32,14 +32,14 @@ Expr *Parser::c_parser_expressions(Env &env) const
     return 0;
 }
 
-Tree *Parser::c_parser_base_expressions(Env &env, int k) const
+Tree *Parser::c_parser_base_expressions(Env &env, MAYBE_UNUSED int k) const
 {
     //expr -> assignment-expr { ',' assignment-expr }
 
     //stop: IF ID } 0
     Tree *tp = c_parser_expressions_1(env, 0);
     while (*cur == OP_COMMA) {
-        Tree *ret = NULL;
+        MAYBE_UNUSED Tree *ret = NULL;
         next();
         ret = c_parser_expressions_1(env, 0);
         //tp = new Tree(RIGHT, ret->getType(), NULL, ret);
@@ -47,7 +47,7 @@ Tree *Parser::c_parser_base_expressions(Env &env, int k) const
     return tp;
 }
 
-Tree *Parser::c_parser_expressions_1(Env &env, int k) const
+Tree *Parser::c_parser_expressions_1(Env &env, MAYBE_UNUSED int k) const
 //assignment statements.
 {
     Tree *tp = c_parser_expressions_2(env);
@@ -149,7 +149,7 @@ Tree *Parser::c_parser_expressions_3(Env &env, int k) const
             while (op2l[cur->token_value.op] == k1 && !isASSIGN(*cur)) {
                 OP op = cur->token_value.op;
                 Tree *rightT = NULL;
-                Tree *leftT = NULL;
+                MAYBE_UNUSED Tree *leftT = NULL;
                 if (op == OP_LOGOR) {
                     next();
                     Tree *rightT = c_parser_expressions_3(env, 4);
@@ -182,9 +182,9 @@ Tree *Parser::c_parser_unary_expr(Env &env) const
     Tree *tp = NULL;
     TYPE ty = cur->token_type;
     const Type *objectType = NULL;
-    size_t size;
+    MAYBE_UNUSED size_t size;
     TYPE_OPERATOR to;
-    Node_OP nop;
+    MAYBE_UNUSED Node_OP nop;
     if (ty == T_OPERATOR && !NS_LEX_TOOLS::matchOP(*cur, OP_LEFTBRACK)) {
         OP _op = cur->token_value.op;
         switch (_op) {
@@ -297,7 +297,7 @@ Tree *Parser::c_parser_postfix_expr(Env &env, Tree *tr) const
             case OP_LEFTSQBRAC: {
                 next();
                 Tree *sub = c_parser_expressions_1(env, 0);
-                const char *arrayName = tr->getIDName();
+                MAYBE_UNUSED const char *arrayName = tr->getIDName();
                 retTree = Tree::ARRAYtree(retTree, sub);
                 pushBack();
                 need(OP_RIGHTSQBRAC);
@@ -305,6 +305,7 @@ Tree *Parser::c_parser_postfix_expr(Env &env, Tree *tr) const
             }
             case OP_LEFTBRACK:
                 retTree = c_parser_expr_func_call(env, tr);
+                FALLTHROUGH
             case OP_PERIOD:
             case OP_POINTER:
             default:

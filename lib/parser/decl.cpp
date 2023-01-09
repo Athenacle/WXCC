@@ -98,7 +98,7 @@ meet_comma:
             if (declared != 1)
                 parserError(PAR_ERR_INT, declError[DE_MORE_DECL_WITH_FUNC], cur->token_pos->line);
             else {
-                ST *retST = c_parser_funtion_definition(env, *id);
+                MAYBE_UNUSED ST *retST = c_parser_funtion_definition(env, *id);
             }
         } else {
             pushBack();
@@ -276,7 +276,6 @@ Type *Parser::c_parser_parameter_type_list(void) const
         } else
         //DECLARATION-SPECIFIERS DECLARATOR
         {
-        paraList_pb:
             pushBack();
         paraList:
             Type *retTY = c_parser_declaration_specifiers(NULL);

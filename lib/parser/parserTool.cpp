@@ -19,7 +19,7 @@ int Parser::tokenCompare(int compareTo) const
     //TODO: THIS FUNCTION NEED TO BE TESTED.
     if ((compareTo & TYPE_SSQ) == TYPE_SSQ)
         return to->token_type == T_KEY
-               && (to->token_value.keyword & compareTo) == (compareTo & TYPE_SSQ);
+               && (to->token_value.keyword & compareTo) == (compareTo & (int)TYPE_SSQ);
 
     if ((compareTo & KEYWORD_MASK) == KEYWORD_MASK) {
         return to->token_type == T_KEY && to->token_value.keyword == compareTo;

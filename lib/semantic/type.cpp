@@ -41,9 +41,11 @@ namespace
         "TE05. Line %3d: Function cannot be a parameter of another function.\n",
 
         "TE06: Line %3d: Array cannot contain functions.\n"};
-    const char *typeWarning[] = {"NULL",
 
-                                 "TW01: floating type with a signed/unsigned specifier. ignore.\n"};
+    MAYBE_UNUSED const char *typeWarning[] = {
+        "NULL",
+
+        "TW01: floating type with a signed/unsigned specifier. ignore.\n"};
 };  // namespace
 
 Type::Type(TYPE_OPERATOR _oper,
@@ -121,10 +123,10 @@ void Type::print(void)
 
 char *Type::print(char *buffer)
 {
-    if (this == NULL)
-        return buffer;
+    // if (this == NULL)
+    //     return buffer;
     if (type_op == TO_FUNCTION) {
-        Type *ytp = this->u.f.paraList;
+        MAYBE_UNUSED Type *ytp = this->u.f.paraList;
         char *ptr = this->base_type->print(buffer);
         ptr += sprintf(ptr, " (*)(");
         ptr = u.f.paraList->print(ptr);
@@ -255,7 +257,7 @@ const Type &Type::binaryOp(const Type &left, const Type &right)
         leftTY = &leftTY->getBaseType();
     }
 
-    const Type *rightTY = &right;
+    MAYBE_UNUSED const Type *rightTY = &right;
     while (left.getTYOP() == TO_CONST || left.getTYOP() == TO_VOLATILE)
 
     {
@@ -302,7 +304,7 @@ namespace NS_BASE_TYPE
 
             voidType = new Type(TO_VOID);
             pvType = new Type(TO_POINTER, voidType);
-        } catch (std::bad_alloc e) {
+        } catch (std::bad_alloc &e) {
             fatalError("new BASE_TYPES error: no more memory.");
         }
     }

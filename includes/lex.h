@@ -40,7 +40,7 @@
 #define LEX_WARNING_ILL_MACRO_TOKEN       2
 #define LEX_WARNING_OCT_HEX_NOT_IMPLEMENT 3
 
-#define EOT                               0xdeadbeef
+#define EOT                               (static_cast<int>(0xdeadbeef))
 /* EOT means End  Of Token.
 * It indicates the end of input source file.
 * Magic Number

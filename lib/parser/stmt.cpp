@@ -61,7 +61,7 @@ ST *Parser::c_parser_funtion_definition(Env &globalEnv, Identifier &id) const
             id.getIDname(),
             id.getType().getTYPEName());
     IR *blockBegin = new IR();
-    Block *retIR = c_parser_compound_statement(fun);
+    MAYBE_UNUSED Block *retIR = c_parser_compound_statement(fun);
     IR::print(blockBegin);
     fprintf(wxccErr, "\nFunction %s End.----------------------------------\n", id.getIDname());
     need(OP_RIGHTBRACE);
@@ -150,7 +150,7 @@ Block *Parser::c_parser_select_statement(Env &env) const
         } while (*cur == OP_SEMICOLON);
         if (*cur == KEY_ELSE) {
             Label *la = new Label();
-            Label *lb = new Label();
+            MAYBE_UNUSED Label *lb = new Label();
             next();
             IR *irBefore = new IR("\tgoto %s \n", false);
             IR *falseGoto = new IR("\tgoto %s \n", false);
@@ -161,22 +161,26 @@ Block *Parser::c_parser_select_statement(Env &env) const
             IR::appendIR(tmpIR->preIR, falseGoto);
             IR::appendIR(tmpIR->preIR, ir);
             IRList::mergeChain(*falseStmt->nextList, *IRList::makeIRList(*falseGoto));
-            IRList *listBeforeElse = IRList::makeIRList(*irBefore);
+            MAYBE_UNUSED IRList *listBeforeElse = IRList::makeIRList(*irBefore);
             IRList::backPatch(*condExpr->getTree().falseList, *la);
             IRList *tmp = IRList::mergeChain(*falseStmt->nextList, irBefore);
             stmt->nextList = IRList::mergeChain(*tmp, *falseStmt->nextList);
 
-            if (falseStmt->breakList != NULL)
-                if (stmt->breakList != NULL)
+            if (falseStmt->breakList != NULL) {
+                if (stmt->breakList != NULL) {
                     stmt->breakList = IRList::mergeChain(*stmt->breakList, *falseStmt->breakList);
-                else
+                } else {
                     stmt->breakList = falseStmt->breakList;
-            if (falseStmt->continueList != NULL)
-                if (stmt->continueList != NULL)
+                }
+            }
+            if (falseStmt->continueList != NULL) {
+                if (stmt->continueList != NULL) {
                     stmt->continueList =
                         IRList::mergeChain(*stmt->continueList, *falseStmt->continueList);
-                else
+                } else {
                     stmt->continueList = falseStmt->continueList;
+                }
+            }
 
         } else {
             stmt->nextList = condExpr->getTree().falseList;
@@ -215,7 +219,6 @@ stmt_list:
     } else if (matchOP(*cur, OP_RIGHTBRACE)) {
         goto comp_stmt_finish;  // meet '}', exit current block;
     } else if (isLabel(*cur)) {
-    label:
         stmt = c_parser_label_statement(curEnv);
     } else if (matchOP(*cur, OP_SEMICOLON))  // a statements finishes
     {
@@ -300,7 +303,7 @@ Block *Parser::c_parser_iter_for(Env &env) const
  *	c = 0
  */
 {
-    IRList *condBeginList, *bodyBeginList, *retList, *incrList, *backList;
+    MAYBE_UNUSED IRList *condBeginList, *bodyBeginList, *retList, *incrList, *backList;
     Block *ret = new Block();
     ret->nextList = IRList::makeIRList(*new IR(""));
     need(OP_LEFTBRACK);
@@ -332,8 +335,8 @@ Block *Parser::c_parser_iter_for(Env &env) const
     IRList::backPatch(*backList, *condLabel);
     IR *afterExprIR = IR::reSetCurrentFirst(afterExpr->getTree().codebegin)->nextIR;
     IR::currentIR = tmpCurrent;
-    IR *stmtIR = new IR(*stmtLabel);
-    Block *stmt = c_parser_statement(env);
+    MAYBE_UNUSED IR *stmtIR = new IR(*stmtLabel);
+    MAYBE_UNUSED Block *stmt = c_parser_statement(env);
     IR *bodyBeginIR = new IR("%s : \n");
 
     bodyBeginList = IRList::makeIRList(*bodyBeginIR);
@@ -404,7 +407,7 @@ Block *Parser::c_parser_iter_while(Env &env) const
  *	b = b + 1
  */
 {
-    IRList *f;
+    MAYBE_UNUSED IRList *f;
     Label *condLabel, *bodyLabel, *endLabel;
     IR *condIR, *bodyIR, *backIR, *endIR;
     Expr *condExpr;

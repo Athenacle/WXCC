@@ -4,6 +4,8 @@
 * January 21, 2013
 *
 */
+
+
 #include "system.h"
 #include "lex.h"
 #include "symbol.h"
@@ -638,10 +640,12 @@ int Lex::number(char peek)
             if (isdigit(tmpBuffer[1])) /* oct numbers */
             {
                 return newNumber(tmpBuffer, 8);
-            } else if (tmpBuffer[1] == 'x' || tmpBuffer[1] == 'X') /*hex numbers*/
+            } else if (tmpBuffer[1] == 'x' || tmpBuffer[1] == 'X') { /*hex numbers*/
                 return newNumber(tmpBuffer, 16);
-            else if (tmpBuffer[1] == '\0') /* there is a 0 */
+            } else if (tmpBuffer[1] == '\0') { /* there is a 0 */
                 return newNumber(tmpBuffer, 10);
+            }
+            FALLTHROUGH;
         default: /* dec numbers */
             return newNumber(tmpBuffer, 10);
     }
@@ -929,6 +933,7 @@ NS_LEX_CONSTANTS::KEYWORD Lex::letter(char peek)
                                 }
                             }
                         }
+                        break;
                     case 't':
                         *(++p) = getNextChar(GET);
                         if (*p == 'u') {

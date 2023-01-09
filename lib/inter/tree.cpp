@@ -96,7 +96,7 @@ Tree *Tree::ARRAYtree(Tree *ty, Tree *subscript)
     int elementSize = arrayBaseType.getBaseType().getSize();
     Tree *offset = Tree::CONSTtree(elementSize);
     offset = Tree::MULTtree(offset, subscript);
-    const char *multStr = offset->t->toString();
+    MAYBE_UNUSED const char *multStr = offset->t->toString();
     offset = Tree::PLUStree(ty, offset);
     Tree *ret = Tree::INDRtree(offset, arrayBaseType.getBaseType());
     return ret;
@@ -512,7 +512,7 @@ Tree *Tree::ORtree(Tree *left, Tree *right)
     }
     Tree *ret = new Tree(NOP_LOR, *NS_BASE_TYPE::intType, left, right);
     Label *la = new Label();
-    IR *ir = new IR(*la);
+    MAYBE_UNUSED IR *ir = new IR(*la);
 
     IR *firstGOTO = new IR("%s : \n", false);
     IR::appendIR(right->codebegin->preIR, firstGOTO);

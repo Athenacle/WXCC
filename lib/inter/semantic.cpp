@@ -102,7 +102,7 @@ void IRList::backPatch(IRList &irlist, Label &label)
     int secondCount = irlist.list.size();
     int i = 0;
     const char *labelStr = label.toString();
-    int len = strlen(labelStr);
+    MAYBE_UNUSED int len = strlen(labelStr);
     for (; i < secondCount; i++) {
         IR &ir = *irlist.list.at(i);
         ir.dest = &label;

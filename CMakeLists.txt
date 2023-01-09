@@ -14,6 +14,9 @@ set(LIBRARY_OUTPUT_PATH ${OUT_PATH})
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 include(Check)
 
+configure_file(${CMAKE_SOURCE_DIR}/config.h.in ${CMAKE_BINARY_DIR}/config.h @ONLY)
+include_directories(${CMAKE_BINARY_DIR})
+add_compile_definitions(HAVE_CONFIG_H)
 
 add_subdirectory(lib)
 
