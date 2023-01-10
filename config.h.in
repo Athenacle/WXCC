@@ -63,7 +63,7 @@
 
 // clang-format off
 
-#define PROJECT_GIT_SHA  "@GIT_SHA1@"
+#define PROJECT_GIT_SHA  "@GIT_HASH@"
 
 #define PROJECT_NAME "@PROJECT_NAME@"
 
