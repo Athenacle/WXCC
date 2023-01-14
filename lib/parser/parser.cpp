@@ -12,11 +12,14 @@
 #include "parser.h"
 #include "exception.h"
 
+#include "lex/tools.h"
+
 using namespace lex;
 using namespace constants;
 using namespace scope;
-using namespace tools;
+using namespace utils;
 using namespace type_operator;
+using namespace lex::tools;
 
 int currentLevel = S_GLOBAL;
 std::map<KEYWORD, TYPE_OPERATOR> Parser::key2to;

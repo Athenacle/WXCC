@@ -6,8 +6,10 @@
 */
 
 #include "system.h"
+#include "tools.h"
 
-void fatalError(const char *message)
+
+void fatalError(const char* message)
 {
     fprintf(stderr, "fatal error: %s.\n", message);
 #if defined TOOL_DEBUG && defined WIN32
@@ -16,4 +18,15 @@ void fatalError(const char *message)
     }
 #endif
     exit(EXIT_FAILURE);
+}
+
+
+unsigned long utils::strHash(const char* st)
+{
+    // Knuth[1973b]: TAOCP Vol2
+    unsigned long hash = 1315423911ul;
+    while (size_t ch = (size_t)*st++) {
+        hash = ((hash << 13) ^ (hash >> 3)) ^ ch;
+    }
+    return hash;
 }

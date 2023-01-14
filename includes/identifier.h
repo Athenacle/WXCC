@@ -113,7 +113,7 @@ public:
 
     unsigned long getHash(void)
     {
-        return lex::tools::strHash(this->getIDName());
+        return utils::strHash(this->getIDName());
     }
 };
 

@@ -9,7 +9,7 @@
 
 #include "exception.h"
 #include "lex.h"
-
+#include "tools.h"
 
 using std::pair;
 
@@ -35,7 +35,7 @@ namespace NS_TABLE
     public:
         static unsigned long hash(const char* t)
         {
-            return lex::tools::strHash(t);
+            return utils::strHash(t);
         }
     };
 

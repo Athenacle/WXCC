@@ -12,10 +12,12 @@
 #include "exception.h"
 #include "identifier.h"
 
+#include "lex/tools.h"
+
 using namespace lex;
 using namespace constants;
 using namespace scope;
-using namespace tools;
+using namespace ::lex::tools;
 using namespace type_operator;
 
 namespace

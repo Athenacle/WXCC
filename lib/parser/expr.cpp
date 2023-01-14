@@ -12,8 +12,10 @@
 #include "expr.h"
 #include "system.h"
 
+#include "lex/tools.h"
+
 using namespace lex;
-using tools::isASSIGN;
+using lex::tools::isASSIGN;
 using namespace NS_EXPRE_IR;
 using namespace constants;
 

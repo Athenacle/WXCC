@@ -14,6 +14,8 @@
 #include "functions.h"
 #include "expr.h"
 
+#include "lex/tools.h"
+
 using namespace lex;
 using namespace lex::tools;
 
