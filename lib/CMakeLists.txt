@@ -1,11 +1,11 @@
 
 
 add_library(libs STATIC  
-                env/environment.cpp env/symbol.cpp env/symbol.cpp
-                inter/semantic.cpp inter/tree.cpp
-                lex/input.cpp lex/lex.cpp lex/lexDebug.cpp  lex/lexWE.cpp lex/token.cpp
-                parser/decl.cpp parser/expr.cpp parser/parser.cpp parser/parserTool.cpp
-                parser/parserWE.cpp parser/stmt.cpp
-                semantic/semacticWE.cpp semantic/type.cpp
-                tools/tools.cpp)
+                env/environment.cc env/symbol.cc env/symbol.cc
+                inter/semantic.cc inter/tree.cc
+                lex/input.cc lex/lex.cc lex/lexDebug.cc  lex/lexWE.cc lex/token.cc
+                parser/decl.cc parser/expr.cc parser/parser.cc parser/parserTool.cc
+                parser/parserWE.cc parser/stmt.cc
+                semantic/semacticWE.cc semantic/type.cc
+                tools/tools.cc)
 target_include_directories(libs PUBLIC ${CMAKE_SOURCE_DIR}/includes)

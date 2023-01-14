@@ -7,7 +7,7 @@
 */
 
 #include "system.h"
-#include "lex.h"
+#include "lex/lexer.h"
 #include "parser.h"
 
 int Parser::parserWarningCount = 0;

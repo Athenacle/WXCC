@@ -9,7 +9,7 @@
 #ifndef TREE_H
 #define TREE_H
 
-#include "lex.h"
+#include "lex/lexer.h"
 #include "type.h"
 #include "environment.h"
 #include "system.h"

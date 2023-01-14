@@ -25,7 +25,7 @@ add_compile_definitions(HAVE_CONFIG_H)
 add_subdirectory(lib)
 add_subdirectory(test)
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} main.cc)
 target_link_libraries(${PROJECT_NAME} PUBLIC libs fmt)
 add_dependencies(${PROJECT_NAME} argparse)
 target_include_directories(${PROJECT_NAME} PUBLIC includes/ ${ARGPARSE_INC_DIR})

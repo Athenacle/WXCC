@@ -7,7 +7,7 @@
 
 
 #include "system.h"
-#include "lex.h"
+#include "lex/lexer.h"
 #include "symbol.h"
 #include "tools.h"
 

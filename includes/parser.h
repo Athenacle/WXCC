@@ -8,7 +8,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "lex.h"
+#include "lex/lexer.h"
 #include "type.h"
 #include "environment.h"
 #include "tree.h"

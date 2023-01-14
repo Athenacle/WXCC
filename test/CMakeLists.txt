@@ -3,13 +3,13 @@ enable_testing()
 
 set(TEST_NAME ${PROJECT_NAME}_all_in_one)
 
-add_library(test STATIC test.cpp)
+add_library(test STATIC test.cc)
 target_link_libraries(test PRIVATE GTest::GTest GTest::GMock libs)
 target_include_directories(test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/includes)
 
 set(LIBS)
 macro(add_subdirectory_test)
-    file(GLOB files ${ARGN}/*.cpp)
+    file(GLOB files ${ARGN}/*.cc)
     foreach(file ${files})
         get_filename_component(basename ${file} NAME_WE)
         set(TN test_${ARGN}_${basename})

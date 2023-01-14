@@ -2,7 +2,7 @@
 
 
 #include "system.h"
-#include "lex.h"
+#include "lex/lexer.h"
 #include "type.h"
 #include "symbol.h"
 #include "parser.h"

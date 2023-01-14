@@ -6,7 +6,7 @@
 */
 
 #include "system.h"
-#include "lex.h"
+#include "lex/lexer.h"
 #include "tools.h"
 #include "parser.h"
 #include "symbol.h"

@@ -1,5 +1,5 @@
 #include "lex/token.h"
-#include "lex.h"
+#include "lex/lexer.h"
 
 using namespace lex;
 using namespace lex::types;

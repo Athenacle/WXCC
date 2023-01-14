@@ -5,7 +5,7 @@
 *
 */
 #include "system.h"
-#include "lex.h"
+#include "lex/lexer.h"
 #include "parser.h"
 
 using namespace lex;

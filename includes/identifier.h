@@ -9,7 +9,7 @@
 #define IDENTIFIER_H
 
 
-#include "lex.h"
+#include "lex/lexer.h"
 #include "type.h"
 #include "symbol.h"
 #include "table.h"

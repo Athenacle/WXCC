@@ -5,7 +5,7 @@
 *
 */
 
-#include "lex.h"
+#include "lex/lexer.h"
 #include "tools.h"
 #include "symbol.h"
 
