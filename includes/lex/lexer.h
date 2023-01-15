@@ -12,6 +12,7 @@
 
 #include "lex/constants.h"
 #include "lex/token.h"
+#include "lex/input.h"
 
 #define BLOCK_SIZE     4096
 #define LEX_BLOCK_SIZE (BLOCK_SIZE + 2) /* 4098 */
@@ -59,22 +60,17 @@ namespace lex
         friend types::Token::Token(Token &tok);
 
     private:
-        Lex(const Lex &);
-        Lex &operator=(const Lex &);
+        Lex(const Lex &) = delete;
+        Lex &operator=(const Lex &) = delete;
 
         static types::Token *currentToken;
         static types::Position *currentPos;
 
+        LexInputSource *source;
+
         types::Token *newTok;
 
-        FILE *sourceFile;
-        const char *start;
-        const char *pointer;
-
-        static char buffer[LEX_BUFFER_SIZE + 4];
         static char tmpBuffer[TMPBUFFER_SIZE];
-        int initLex(const char *_filename);
-        int fillBuffer(void);
 
         static int lexWarningCount;
         static int lexErrorCount;
@@ -125,7 +121,7 @@ namespace lex
             return new types::Token(*currentToken);
         }
 
-        Lex(const char *filename);
+        Lex(LexInputSource *source);
 
         int getNextToken(void);
     };

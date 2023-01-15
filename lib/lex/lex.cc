@@ -19,34 +19,22 @@ using namespace types;
 #define BACK      0
 #define LOOKAHEAD 1
 
-Lex::Lex(const char* filename)
+Lex::Lex(LexInputSource* s) : source(s)
 {
-    currentPos = new Position(filename);
+    currentPos = new Position(s->filename());
     currentToken = new Token;
     currentToken->token_pos = currentPos;
-    initLex(filename);
-    start = pointer = buffer;
 }
 
 char Lex::getNextChar(int type)
 {
-    //TODO : 龙书上的词法分析器双缓冲技术
-    if (pointer - start == LEX_BUFFER_SIZE
-        && type == GET) { /* all context in buffer has been proceed, re-fill the buffer*/
-                          //fillBuffer();
-                          //pointer = buffer;
+    LexInputSource::GET_TYPE t = LexInputSource::GET_TYPE::GET_CHAR;
+    if (type == BACK) {
+        t = LexInputSource::GET_TYPE::PUSH_BACK;
+    } else if (type == LOOKAHEAD) {
+        t = LexInputSource::GET_TYPE::LOOK_AHEAD;
     }
-    switch (type) {
-        case GET:
-            return *(pointer++);
-        case BACK:
-            return *(pointer--);
-        case LOOKAHEAD:
-            return *(pointer);
-        default:
-            assert(0);
-    }
-    return 0;
+    return source->next(t);
 }
 
 void Lex::skipBlank(void)

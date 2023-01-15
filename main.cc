@@ -42,7 +42,9 @@ int main(int argc, char *argv[])
     if (wxccErr == nullptr)
         wxccErr = stdout;
     initCompiler();
-    lex::Lex lexer(argv[1]);
+    lex::FileLexInputSource input;
+    input.openFile(argv[1]);
+    lex::Lex lexer(&input);
     Parser par(lexer);
     Env *globalEnv = new Env();
     globalEnv->setGlobal();

@@ -9,3 +9,4 @@ add_library(libs STATIC
                 semantic/semacticWE.cc semantic/type.cc
                 tools/tools.cc)
 target_include_directories(libs PUBLIC ${CMAKE_SOURCE_DIR}/includes)
+target_link_libraries(libs PUBLIC fmt)

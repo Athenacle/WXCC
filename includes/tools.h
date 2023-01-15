@@ -61,6 +61,8 @@ namespace utils
 {
 
     unsigned long strHash(const char *);
-}
+
+    const char *strdup(const char *);
+}  // namespace utils
 
 #endif
