@@ -6,9 +6,10 @@
 */
 
 #include "type.h"
-#include "tools.h"
-#include "semantic.h"
+
 #include "exception.h"
+#include "semantic.h"
+#include "tools.h"
 
 //using namespace NS_SEMACTIC;
 using namespace type_operator;
@@ -118,7 +119,7 @@ void Type::print(void)
 {
     char buf[100] = {0};
     print(buf);
-    name = strdup(buf);
+    name = utils::strdup(buf);
 }
 
 char *Type::print(char *buffer)

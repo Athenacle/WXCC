@@ -1,6 +1,7 @@
 #include "tree.h"
-#include "type.h"
+
 #include "expr.h"
+#include "type.h"
 
 using namespace NS_EXPRE_IR;
 

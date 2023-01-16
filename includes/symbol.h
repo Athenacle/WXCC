@@ -8,9 +8,9 @@
 #ifndef SYMBOL_H
 #define SYMBOL_H
 
-#include "lex/lexer.h"
-
 #include <iterator>
+
+#include "lex/lexer.h"
 using std::iterator;
 using namespace lex::types;
 using namespace lex::constants;

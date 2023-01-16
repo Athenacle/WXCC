@@ -4,10 +4,11 @@
 * April 4, 2013
 *
 */
-#include "system.h"
 #include "semantic.h"
-#include "tree.h"
+
 #include "stmt.h"
+#include "system.h"
+#include "tree.h"
 
 using namespace std;
 

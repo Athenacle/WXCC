@@ -7,8 +7,8 @@
 *
 */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef SYSTEM_H_
+#define SYSTEM_H_
 
 #if defined HAVE_CONFIG_H && !defined WIN32
 #define DEBUG
@@ -38,29 +38,18 @@
 #endif
 
 /// system includes.
-#include <cstring>
-#include <cstdio>
-#include <cstdlib>
-
-#include <ctype.h>
-#include <cstdarg>
-#include <climits>
-#include <cfloat>
+#include <cassert>
+#include <cctype>
 #include <cerrno>
-#include <assert.h>
-
-#include <iostream>
-#include <map>
+#include <cfloat>
+#include <climits>
 #include <string>
-#include <utility>
-#include <iterator>
-#include <vector>
 
 extern FILE *wxccErr;
 extern int errCount;
 extern int warningCount;
 void fatalError(const char *);
 
-#define GD_OUTPUT
+class Function;
 
 #endif

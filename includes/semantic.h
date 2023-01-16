@@ -6,8 +6,10 @@
 *
 */
 
-#include "system.h"
+#include <vector>
 
+#include "system.h"
+#include "tools.h"
 
 #ifndef SEMANTIC_H
 #define SEMANTIC_H
@@ -47,10 +49,10 @@ class Label
 public:
     Label();
 
-    static char *nextLabel()
+    static const char *nextLabel()
     {
         labelNum--;
-        return strdup(Label().toString());
+        return utils::strdup(Label().toString());
     }
 
     void print(FILE *fp = wxccErr) const;

@@ -1,10 +1,10 @@
 #ifndef EXPR_H
 #define EXPR_H
 
-#include "type.h"
-#include "tree.h"
 #include "exception.h"
 #include "semantic.h"
+#include "tree.h"
+#include "type.h"
 
 class Expr : public Block
 {

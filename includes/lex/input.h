@@ -1,6 +1,7 @@
 #ifndef LEX_INPUT_H_
 #define LEX_INPUT_H_
 
+#include <cstdint>
 #include <cstdio>
 
 namespace lex

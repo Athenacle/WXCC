@@ -10,9 +10,10 @@
 #define TREE_H
 
 #include "lex/lexer.h"
-#include "type.h"
+
 #include "environment.h"
 #include "system.h"
+#include "type.h"
 
 namespace NS_EXPRE_IR
 {

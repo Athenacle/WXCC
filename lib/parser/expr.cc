@@ -4,15 +4,18 @@
 * April 7, 2013
 */
 
-#include "tree.h"
-#include "parser.h"
+#include "expr.h"
+
+#include <cstdarg>
+
 #include "lex/lexer.h"
+#include "lex/tools.h"
+
 #include "environment.h"
 #include "identifier.h"
-#include "expr.h"
+#include "parser.h"
 #include "system.h"
-
-#include "lex/tools.h"
+#include "tree.h"
 
 using namespace lex;
 using lex::tools::isASSIGN;

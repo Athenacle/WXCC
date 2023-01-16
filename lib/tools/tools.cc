@@ -5,8 +5,11 @@
 *
 */
 
-#include "system.h"
 #include "tools.h"
+
+#include <cstring>
+
+#include "system.h"
 
 FILE* wxccErr;
 

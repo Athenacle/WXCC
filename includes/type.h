@@ -8,9 +8,11 @@
 #ifndef TYPE_H
 #define TYPE_H
 
-#include "symbol.h"
+#include <map>
+
 #include "exception.h"
 #include "semantic.h"
+#include "symbol.h"
 
 namespace type_operator
 {
@@ -85,7 +87,7 @@ class Type
     int size;              /* total size (byte)	*/
     Symbol *sym;
 
-    char *name;
+    const char *name;
 
     static std::map<TYPE_OPERATOR, const char *> to2c;
 

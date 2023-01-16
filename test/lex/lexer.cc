@@ -1,7 +1,8 @@
-#include "test.h"
-
 #include "lex/lexer.h"
+
 #include <vector>
+
+#include "test.h"
 
 using namespace lex;
 using namespace constants;

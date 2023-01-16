@@ -1,9 +1,9 @@
 #ifndef LEX_TOKEN_H_
 #define LEX_TOKEN_H_
 
-#include "lex/constants.h"
-
 #include <cstdint>
+
+#include "lex/constants.h"
 
 namespace lex
 {

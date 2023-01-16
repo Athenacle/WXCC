@@ -7,14 +7,15 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-#include "system.h"
 #include "lex/lexer.h"
-#include "type.h"
-#include "symbol.h"
-#include "parser.h"
+
+#include "environment.h"
 #include "exception.h"
 #include "identifier.h"
-#include "environment.h"
+#include "parser.h"
+#include "symbol.h"
+#include "system.h"
+#include "type.h"
 
 class Function
 {

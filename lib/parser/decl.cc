@@ -4,15 +4,15 @@
  * April 4, 2013
  */
 
-#include "system.h"
 #include "lex/lexer.h"
-#include "type.h"
-#include "symbol.h"
-#include "parser.h"
+#include "lex/tools.h"
+
 #include "exception.h"
 #include "identifier.h"
-
-#include "lex/tools.h"
+#include "parser.h"
+#include "symbol.h"
+#include "system.h"
+#include "type.h"
 
 using namespace lex;
 using namespace constants;

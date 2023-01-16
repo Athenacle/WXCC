@@ -1,4 +1,7 @@
 #include "lex/token.h"
+
+#include <cstring>
+
 #include "lex/lexer.h"
 #include "lex/tools.h"
 

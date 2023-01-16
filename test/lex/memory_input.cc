@@ -1,5 +1,6 @@
-#include "test.h"
 #include "lex/input.h"
+
+#include "test.h"
 
 using namespace lex;
 

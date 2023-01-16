@@ -8,11 +8,11 @@
 #ifndef LEX_HEADER
 #define LEX_HEADER
 
-#include "system.h"
-
 #include "lex/constants.h"
-#include "lex/token.h"
 #include "lex/input.h"
+#include "lex/token.h"
+
+#include "system.h"
 
 #define BLOCK_SIZE     4096
 #define LEX_BLOCK_SIZE (BLOCK_SIZE + 2) /* 4098 */

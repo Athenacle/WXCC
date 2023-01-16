@@ -6,9 +6,12 @@
 */
 
 
-#include "system.h"
+#include <cstring>
+
 #include "lex/lexer.h"
+
 #include "symbol.h"
+#include "system.h"
 #include "tools.h"
 
 using namespace lex;

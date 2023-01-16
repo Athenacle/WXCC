@@ -1,15 +1,16 @@
 //#include "../includes/Env.h"
 
 
-#include "system.h"
 #include "lex/lexer.h"
-#include "type.h"
-#include "symbol.h"
-#include "parser.h"
+
 #include "exception.h"
 #include "identifier.h"
-#include "table.h"
+#include "parser.h"
 #include "semantic.h"
+#include "symbol.h"
+#include "system.h"
+#include "table.h"
+#include "type.h"
 
 using namespace scope;
 

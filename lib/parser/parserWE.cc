@@ -6,9 +6,12 @@
 *
 */
 
-#include "system.h"
+#include <cstdarg>
+
 #include "lex/lexer.h"
+
 #include "parser.h"
+#include "system.h"
 
 int Parser::parserWarningCount = 0;
 int Parser::parserErrorCount = 0;

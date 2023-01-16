@@ -4,13 +4,14 @@
 * January 23, 2013
 *
 */
-#include "lex/lexer.h"
 #include "lex/output.h"
 
 #include <fmt/format.h>
 
-#include <unordered_map>
 #include <algorithm>
+#include <unordered_map>
+
+#include "lex/lexer.h"
 
 using namespace lex;
 using namespace lex::constants;

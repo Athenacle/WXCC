@@ -7,9 +7,11 @@
 #ifndef ENV_H
 #define ENV_H
 
-#include "table.h"
+#include <cstring>
+
 #include "identifier.h"
 #include "symbol.h"
+#include "table.h"
 
 using namespace scope;
 using namespace NS_TABLE;

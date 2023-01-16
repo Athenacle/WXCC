@@ -7,8 +7,9 @@
 #ifndef TABLE_H
 #define TABLE_H
 
-#include "exception.h"
 #include "lex/lexer.h"
+
+#include "exception.h"
 #include "tools.h"
 
 using std::pair;

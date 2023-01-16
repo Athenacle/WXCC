@@ -5,14 +5,15 @@
 *
 */
 
-#include "system.h"
-#include "lex/lexer.h"
-#include "type.h"
-#include "symbol.h"
 #include "parser.h"
-#include "exception.h"
 
+#include "lex/lexer.h"
 #include "lex/tools.h"
+
+#include "exception.h"
+#include "symbol.h"
+#include "system.h"
+#include "type.h"
 
 using namespace lex;
 using namespace constants;

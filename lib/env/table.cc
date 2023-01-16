@@ -5,6 +5,5 @@
 *
 */
 
-#include "tools.h"
-#include "tools.h"
 #include "symbol.h"
+#include "tools.h"

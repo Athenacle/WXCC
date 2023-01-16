@@ -1,6 +1,6 @@
-#include "test.h"
-
 #include <random>
+
+#include "test.h"
 
 namespace
 {

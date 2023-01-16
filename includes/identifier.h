@@ -9,11 +9,14 @@
 #define IDENTIFIER_H
 
 
+#include <map>
+
 #include "lex/lexer.h"
-#include "type.h"
+
+#include "semantic.h"
 #include "symbol.h"
 #include "table.h"
-#include "semantic.h"
+#include "type.h"
 
 using namespace NS_BASE_TYPE;
 //using namespace NS_IR;

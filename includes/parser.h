@@ -8,14 +8,16 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include <map>
+
 #include "lex/lexer.h"
-#include "type.h"
+
 #include "environment.h"
-#include "tree.h"
-#include "stmt.h"
 #include "expr.h"
 #include "functions.h"
-#include <map>
+#include "stmt.h"
+#include "tree.h"
+#include "type.h"
 
 using namespace lex::constants;
 using namespace type_operator;
