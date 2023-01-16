@@ -67,21 +67,13 @@ namespace
 };  // namespace
 
 #ifdef LEX_DEBUG
-//#define LEX_DEBUG_ASM_BP
 #endif
-/*
-int Lex::lexWarningCount = 0;
-int Lex::lexErrorCount = 0;
-*/
+
 void Lex::lexerWarning(int warningType, const char *message, ...)
 {
     lexWarningCount++;
-#if defined LEX_DEBUG_ASM_BP && defined WIN32
-    __asm {
-		int 3
-    }
-#endif
-    fprintf(wxccErr, "Warn: file: %s, line: %d.>> ", currentPos->filename, currentPos->line + 1);
+
+    fprintf(wxccErr, "Warn: file: %s, line: %d.>> ", "", 0);
     switch (warningType) {
         case LEX_WARNING_ILL_MACRO_TOKEN:
             fprintf(wxccErr, lexWarnings[LEX_WARNING_ILL_MACRO_TOKEN], message);
@@ -102,7 +94,7 @@ void Lex::lexerError(int errorType, const char *message, ...)
 		int 3
     }
 #endif
-    fprintf(wxccErr, "Error.file: %s, line: %d.>> ", currentPos->filename, currentPos->line + 1);
+    fprintf(wxccErr, "Error.file: %s, line: %d.>> ", "", 0);
     switch (errorType) {
         case LEX_ERROR_STRING_MEET_NEWLINE: /* 1 */
             fprintf(wxccErr, "%s", lexErrors[LEX_ERROR_STRING_MEET_NEWLINE]);

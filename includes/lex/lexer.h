@@ -63,8 +63,6 @@ namespace lex
         Lex(const Lex &) = delete;
         Lex &operator=(const Lex &) = delete;
 
-        Position *currentPos;
-
         LexInputSource *source;
 
         char tmpBuffer[TMPBUFFER_SIZE];
@@ -99,14 +97,17 @@ namespace lex
         void lexerError(int warningType, const char *message, ...);
 
     public:
-        Position *getPos(void)
-        {
-            return currentPos;
-        }
         Lex(LexInputSource *source);
+        Lex() = default;
+
         ~Lex();
 
         Token getNextToken(void);
+
+        void setSource(LexInputSource *s)
+        {
+            source = s;
+        }
     };
 }  // namespace lex
 

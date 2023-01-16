@@ -15,7 +15,14 @@
 #include "tools.h"
 
 using namespace lex;
+using namespace lex::types;
 
+Position LexInputSource::position() const
+{
+    return Position(file, line, column);
+}
+
+LexInputSource::LexInputSource() : line(1), column(0) {}
 
 LexInputSource::~LexInputSource() {}
 
@@ -29,6 +36,7 @@ MemoryLexInputSource::~MemoryLexInputSource()
 
 MemoryLexInputSource::MemoryLexInputSource()
 {
+    lastCol = 1;
     bufsize = 0;
     buf = end = pointer = nullptr;
 }
@@ -38,9 +46,6 @@ FileLexInputSource::~FileLexInputSource()
 {
     if (fp) {
         fclose(fp);
-    }
-    if (file) {
-        delete[] file;
     }
 }
 
@@ -53,7 +58,7 @@ const char *MemoryLexInputSource::filename()
 
 const char *FileLexInputSource::filename()
 {
-    return file;
+    return file->c_str();
 }
 
 bool FileLexInputSource::fillBuffer()
@@ -73,7 +78,8 @@ bool FileLexInputSource::openFile(const char *fn)
         fatalError(msg.c_str());
     }
     fseek(fp, 0, SEEK_SET);
-    file = utils::strdup(fn);
+    file = std::make_shared<std::string>(fn);
+
     return true;
 }
 
@@ -87,10 +93,25 @@ char MemoryLexInputSource::next(LexInputSource::GET_TYPE type)
     auto c = *(pointer);
 
     if (c && type == LexInputSource::GET_TYPE::GET_CHAR) {
+        if (c == '\n') {
+            line++;
+            lastCol = column;
+            column = 0;
+        } else {
+            column++;
+        }
         pointer += 1;
     }
     if (type == LexInputSource::GET_TYPE::PUSH_BACK && pointer > buf) {
         pointer -= 1;
+        if (*(pointer) == '\n') {
+            if (line > 1) {
+                line--;
+                column = lastCol;
+            }
+        } else {
+            column--;
+        }
     }
 
     return c;

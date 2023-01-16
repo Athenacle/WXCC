@@ -2,6 +2,8 @@
 #define LEX_TOKEN_H_
 
 #include <cstdint>
+#include <memory>
+#include <string>
 
 #include "lex/constants.h"
 
@@ -41,20 +43,33 @@ namespace lex
         };
 
         struct Position {
-            char const *filename;
+            std::shared_ptr<std::string> filename;
+
             int line;
             int place;
+
+            Position() : line(0), place(0) {}
+
             Position(const Position &pos) : filename(pos.filename), line(pos.line), place(pos.place)
             {
             }
-            Position(const char *file, int l = 1, int p = 0) : filename(file), line(l), place(p) {}
+
+            Position(const std::shared_ptr<std::string> &file, int l = 1, int p = 0)
+                : filename(file), line(l), place(p)
+            {
+            }
+
+            Position(Position &&) = default;
+
+            Position &operator=(const Position &) = default;
+            Position &operator=(Position &&) = default;
         };
 
         class Token
         {
         public:
             constants::TYPE token_type;
-            Position *token_pos;
+            Position token_pos;
             union token_value {
                 Number *numVal;
                 const char *id_name;
@@ -107,14 +122,13 @@ namespace lex
             explicit Token(constants::TYPE, const char *);
             explicit Token(Number *);
             Token(const Token &tok) = default;
-            explicit Token(constants::OP);
+            Token(constants::OP);
 
             Token(Token &&) = default;
 
             Token()
             {
                 token_type = constants::T_NONE;
-                token_pos = nullptr;
                 token_value.id_name = nullptr;
             }
 

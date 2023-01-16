@@ -365,7 +365,7 @@ Tree *Parser::c_parser_primary_expr(Env &env) const
             if (tp == nullptr) {
                 char buf[40];
                 sprintf(buf, "EE01 %%d: undeclared identifier %s\n", pc);
-                parserError(PAR_ERR_INT_STR, buf, cur.token_pos->line);
+                parserError(PAR_ERR_INT_STR, buf, cur.token_pos.line);
             }
             break;
         case T_INT_CON:

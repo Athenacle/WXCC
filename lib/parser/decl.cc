@@ -79,7 +79,7 @@ int Parser::c_parser_declaration(Env &env, scope::Scope sc) const
 meet_comma:
     nST = c_parser_declarator(ty);
     if (nST == nullptr) {
-        parserError(PAR_ERR_NEED_VAR_D, cur.token_pos->line);
+        parserError(PAR_ERR_NEED_VAR_D, cur.token_pos.line);
         goto typeErrFinish;
     } else {
         nST->first->setScope(sc, env.getLevel());
@@ -90,7 +90,7 @@ meet_comma:
             env.newIdentifier(id);
             declared++;
         } else {
-            parserError(PAR_ERR_STR_INT, tyChk.toString(), cur.token_pos->line);
+            parserError(PAR_ERR_STR_INT, tyChk.toString(), cur.token_pos.line);
         }
         next();
         if (matchOP(cur, OP_EQ)) {
@@ -99,7 +99,7 @@ meet_comma:
             goto meet_comma;
         } else if (matchOP(cur, OP_LEFTBRACE)) {
             if (declared != 1)
-                parserError(PAR_ERR_INT, declError[DE_MORE_DECL_WITH_FUNC], cur.token_pos->line);
+                parserError(PAR_ERR_INT, declError[DE_MORE_DECL_WITH_FUNC], cur.token_pos.line);
             else {
                 MAYBE_UNUSED ST *retST = c_parser_funtion_definition(env, *id);
             }
@@ -271,7 +271,7 @@ Type *Parser::c_parser_parameter_type_list(void) const
     if (matchOP(cur, OP_RIGHTBRACK))  // no parameter. eg. void foo();
     {
         parameterList = NS_BASE_TYPE::voidType;
-        parserWarning(PARER_WE_USE_STRING, declWarning[DW_LACK_PARA_LIST], cur.token_pos->line);
+        parserWarning(PARER_WE_USE_STRING, declWarning[DW_LACK_PARA_LIST], cur.token_pos.line);
     } else {
         if (matchKEY(cur, KEY_KVOID) || matchKEY(cur, KEY_TVOID)) {
             parameterList = NS_BASE_TYPE::voidType;
@@ -297,7 +297,7 @@ Type *Parser::c_parser_parameter_type_list(void) const
             if (matchOP(cur, OP_COMMA)) {
                 goto paraList;
             } else if (matchQualifier(cur) || isBaseType(cur)) {
-                parserError(PARER_WE_USE_STRING, declError[DE_NEED_COMMA], cur.token_pos->line);
+                parserError(PARER_WE_USE_STRING, declError[DE_NEED_COMMA], cur.token_pos.line);
             } else if (matchOP(cur, OP_RIGHTBRACK)) {
                 ;
             }

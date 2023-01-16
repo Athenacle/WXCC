@@ -10,4 +10,8 @@ namespace test
     uint32_t random();
 
     uint32_t random(uint32_t mod);
+
+#ifdef HAVE_FLEX_BISON
+    const char* randomSourceCode();
+#endif
 }  // namespace test

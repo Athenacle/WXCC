@@ -144,10 +144,10 @@ namespace lex
         const unsigned long OP_ASGN_MASK = 0x00041000;
 
         /*
-	* NUMBER_TYPE
-	* 0x0011  [	0		0		0		0]
-	*		FL/INT		U/S		LONG		INT/CHAR
-	*/
+	    * NUMBER_TYPE
+	    * 0x0011  [	0		0		0		0]
+	    *         FL/INT    U/S	    LONG    INT/CHAR
+	    */
 
         const uint32_t NT_NONE = 0X0011ffff;
         const uint32_t NT_SI = 0x00110001; /* SIGNED	INT  */
@@ -157,15 +157,25 @@ namespace lex
         const uint32_t NT_CH = 0x00110103; /* UNSIGNED	CHAR */
         const uint32_t NT_FL = 0x00111000; /* FLOAT	     */
         const uint32_t NT_DB = 0x00111010; /* DOUBLE	     */
-#define NT_LONG_MASK     (0X00110010)
-#define NT_UNSIGNED_MASK (0x00110100)
-#define NT_LD            (NT_DB) /* LONG DOUBLE */
+
+#define NT_LONG_LONG_MASK   (0x0011'0020)
+#define NT_LONG_MASK        (0x0011'0010)
+#define NT_SHORT_MASK       (0x0011'00f0)
+
+#define NT_SIGNED_MASK      (0x0011'0200)
+#define NT_UNSIGNED_MASK    (0x0011'0100)
+
+#define NT_FLOAT_MASK       (0x0011'1000)
+#define NT_DOUBLE_MASK      (0x0011'2000)
+#define NT_LONG_DOUBLE_MASK (0x0011'1010)
+#define NT_CHAR_MASK        (0x0011'0001)
+#define NT_LD               (NT_LONG_DOUBLE_MASK)
         class NumberType
         {
             uint32_t _type;
 
         public:
-            NumberType() : _type(NT_NONE) {}
+            NumberType() : _type(NT_SI) {}
 
             NumberType(uint32_t type) : _type(type) {}
 
@@ -177,6 +187,62 @@ namespace lex
             uint32_t type() const
             {
                 return _type;
+            }
+
+            void setLongLong()
+            {
+                _type |= NT_LONG_LONG_MASK;
+            }
+            bool isLongLong() const
+            {
+                return (_type & NT_LONG_LONG_MASK) == NT_LONG_LONG_MASK;
+            }
+
+            void setLong()
+            {
+                _type |= NT_LONG_MASK;
+            }
+            bool isLong() const
+            {
+                return (_type & NT_LONG_MASK) == NT_LONG_MASK;
+            }
+
+            bool isSigned() const
+            {
+                return (_type & NT_SIGNED_MASK) == NT_SIGNED_MASK;
+            }
+            void setSigned()
+            {
+                _type &= NT_SIGNED_MASK;
+            }
+
+            bool isUnsigned()
+            {
+                return (_type & NT_UNSIGNED_MASK) == NT_UNSIGNED_MASK;
+            }
+            void setUnsigned()
+            {
+                _type |= NT_UNSIGNED_MASK;
+            }
+
+            bool isFloating() const
+            {
+                return (_type & NT_FLOAT_MASK) == NT_FLOAT_MASK;
+            }
+
+            bool isInteger() const
+            {
+                return !isFloating();
+            }
+
+            void setShort()
+            {
+                _type |= NT_SHORT_MASK;
+            }
+
+            bool isShort() const
+            {
+                return (_type & NT_SHORT_MASK) == NT_SHORT_MASK;
             }
         };
 

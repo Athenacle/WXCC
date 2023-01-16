@@ -48,11 +48,11 @@ bool Parser::need(const OP op) const
         return true;
     else {
         if (isOP(cur))
-            parserError(PAR_ERR_NEED_C_CC, cur.token_pos->line, op2c[op], op2c[cur.token_value.op]);
+            parserError(PAR_ERR_NEED_C_CC, cur.token_pos.line, op2c[op], op2c[cur.token_value.op]);
         else if (isBaseType(cur)) {
             parserError(PAR_ERR_NEED_C_CS, op2c[op], "type");
         } else if (isID(cur)) {
-            parserError(PAR_ERR_NEED_C_CC, cur.token_pos->line, op2c[op], op2c[cur.token_value.op]);
+            parserError(PAR_ERR_NEED_C_CC, cur.token_pos.line, op2c[op], op2c[cur.token_value.op]);
         } else {
             parserError(PAR_ERR_NEED_C_CS, op2c[op], "others");
         }

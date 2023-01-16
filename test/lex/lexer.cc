@@ -21,7 +21,7 @@ TEST(Lexer, keywords)
         {KEY_AUTO},     {KEY_BREAK},  {KEY_CASE},    {KEY_CHAR},   {KEY_CONST},    {KEY_CONTINUE},
         {KEY_DEFAULT},  {KEY_DO},     {KEY_DOUBLE},  {KEY_ELSE},   {KEY_ENUM},     {KEY_EXTERN},
         {KEY_FLOAT},    {KEY_FOR},    {KEY_GOTO},    {KEY_IF},     {KEY_INT},      {KEY_LONG},
-        {KEY_REGISTER}, {KEY_RETURN}, {KEY_SHORT},   {KEY_SIGNED}, {KEY_SIZEOF},   {KEY_STATIC},
+        {KEY_REGISTER}, {KEY_RETURN}, {KEY_SHORT},   {KEY_SIGNED}, {OP_SIZEOF},    {KEY_STATIC},
         {KEY_STRUCT},   {KEY_SWITCH}, {KEY_TYPEDEF}, {KEY_UNION},  {KEY_UNSIGNED}, {KEY_KVOID},
         {KEY_VOLATILE}, {KEY_WHILE}};
 

@@ -91,7 +91,7 @@ public:
 
     int inline getSymbolLine(void) const
     {
-        return this->tok->token_pos->line;
+        return this->tok->token_pos.line;
     }
 
     void useID(void)

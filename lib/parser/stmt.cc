@@ -229,7 +229,7 @@ stmt_list:
         goto stmt_list;
     } else if (isBaseType(cur))  // declaration after statements.
     {
-        parserError(PAR_ERR_INT_STR, stmtErrors[PE_DECL_AFTER_STMT], cur.token_pos->line);
+        parserError(PAR_ERR_INT_STR, stmtErrors[PE_DECL_AFTER_STMT], cur.token_pos.line);
     meet_type:
         //error recover. ignore all the base types.
         next();

@@ -35,7 +35,7 @@ unsigned long utils::strHash(const char* st)
     return hash;
 }
 
-const char* utils::strdup(const char* s)
+char* utils::strdup(const char* s)
 {
     auto l = strlen(s);
     auto ret = new char[l + 1];

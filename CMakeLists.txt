@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(wxcc CXX)
+project(wxcc CXX C)
 set(CMAKE_CXX_STANDARD 17)
 set(MAJOR_VERSION 0)
 set(MINOR_VERSION 0)

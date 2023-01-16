@@ -1,11 +1,31 @@
 include(GTest)
 enable_testing()
 
+find_package(FLEX 2.6 REQUIRED)
+find_package(BISON 3.0 REQUIRED)
+
 set(TEST_NAME ${PROJECT_NAME}_all_in_one)
 
-add_library(test STATIC test.cc test_lib.cc)
+set(TEST_LIB_SRC test.cc test_lib.cc)
+
+if (${FLEX_FOUND} AND ${BISON_FOUND})
+    set(LEXER_OUT "${CMAKE_CURRENT_BINARY_DIR}/lexer.c")
+    set(PARSER_OUT "${CMAKE_CURRENT_BINARY_DIR}/parser.c")
+
+    flex_target(LEXER "${CMAKE_CURRENT_SOURCE_DIR}/flex_bison/misc/flex.l" "${LEXER_OUT}"
+                DEFINES_FILE "${CMAKE_CURRENT_BINARY_DIR}/fb_lexer.h")
+
+    bison_target(PARSER "${CMAKE_CURRENT_SOURCE_DIR}/flex_bison/misc/parser.y" "${PARSER_OUT}"
+                DEFINES_FILE "${CMAKE_CURRENT_BINARY_DIR}/fb_parser.h")
+
+    add_flex_bison_dependency(LEXER PARSER)
+    list(APPEND TEST_LIB_SRC ${LEXER_OUT} ${PARSER_OUT} flex_bison/misc/fb.cc)
+endif()
+
+add_library(test STATIC ${TEST_LIB_SRC})
+
 target_link_libraries(test PRIVATE GTest::GTest GTest::GMock libs)
-target_include_directories(test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/includes)
+target_include_directories(test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/includes ${CMAKE_CURRENT_BINARY_DIR})
 
 set(LIBS)
 macro(add_subdirectory_test)
@@ -22,6 +42,11 @@ macro(add_subdirectory_test)
 endmacro()
 
 add_subdirectory_test(lex)
+
+if (${FLEX_FOUND} AND ${BISON_FOUND})
+    target_compile_definitions(test PUBLIC HAVE_FLEX_BISON)
+    add_subdirectory_test(flex_bison)
+endif()
 
 add_executable(${TEST_NAME} ${LIBS})
 add_test(${TEST_NAME} ${TEST_NAME})
