@@ -41,7 +41,7 @@ Tree *Parser::c_parser_base_expressions(Env &env, MAYBE_UNUSED int k) const
 
     //stop: IF ID } 0
     Tree *tp = c_parser_expressions_1(env, 0);
-    while (*cur == OP_COMMA) {
+    while (cur == OP_COMMA) {
         MAYBE_UNUSED Tree *ret = nullptr;
         next();
         ret = c_parser_expressions_1(env, 0);
@@ -54,7 +54,7 @@ Tree *Parser::c_parser_expressions_1(Env &env, MAYBE_UNUSED int k) const
 //assignment statements.
 {
     Tree *tp = c_parser_expressions_2(env);
-    OP op = cur->token_value.op;
+    OP op = cur.token_value.op;
     int level = op2l[op];
     if (op == OP_ASSIGN || (level >= 6 && level <= 8) || (level >= 11 && level <= 13)) {
         if (level == 2) {
@@ -130,7 +130,7 @@ Tree *Parser::c_parser_expressions_2(Env &env) const
 {
     Tree *binT = c_parser_expressions_3(env, 4);
 
-    if (*cur == OP_QUESTION)  // meet the ? OP, parse the optional expr
+    if (cur == OP_QUESTION)  // meet the ? OP, parse the optional expr
     {
         Tree *trueT = c_parser_base_expressions(env, 0);
         need(OP_COLON);
@@ -147,10 +147,10 @@ Tree *Parser::c_parser_expressions_3(Env &env, int k) const
     int k1;
     Tree *p = c_parser_unary_expr(env);
 
-    if (*cur == T_OPERATOR) {
-        for (k1 = op2l[cur->token_value.op]; k1 >= k; k1--) {
-            while (op2l[cur->token_value.op] == k1 && !isASSIGN(*cur)) {
-                OP op = cur->token_value.op;
+    if (cur == T_OPERATOR) {
+        for (k1 = op2l[cur.token_value.op]; k1 >= k; k1--) {
+            while (op2l[cur.token_value.op] == k1 && !isASSIGN(cur)) {
+                OP op = cur.token_value.op;
                 Tree *rightT = nullptr;
                 MAYBE_UNUSED Tree *leftT = nullptr;
                 if (op == OP_LOGOR) {
@@ -176,20 +176,20 @@ Tree *Parser::c_parser_expressions_3(Env &env, int k) const
 void Parser::c_parser_expression_recover(void) const
 {
     // when exception occurs, skip all the symbols until next ;
-    for (next(); !(*cur == OP_SEMICOLON); next())
+    for (next(); !(cur == OP_SEMICOLON); next())
         ;
 }
 
 Tree *Parser::c_parser_unary_expr(Env &env) const
 {
     Tree *tp = nullptr;
-    TYPE ty = cur->token_type;
+    TYPE ty = cur.token_type;
     const Type *objectType = nullptr;
     MAYBE_UNUSED size_t size;
     TYPE_OPERATOR to;
     MAYBE_UNUSED Node_OP nop;
-    if (ty == T_OPERATOR && !tools::matchOP(*cur, OP_LEFTBRACK)) {
-        OP _op = cur->token_value.op;
+    if (ty == T_OPERATOR && !tools::matchOP(cur, OP_LEFTBRACK)) {
+        OP _op = cur.token_value.op;
         switch (_op) {
             case OP_MULT:
                 next();
@@ -250,22 +250,22 @@ Tree *Parser::c_parser_unary_expr(Env &env) const
                 //;break;
             case OP_SIZEOF:
                 next();
-                if (*cur == T_ID) {
-                    Identifier *id = env.findID(cur->token_value.id_name);
+                if (cur == T_ID) {
+                    Identifier *id = env.findID(cur.token_value.id_name);
                     if (id == nullptr)
                         assert(0);
                     else {
                         size = id->getType().getSize();
                     }
                 } else {
-                    if (*cur == OP_LEFTBRACK) {
+                    if (cur == OP_LEFTBRACK) {
                         next();
-                        if (tools::isBaseType(*cur)) {
+                        if (tools::isBaseType(cur)) {
                             Type *ty = c_parser_declaration_type_specifiers(nullptr);
                             size = ty->getSize();
                             delete ty;
-                        } else if (*cur == T_ID) {
-                            Identifier *id = env.findID(cur->token_value.id_name);
+                        } else if (cur == T_ID) {
+                            Identifier *id = env.findID(cur.token_value.id_name);
                             if (id == nullptr)
                                 assert(0);
                             else {
@@ -292,7 +292,7 @@ Tree *Parser::c_parser_postfix_expr(Env &env, Tree *tr) const
 {
     Tree *retTree = tr;
     for (;;) {
-        switch (cur->token_value.op) {
+        switch (cur.token_value.op) {
             case OP_INC:
                 break;
             case OP_DEC:
@@ -336,10 +336,10 @@ Tree *Parser::c_parser_expr_func_call(Env &env, Tree *funcID) const
         }
         sprintf(buf, "\tpara %s\n", argString);
         new IR(strdup(buf));
-        if (*cur == OP_COMMA) {
+        if (cur == OP_COMMA) {
             next();
             continue;
-        } else if (*cur == OP_RIGHTBRACK) {
+        } else if (cur == OP_RIGHTBRACK) {
             next();
             break;
         }
@@ -355,25 +355,25 @@ Tree *Parser::c_parser_primary_expr(Env &env) const
 {
     Tree *tp = nullptr;
     const char *pc;
-    switch (cur->token_type) {
+    switch (cur.token_type) {
         case T_ID:
-            pc = cur->token_value.id_name;
+            pc = cur.token_value.id_name;
             tp = Tree::IDtree(env, pc);
             if (tp == nullptr) {
                 char buf[40];
                 sprintf(buf, "EE01 %%d: undeclared identifier %s\n", pc);
-                parserError(PAR_ERR_INT_STR, buf, cur->token_pos->line);
+                parserError(PAR_ERR_INT_STR, buf, cur.token_pos->line);
             }
             break;
         case T_INT_CON:
-            tp = Tree::CONSTtree(cur->token_value.numVal->val.i_value);
+            tp = Tree::CONSTtree(cur.token_value.numVal->val.i_value);
             break;
         case T_FLOAT_CON:
             break;
         case T_STRING:
             break;
         case T_OPERATOR: {
-            if (tools::matchOP(*cur, OP_LEFTBRACK)) {
+            if (tools::matchOP(cur, OP_LEFTBRACK)) {
                 next();
                 Expr *expr = c_parser_expressions(env);
                 if (Tree::isCmpTree(&expr->getTree())) {

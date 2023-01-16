@@ -46,10 +46,10 @@ class Parser
 
 private:
     lex::Lex& theLexer;
-    mutable lex::types::Token* cur;
-    mutable lex::types::Token* prepre;
+    mutable lex::types::Token cur;
+    mutable lex::types::Token prepre;
     mutable bool isFinish;
-    mutable lex::types::Token* pre;
+    mutable lex::types::Token pre;
 
     static std::map<KEYWORD, TYPE_OPERATOR> key2to;
     static std::map<OP, char> op2c;
@@ -63,15 +63,15 @@ private:
     {
         prepre = pre;
         pre = cur;
-        theLexer.getNextToken();
-        cur = theLexer.getToken();
+        cur = theLexer.getNextToken();
+        //cur = theLexer.getNextToken();
     }
 
     void pushBack(void) const
     {
-        if (pre == nullptr) {
+        if (!pre) {
             pre = cur;
-        } else if (prepre == nullptr) {
+        } else if (!prepre) {
             prepre = pre;
             pre = cur;
         } else
@@ -79,7 +79,7 @@ private:
         cur = nullptr;
     }
 
-    void setPC(lex::types::Token* _cur, lex::types::Token* _pre) const
+    void setPC(lex::types::Token&& _cur, lex::types::Token&& _pre) const
     {
         cur = _cur;
         pre = _pre;
@@ -87,9 +87,9 @@ private:
 
     int next(void) const;
 
-    Token* mkToken(void) const
+    Token mkToken(void) const
     {
-        return theLexer.getLastToken();
+        return theLexer.getNextToken();
     }
 
     mutable Token* lastToken;

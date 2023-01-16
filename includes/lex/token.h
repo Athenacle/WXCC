@@ -16,11 +16,26 @@ namespace lex
                 double d_value;
                 int i_value;
             } val;
-            Number(const Number &num) : type(num.type), numberType(num.numberType)
+
+            Number(const Number &num) : Number()
             {
+                type = num.type;
+                numberType = num.numberType;
                 val.d_value = num.val.d_value;
             }
-            Number() {}
+
+            Number()
+            {
+                val.d_value = 0;
+            }
+
+            bool operator==(const Number &other) const
+            {
+                if (type != other.type) {
+                    return false;
+                }
+                return val.d_value == other.val.d_value;
+            }
         };
 
         struct Position {
@@ -51,8 +66,9 @@ namespace lex
                 return token_type == ty;
             }
 
+            bool operator==(const Token &) const;
 
-            bool inline operator==(constants::OP _op)
+            bool inline operator==(constants::OP _op) const
             {
                 return token_type == constants::T_OPERATOR && token_value.op == _op;
             }
@@ -72,10 +88,27 @@ namespace lex
                 return !this->operator==(_op);
             }
 
-            explicit Token(constants::KEYWORD);
+            operator bool()
+            {
+                return token_type != constants::T_NONE;
+            }
+
+            Token &operator=(std::nullptr_t)
+            {
+                token_type = constants::T_NONE;
+                return *this;
+            }
+
+            Token &operator=(const Token &) = default;
+
+            Token(constants::KEYWORD);
             explicit Token(constants::TYPE, const char *);
             explicit Token(Number *);
-            explicit Token(Token &tok);
+            Token(const Token &tok) = default;
+            explicit Token(constants::OP);
+
+            Token(Token &&) = default;
+
             Token()
             {
                 token_type = constants::T_NONE;

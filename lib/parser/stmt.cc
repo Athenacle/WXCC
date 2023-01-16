@@ -89,11 +89,11 @@ Block *Parser::c_parser_compound_statement(Env &curEnv) const
     ret->nextList = IRList::makeIRList(*new IR(""));
     ret->breakList = nullptr;
     next();
-    for (; isBaseType(*cur);) {
+    for (; isBaseType(cur);) {
         c_parser_declaration(curE, Scope::S_LOCAL);
         next();
     }
-    while (!matchOP(*cur, OP_RIGHTBRACE)) {
+    while (!matchOP(cur, OP_RIGHTBRACE)) {
         blockIR = c_parser_statement(curE);
         //pushBack();
         next();
@@ -115,7 +115,7 @@ Block *Parser::c_parser_compound_statement(Env &curEnv) const
                         IRList::mergeChain(*ret->continueList, *blockIR->continueList);
             }
         }
-        while (*cur == OP_SEMICOLON)
+        while (cur == OP_SEMICOLON)
             next();
     }
 
@@ -127,7 +127,7 @@ Block *Parser::c_parser_compound_statement(Env &curEnv) const
 Block *Parser::c_parser_select_statement(Env &env) const
 {
     Stmt_Jump *stmt = new Stmt_Jump();
-    if (*cur == KEY_IF) {
+    if (cur == KEY_IF) {
         need(OP_LEFTBRACK);
         next();
         Expr *condExpr = c_parser_expressions(env);
@@ -150,8 +150,8 @@ Block *Parser::c_parser_select_statement(Env &env) const
         stmt->breakList = trueStmt->breakList;
         do {
             next();
-        } while (*cur == OP_SEMICOLON);
-        if (*cur == KEY_ELSE) {
+        } while (cur == OP_SEMICOLON);
+        if (cur == KEY_ELSE) {
             Label *la = new Label();
             MAYBE_UNUSED Label *lb = new Label();
             next();
@@ -192,7 +192,7 @@ Block *Parser::c_parser_select_statement(Env &env) const
                 stmt->nextList =
                     IRList::mergeChain(*condExpr->getTree().falseList, *trueStmt->nextList);
         }
-    } else if (*cur == KEY_SWITCH) {
+    } else if (cur == KEY_SWITCH) {
         assert(0);
     }
 
@@ -202,11 +202,11 @@ Block *Parser::c_parser_select_statement(Env &env) const
 Block *Parser::c_parser_statement(Env &curEnv) const
 {
     Block *stmt = nullptr;
-    if (matchOP(*cur, OP_LEFTBRACE))  //meet '{' , a new block.
+    if (matchOP(cur, OP_LEFTBRACE))  //meet '{' , a new block.
         return c_parser_compound_statement(curEnv);
 
 stmt_list:
-    if (isSelect(*cur)) {
+    if (isSelect(cur)) {
         stmt = c_parser_select_statement(curEnv);
         Label *endOfSelect = new Label();
         IR *ir = new IR(*endOfSelect);
@@ -214,32 +214,32 @@ stmt_list:
         IRList::backPatch(*stmt->nextList, *endOfSelect);
         pushBack();
 
-    } else if (isJump(*cur)) {
+    } else if (isJump(cur)) {
         stmt = c_parser_jump_statement(curEnv);
 
-    } else if (isIter(*cur)) {
+    } else if (isIter(cur)) {
         stmt = c_parser_iter_statement(curEnv);
-    } else if (matchOP(*cur, OP_RIGHTBRACE)) {
+    } else if (matchOP(cur, OP_RIGHTBRACE)) {
         goto comp_stmt_finish;  // meet '}', exit current block;
-    } else if (isLabel(*cur)) {
+    } else if (isLabel(cur)) {
         stmt = c_parser_label_statement(curEnv);
-    } else if (matchOP(*cur, OP_SEMICOLON))  // a statements finishes
+    } else if (matchOP(cur, OP_SEMICOLON))  // a statements finishes
     {
         next();
         goto stmt_list;
-    } else if (isBaseType(*cur))  // declaration after statements.
+    } else if (isBaseType(cur))  // declaration after statements.
     {
-        parserError(PAR_ERR_INT_STR, stmtErrors[PE_DECL_AFTER_STMT], cur->token_pos->line);
+        parserError(PAR_ERR_INT_STR, stmtErrors[PE_DECL_AFTER_STMT], cur.token_pos->line);
     meet_type:
         //error recover. ignore all the base types.
         next();
-        if (isBaseType(*cur)) {
+        if (isBaseType(cur)) {
             goto meet_type;
         } else {
             goto stmt_list;
         }
     } else {
-        if (matchKEY(*cur, KEY_ELSE)) {
+        if (matchKEY(cur, KEY_ELSE)) {
             parserError(PAR_ERR_UNMATCHED_KEY);
             next();
         }
@@ -248,7 +248,7 @@ stmt_list:
         pushBack();
         do {
             next();
-        } while (*cur == OP_SEMICOLON);
+        } while (cur == OP_SEMICOLON);
         pushBack();
     }
 
@@ -264,11 +264,11 @@ Block *Parser::c_parser_iter_statement(Env &env) const
 //do{}while();
 {
     Block *ret = new Block();
-    if (matchKEY(*cur, KEY_FOR)) {
+    if (matchKEY(cur, KEY_FOR)) {
         return c_parser_iter_for(env);
-    } else if (matchKEY(*cur, KEY_WHILE)) {
+    } else if (matchKEY(cur, KEY_WHILE)) {
         return c_parser_iter_while(env);
-    } else if (matchKEY(*cur, KEY_DO)) {
+    } else if (matchKEY(cur, KEY_DO)) {
     }
 
     return ret;
@@ -366,20 +366,20 @@ Block *Parser::c_parser_iter_for(Env &env) const
 Block *Parser::c_parser_jump_statement(Env &env) const
 {
     Block *ret = new Block();
-    if (matchKEY(*cur, KEY_BREAK)) {
+    if (matchKEY(cur, KEY_BREAK)) {
         IR *brLa = new IR("%s : \n");
         IR *brIR = new IR("\tgoto %s \n");
         IRList *brList = IRList::makeIRList(*brIR);
         ret->breakList = brList;
         ret->nextList = IRList::makeIRList(*brLa);
-    } else if (matchKEY(*cur, KEY_CONTINUE)) {
+    } else if (matchKEY(cur, KEY_CONTINUE)) {
         IR *conLa = new IR("%s : \n");
         IR *conIR = new IR("\tgoto %s \n");
         IRList *conList = IRList::makeIRList(*conIR);
         ret->continueList = conList;
         ret->nextList = IRList::makeIRList(*conLa);
-    } else if (matchKEY(*cur, KEY_RETURN)) {
-        assert(*cur == KEY_RETURN);
+    } else if (matchKEY(cur, KEY_RETURN)) {
+        assert(cur == KEY_RETURN);
         c_parser_expressions(env);
         new IR("\tret");
     }
@@ -415,7 +415,7 @@ Block *Parser::c_parser_iter_while(Env &env) const
     IR *condIR, *bodyIR, *backIR, *endIR;
     Expr *condExpr;
     Block *stmt;
-    assert(*cur == KEY_WHILE);
+    assert(cur == KEY_WHILE);
     Block *ret = new Block();
 
     condLabel = new Label();  // L0:

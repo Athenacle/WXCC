@@ -8,6 +8,7 @@
 #include "system.h"
 #include "tools.h"
 
+FILE* wxccErr;
 
 void fatalError(const char* message)
 {

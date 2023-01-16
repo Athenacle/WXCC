@@ -57,13 +57,15 @@ namespace lex
         friend types::Token::Token(constants::KEYWORD);
         friend types::Token::Token(constants::TYPE, const char *);
         friend types::Token::Token(types::Number *);
-        friend types::Token::Token(Token &tok);
+        //friend types::Token::Token(Token &tok);
+
+        using Token = types::Token;
 
     private:
         Lex(const Lex &) = delete;
         Lex &operator=(const Lex &) = delete;
 
-        static types::Token *currentToken;
+        // static types::Token *currentToken;
         static types::Position *currentPos;
 
         LexInputSource *source;
@@ -85,16 +87,17 @@ namespace lex
         types::Number *tryParseDecNumber(char *);
         types::Number *tryParseHexNumber(char *);
         types::Number *tryParseOctNumber(char *);
-        int newNumber(char *, int);
-        int number(char);
-        int newIdentifier(const char *, int);
-        int identifier(char *);
-        constants::KEYWORD letter(char);
-        int parseLetter(char);
-        int operators(char);
-        int parseOperator(char);
-        int parseString(void);
-        int parseCharConstant(void);
+
+        Token newNumber(char *, int);
+        Token number(char);
+        Token newIdentifier(const char *, int);
+        Token identifier(char *);
+        Token letter(char);
+        Token parseLetter(char);
+        Token operators(char);
+        Token parseOperator(char);
+        Token parseString(void);
+        Token parseCharConstant(void);
         /////  lex functions end.
 
         void lexerWarning(int warningType, const char *message, ...) const;
@@ -106,24 +109,23 @@ namespace lex
         void printToken(Token tok);
         void lexDebugInit(void);
 #endif
-        types::Token *getToken(void)
-        {
-            return currentToken;
-        }
-
+        // types::Token *getToken(void)
+        // {
+        //     return currentToken;
+        // }
         types::Position *getPos(void)
         {
             return currentPos;
         }
 
-        types::Token *getLastToken(void)
-        {
-            return new types::Token(*currentToken);
-        }
+        // types::Token *getLastToken(void)
+        // {
+        //     return new types::Token(*currentToken);
+        // }
 
         Lex(LexInputSource *source);
 
-        int getNextToken(void);
+        Token getNextToken(void);
     };
 }  // namespace lex
 

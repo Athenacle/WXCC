@@ -22,8 +22,8 @@ using namespace types;
 Lex::Lex(LexInputSource* s) : source(s)
 {
     currentPos = new Position(s->filename());
-    currentToken = new Token;
-    currentToken->token_pos = currentPos;
+    // currentToken = new Token;
+    // currentToken->token_pos = currentPos;
 }
 
 char Lex::getNextChar(int type)
@@ -545,7 +545,7 @@ parOctNumFinish:
     return ret;
 }
 
-int Lex::newNumber(char* numBuffer, int radix)
+Token Lex::newNumber(char* numBuffer, int radix)
 {
     Number* ret = nullptr;
     switch (radix) {
@@ -562,23 +562,25 @@ int Lex::newNumber(char* numBuffer, int radix)
             assert(0);
     }
     //newTok = new Token(ret);
-    currentToken->token_type = ret->type;
-    currentToken->token_value.numVal = ret;
+    Token tok;
+
+    tok.token_type = ret->type;
+    tok.token_value.numVal = ret;
     switch (ret->type) {
         case T_FLOAT_CON:
-            currentToken->token_value.numVal->val.d_value = ret->val.d_value;
+            tok.token_value.numVal->val.d_value = ret->val.d_value;
             break;
         case T_INT_CON:
-            currentToken->token_value.numVal->val.i_value = ret->val.i_value;
+            tok.token_value.numVal->val.i_value = ret->val.i_value;
             break;
         default:
             assert(0);
     }
 
-    return currentToken->token_type;
+    return tok;
 }
 
-int Lex::number(char peek)
+Token Lex::number(char peek)
 /*
 	*	CONSTANT:
 	*		FLOATING-CONSTANT	|
@@ -640,17 +642,18 @@ int Lex::number(char peek)
     }
 }
 
-int Lex::newIdentifier(const char* name, int name_length)
+Token Lex::newIdentifier(const char* name, int name_length)
 {
     char* newName = new char[sizeof(char) * name_length];
-    currentToken->token_type = T_ID;
-    currentToken->token_value.string = newName;
+    // currentToken->token_type = T_ID;
+    // currentToken->token_value.string = newName;
     strcpy(newName, name);
     //newTok = new Token(T_ID, newName);
-    return 0;
+    Token tok(T_ID, newName);
+    return tok;
 }
 
-int Lex::identifier(char* start)
+Token Lex::identifier(char* start)
 {
     char t = *start;
     int length = 0;
@@ -661,13 +664,15 @@ int Lex::identifier(char* start)
     //TODO: Test whether here should has a getNextChar(BACK);
     getNextChar(BACK);
     currentPos->place += length;
-    newIdentifier(tmpBuffer, (int)strlen(tmpBuffer) + 1);
-    return T_ID;
+    return newIdentifier(tmpBuffer, (int)strlen(tmpBuffer) + 1);
 }
 
-constants::KEYWORD Lex::letter(char peek)
+Token Lex::letter(char peek)
 {
     char* p = tmpBuffer;
+    Token tok;
+    tok.token_type = T_KEY;
+
     switch (*p = peek) {
         case 'a': /* auto */
             *(++p) = getNextChar(GET);
@@ -677,7 +682,8 @@ constants::KEYWORD Lex::letter(char peek)
                     *(++p) = getNextChar(GET);
                     if (*p == 'o' && !isalnum(getNextChar(LOOKAHEAD))) {
                         currentPos->place += 4;
-                        return KEY_AUTO;
+                        tok.token_value.keyword = KEY_AUTO;
+                        return tok;
                     }
                 }
             }
@@ -692,7 +698,9 @@ constants::KEYWORD Lex::letter(char peek)
                         *(++p) = getNextChar(GET);
                         if (*p == 'k' && !isalnum(getNextChar(LOOKAHEAD))) {
                             currentPos->place += 5;
-                            return KEY_BREAK;
+
+                            tok.token_value.keyword = KEY_BREAK;
+                            return tok;
                         }
                     }
                 }
@@ -708,7 +716,8 @@ constants::KEYWORD Lex::letter(char peek)
                         *(++p) = getNextChar(GET);
                         if (*p == 'e' && !isalnum(getNextChar(LOOKAHEAD))) {
                             currentPos->place += 4;
-                            return KEY_CASE;
+                            tok.token_value.keyword = KEY_CASE;
+                            return tok;
                         }
                     }
                     break;
@@ -718,7 +727,8 @@ constants::KEYWORD Lex::letter(char peek)
                         *(++p) = getNextChar(GET);
                         if (*p == 'r' && !isalnum(getNextChar(LOOKAHEAD))) {
                             currentPos->place += 4;
-                            return KEY_CHAR;
+                            tok.token_value.keyword = KEY_CHAR;
+                            return tok;
                         }
                     }
                     break;
@@ -731,7 +741,8 @@ constants::KEYWORD Lex::letter(char peek)
                                 *(++p) = getNextChar(GET);
                                 if (*p == 't' && !isalnum(getNextChar(LOOKAHEAD))) {
                                     currentPos->place += 5;
-                                    return KEY_CONST;
+                                    tok.token_value.keyword = KEY_CONST;
+                                    return tok;
                                 }
                                 break;
                             case 't':
@@ -744,7 +755,8 @@ constants::KEYWORD Lex::letter(char peek)
                                             *(++p) = getNextChar(GET);
                                             if (*p == 'e' && !isalnum(getNextChar(LOOKAHEAD))) {
                                                 currentPos->place += 7;
-                                                return KEY_CONTINUE;
+                                                tok.token_value.keyword = KEY_CONTINUE;
+                                                return tok;
                                             }
                                         }
                                     }
@@ -768,7 +780,8 @@ constants::KEYWORD Lex::letter(char peek)
                                     *(++p) = getNextChar(GET);
                                     if (*p == 't' && !isalnum(getNextChar(LOOKAHEAD))) {
                                         currentPos->place += 6;
-                                        return KEY_DEFAULT;
+                                        tok.token_value.keyword = KEY_DEFAULT;
+                                        return tok;
                                     }
                                 }
                             }
@@ -778,7 +791,9 @@ constants::KEYWORD Lex::letter(char peek)
                 case 'o':
                     if (!isalnum(*(++p) = getNextChar(GET))) {
                         currentPos->place += 2;
-                        return KEY_DO;
+                        tok.token_value.keyword = KEY_DO;
+                        return tok;
+
                     } else if (*p == 'u') {
                         *(++p) = getNextChar(GET);
                         if (*p == 'b') {
@@ -787,7 +802,8 @@ constants::KEYWORD Lex::letter(char peek)
                                 *(++p) = getNextChar(GET);
                                 if (*p == 'e' && !isalnum(getNextChar(LOOKAHEAD))) {
                                     currentPos->place += 6;
-                                    return KEY_DOUBLE;
+                                    tok.token_value.keyword = KEY_DOUBLE;
+                                    return tok;
                                 }
                             }
                         }
@@ -803,7 +819,8 @@ constants::KEYWORD Lex::letter(char peek)
                         *(++p) = getNextChar(GET);
                         if (*p == 'e' && !isalnum(getNextChar(LOOKAHEAD))) {
                             currentPos->place += 4;
-                            return KEY_ELSE;
+                            tok.token_value.keyword = KEY_ELSE;
+                            return tok;
                         }
                     }
                     break;
@@ -813,7 +830,8 @@ constants::KEYWORD Lex::letter(char peek)
                         *(++p) = getNextChar(GET);
                         if (*p == 'm' && !isalnum(getNextChar(LOOKAHEAD))) {
                             currentPos->place += 4;
-                            return KEY_ENUM;
+                            tok.token_value.keyword = KEY_ENUM;
+                            return tok;
                         }
                     }
                     break;
@@ -824,10 +842,12 @@ constants::KEYWORD Lex::letter(char peek)
                         if (*p == 'e') {
                             *(++p) = getNextChar(GET);
                             if (*p == 'r') {
+                                *(++p) = getNextChar(GET);
                                 if (*p == 'n' && !isalnum(getNextChar(LOOKAHEAD))) {
                                     currentPos->place += 6;
-                                    getNextChar(BACK);
-                                    return KEY_EXTERN;
+                                    //getNextChar(BACK);
+                                    tok.token_value.keyword = KEY_EXTERN;
+                                    return tok;
                                 }
                             }
                         }
@@ -842,7 +862,8 @@ constants::KEYWORD Lex::letter(char peek)
                     *(++p) = getNextChar(GET);
                     if (*p == 'r' && !isalnum(getNextChar(LOOKAHEAD))) {
                         currentPos->place += 3;
-                        return KEY_FOR;
+                        tok.token_value.keyword = KEY_FOR;
+                        return tok;
                     }
                     break;
                 case 'l':
@@ -853,7 +874,8 @@ constants::KEYWORD Lex::letter(char peek)
                             *(++p) = getNextChar(GET);
                             if (*p == 't' && !isalnum(getNextChar(LOOKAHEAD))) {
                                 currentPos->place += 5;
-                                return KEY_FLOAT;
+                                tok.token_value.keyword = KEY_FLOAT;
+                                return tok;
                             }
                         }
                     }
@@ -868,7 +890,8 @@ constants::KEYWORD Lex::letter(char peek)
                     *(++p) = getNextChar(GET);
                     if (*p == 'o' && !isalnum(getNextChar(LOOKAHEAD))) {
                         currentPos->place += 4;
-                        return KEY_GOTO;
+                        tok.token_value.keyword = KEY_GOTO;
+                        return tok;
                     }
                 }
             }
@@ -877,12 +900,14 @@ constants::KEYWORD Lex::letter(char peek)
             *(++p) = getNextChar(GET);
             if (*p == 'f' && !isalnum(getNextChar(LOOKAHEAD))) {
                 currentPos->place += 2;
-                return KEY_IF;
+                tok.token_value.keyword = KEY_IF;
+                return tok;
             } else if (*p == 'n') {
                 *(++p) = getNextChar(GET);
                 if (*p == 't' && !isalnum(getNextChar(LOOKAHEAD))) {
                     currentPos->place += 3;
-                    return KEY_INT;
+                    tok.token_value.keyword = KEY_INT;
+                    return tok;
                 }
             }
             break;
@@ -894,7 +919,8 @@ constants::KEYWORD Lex::letter(char peek)
                     *(++p) = getNextChar(GET);
                     if (*p == 'g' && !isalnum(getNextChar(LOOKAHEAD))) {
                         currentPos->place += 4;
-                        return KEY_LONG;
+                        tok.token_value.keyword = KEY_LONG;
+                        return tok;
                     }
                 }
             }
@@ -916,7 +942,8 @@ constants::KEYWORD Lex::letter(char peek)
                                         *(++p) = getNextChar(GET);
                                         if (*p == 'r' && !isalnum(getNextChar(LOOKAHEAD))) {
                                             currentPos->place += 8;
-                                            return KEY_REGISTER;
+                                            tok.token_value.keyword = KEY_REGISTER;
+                                            return tok;
                                         }
                                     }
                                 }
@@ -931,7 +958,8 @@ constants::KEYWORD Lex::letter(char peek)
                                 *(++p) = getNextChar(GET);
                                 if (*p == 'n' && !isalnum(getNextChar(LOOKAHEAD))) {
                                     currentPos->place += 6;
-                                    return KEY_RETURN;
+                                    tok.token_value.keyword = KEY_RETURN;
+                                    return tok;
                                 }
                             }
                         }
@@ -949,7 +977,8 @@ constants::KEYWORD Lex::letter(char peek)
                             *(++p) = getNextChar(GET);
                             if (*p == 't' && !isalnum(getNextChar(LOOKAHEAD))) {
                                 currentPos->place += 5;
-                                return KEY_SHORT;
+                                tok.token_value.keyword = KEY_SHORT;
+                                return tok;
                             }
                         }
                     }
@@ -965,7 +994,8 @@ constants::KEYWORD Lex::letter(char peek)
                                     *(++p) = getNextChar(GET);
                                     if (*p == 'd' && !isalnum(getNextChar(LOOKAHEAD))) {
                                         currentPos->place += 5;
-                                        return KEY_SIGNED;
+                                        tok.token_value.keyword = KEY_SIGNED;
+                                        return tok;
                                     }
                                 }
                             }
@@ -978,7 +1008,8 @@ constants::KEYWORD Lex::letter(char peek)
                                     *(++p) = getNextChar(GET);
                                     if (*p == 'f' && !isalnum(getNextChar(LOOKAHEAD))) {
                                         currentPos->place += 5;
-                                        return KEY_SIZEOF;
+                                        tok.token_value.keyword = KEY_SIZEOF;
+                                        return tok;
                                     }
                                 }
                             }
@@ -996,7 +1027,8 @@ constants::KEYWORD Lex::letter(char peek)
                                     *(++p) = getNextChar(GET);
                                     if (*p == 'c' && !isalnum(getNextChar(LOOKAHEAD))) {
                                         currentPos->place += 6;
-                                        return KEY_STATIC;
+                                        tok.token_value.keyword = KEY_STATIC;
+                                        return tok;
                                     }
                                 }
                             }
@@ -1009,7 +1041,8 @@ constants::KEYWORD Lex::letter(char peek)
                                     *(++p) = getNextChar(GET);
                                     if (*p == 't' && !isalnum(getNextChar(LOOKAHEAD))) {
                                         currentPos->place += 6;
-                                        return KEY_STRUCT;
+                                        tok.token_value.keyword = KEY_STRUCT;
+                                        return tok;
                                     }
                                 }
                             }
@@ -1027,7 +1060,8 @@ constants::KEYWORD Lex::letter(char peek)
                                 *(++p) = getNextChar(GET);
                                 if (*p == 'h' && !isalnum(getNextChar(LOOKAHEAD))) {
                                     currentPos->place += 6;
-                                    return KEY_SWITCH;
+                                    tok.token_value.keyword = KEY_SWITCH;
+                                    return tok;
                                 }
                             }
                         }
@@ -1048,7 +1082,8 @@ constants::KEYWORD Lex::letter(char peek)
                                 *(++p) = getNextChar(GET);
                                 if (*p == 'f') {
                                     currentPos->place += 7;
-                                    return KEY_TYPEDEF;
+                                    tok.token_value.keyword = KEY_TYPEDEF;
+                                    return tok;
                                 }
                             }
                         }
@@ -1067,7 +1102,8 @@ constants::KEYWORD Lex::letter(char peek)
                             *(++p) = getNextChar(GET);
                             if (*p == 'n') {
                                 currentPos->place += 5;
-                                return KEY_UNION;
+                                tok.token_value.keyword = KEY_UNION;
+                                return tok;
                             }
                         }
                         break;
@@ -1076,13 +1112,15 @@ constants::KEYWORD Lex::letter(char peek)
                         if (*p == 'i') {
                             *(++p) = getNextChar(GET);
                             if (*p == 'g') {
+                                *(++p) = getNextChar(GET);
                                 if (*p == 'n') {
                                     *(++p) = getNextChar(GET);
                                     if (*p == 'e') {
                                         *(++p) = getNextChar(GET);
                                         if (*p == 'd' && !isalnum(getNextChar(LOOKAHEAD))) {
                                             currentPos->place += 8;
-                                            return KEY_UNSIGNED;
+                                            tok.token_value.keyword = KEY_UNSIGNED;
+                                            return tok;
                                         }
                                     }
                                 }
@@ -1101,7 +1139,8 @@ constants::KEYWORD Lex::letter(char peek)
                         *(++p) = getNextChar(GET);
                         if (*p == 'd') {
                             currentPos->place += 4;
-                            return KEY_KVOID;
+                            tok.token_value.keyword = KEY_KVOID;
+                            return tok;
                         }
                         break;
                     }
@@ -1117,7 +1156,8 @@ constants::KEYWORD Lex::letter(char peek)
                                         *(++p) = getNextChar(GET);
                                         if (*p == 'e') {
                                             currentPos->place += 8;
-                                            return KEY_VOLATILE;
+                                            tok.token_value.keyword = KEY_VOLATILE;
+                                            return tok;
                                         }
                                     }
                                 }
@@ -1138,7 +1178,8 @@ constants::KEYWORD Lex::letter(char peek)
                         *(++p) = getNextChar(GET);
                         if (*p == 'e') {
                             currentPos->place += 5;
-                            return KEY_WHILE;
+                            tok.token_value.keyword = KEY_WHILE;
+                            return tok;
                         }
                     }
                 }
@@ -1155,31 +1196,26 @@ constants::KEYWORD Lex::letter(char peek)
 	*		inta\0
 	*     tmpBuffer^  ^p
 	*/
-    identifier(p);
-    return KEY_NONE;
+    return identifier(p);
+    //return KEY_NONE;
 }
 
-int Lex::parseLetter(char peek)
+Token Lex::parseLetter(char peek)
 /* try to get a keyword. */
 {
-    KEYWORD type = letter(peek);
-    if (type == KEY_NONE)
-        currentToken->token_type = T_ID;
-    else if ((type & KEY_NONE) == KEY_NONE) {
-        if (type == KEY_SIZEOF) {
-            currentToken->token_type = T_OPERATOR;
-            currentToken->token_value.op = OP_SIZEOF;
-        } else {
-            currentToken->token_type = T_KEY;
-            currentToken->token_value.keyword = type;
+    auto tok = letter(peek);
+    if ((tok.token_type & KEY_NONE) == KEY_NONE) {
+        if (tok.token_value.keyword == KEY_SIZEOF) {
+            tok.token_type = T_OPERATOR;
+            tok.token_value.op = OP_SIZEOF;
         }
     }
-    return currentToken->token_type;
+    return tok;
 }
 
-int Lex::operators(char peek)
+Token Lex::operators(char peek)
 {
-    int op = OP_NONE;
+    constants::OP op = OP_NONE;
     switch (peek) {
         case '!': {
             peek = getNextChar(GET);
@@ -1425,30 +1461,23 @@ int Lex::operators(char peek)
             lexerError(LEX_ERROR_ILL_TOKEN, &peek);
         }
     }
+
 length_1:
     currentPos->place += 1;
-    return op;
 length_2:
     currentPos->place += 2;
-    return op;
 length_3:
     currentPos->place += 3;
-    return op;
+    Token token(op);
+    return token;
 }
 
-int Lex::parseOperator(char peek)
+Token Lex::parseOperator(char peek)
 {
-    int type = operators(peek);
-    if ((type & OP_NONE) == OP_NONE) {
-        currentToken->token_type = T_OPERATOR;
-        currentToken->token_value.op = static_cast<OP>(type);
-    } else {
-        assert(0);
-    }
-    return T_OPERATOR;
+    return operators(peek);
 }
 
-int Lex::parseString(void)
+Token Lex::parseString(void)
 {
     char t;
     char* tp = tmpBuffer;
@@ -1481,12 +1510,12 @@ stringParse:
             if (getNextChar(LOOKAHEAD) == '\"') {
                 *(tp++) = t;
                 *(tp++) = getNextChar(GET);
-                currentToken->token_pos->place++;
+                // currentToken->token_pos->place++;
                 continue;
             }
         }
         *(tp++) = t;
-        currentToken->token_pos->place++;
+        // currentToken->token_pos->place++;
     }
     *tp = '\0';
     skipBlank();
@@ -1497,14 +1526,15 @@ stringParse:
     ret = new char[sizeof(char) * (tp - tmpBuffer + 1)];
     strcpy(ret, tmpBuffer);
 
-    currentToken->token_type = T_STRING;
-    currentToken->token_value.string = ret;
+    // currentToken->token_type = T_STRING;
+    // currentToken->token_value.string = ret;
+    Token tok(T_STRING, ret);
     //Token *newTok = new Token(T_STRING, ret);
     //memcpy(currentToken, newTok, sizeof(Token));
-    return T_STRING;
+    return tok;
 }
 
-int Lex::parseCharConstant(void)
+Token Lex::parseCharConstant(void)
 {
     char t;
     char* tp = tmpBuffer;
@@ -1546,20 +1576,22 @@ int Lex::parseCharConstant(void)
         }
     }
     if (lengthCount == 1) {
-        currentToken->token_type = T_CHAR_CON;
-        currentToken->token_value.numVal->type = T_CHAR_CON;
-        currentToken->token_value.numVal->numberType = NT_CH;
-        currentToken->token_value.numVal->val.i_value = result;
-        return T_CHAR_CON;
+        Token tok;
+        tok.token_type = T_CHAR_CON;
+        tok.token_value.numVal->type = T_CHAR_CON;
+        tok.token_value.numVal->numberType = NT_CH;
+        tok.token_value.numVal->val.i_value = result;
+        return tok;
     } else {
-        currentToken->token_type = currentToken->token_value.numVal->type = T_INT_CON;
-        currentToken->token_value.numVal->numberType = NT_UI;
-        currentToken->token_value.numVal->val.i_value = result;
-        return T_INT_CON;
+        Token tok;
+        tok.token_type = tok.token_value.numVal->type = T_INT_CON;
+        tok.token_value.numVal->numberType = NT_UI;
+        tok.token_value.numVal->val.i_value = result;
+        return tok;
     }
 }
 
-int Lex::getNextToken(void)
+Token Lex::getNextToken(void)
 {
     for (;;) {
         skipBlank();
@@ -1570,8 +1602,8 @@ int Lex::getNextToken(void)
             case '\v':
             case '\f':
             case '\r':
-                currentToken->token_pos->line++;
-                currentToken->token_pos->place = 0;
+                // currentToken->token_pos->line++;
+                // currentToken->token_pos->place = 0;
                 break;
             case '#':
                 resynch();
@@ -1657,6 +1689,7 @@ int Lex::getNextToken(void)
         }
     }
 end:
-    currentToken->token_type = T_NONE;
-    return EOT;
+    //currentToken->token_type = T_NONE;
+    Token tok;
+    return tok;
 }

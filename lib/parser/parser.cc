@@ -43,17 +43,15 @@ void Parser::begin_parse(Env& env) const
 bool Parser::need(const OP op) const
 {
     next();
-    if (matchOP(*cur, op))
+    if (matchOP(cur, op))
         return true;
     else {
-        if (isOP(*cur))
-            parserError(
-                PAR_ERR_NEED_C_CC, cur->token_pos->line, op2c[op], op2c[cur->token_value.op]);
-        else if (isBaseType(*cur)) {
+        if (isOP(cur))
+            parserError(PAR_ERR_NEED_C_CC, cur.token_pos->line, op2c[op], op2c[cur.token_value.op]);
+        else if (isBaseType(cur)) {
             parserError(PAR_ERR_NEED_C_CS, op2c[op], "type");
-        } else if (isID(*cur)) {
-            parserError(
-                PAR_ERR_NEED_C_CC, cur->token_pos->line, op2c[op], op2c[cur->token_value.op]);
+        } else if (isID(cur)) {
+            parserError(PAR_ERR_NEED_C_CC, cur.token_pos->line, op2c[op], op2c[cur.token_value.op]);
         } else {
             parserError(PAR_ERR_NEED_C_CS, op2c[op], "others");
         }
@@ -65,13 +63,13 @@ bool Parser::need(const OP op) const
 bool Parser::need(const TYPE _ty) const
 {
     next();
-    if (is(*cur, _ty))
+    if (is(cur, _ty))
         return true;
     else {
-        if (isOP(*cur))
-            parserError(PAR_ERR_NEED_C_CS, tp2s[_ty], op2c[cur->token_value.op]);
-        else if (isBaseType(*cur)) {
-            parserError(PAR_ERR_NEED_SS, tp2s[_ty], tp2s[cur->token_type]);
+        if (isOP(cur))
+            parserError(PAR_ERR_NEED_C_CS, tp2s[_ty], op2c[cur.token_value.op]);
+        else if (isBaseType(cur)) {
+            parserError(PAR_ERR_NEED_SS, tp2s[_ty], tp2s[cur.token_type]);
         } else
             parserError(PAR_ERR_NEED_C_CS, "others");
 
@@ -126,17 +124,17 @@ void Parser::InitOp2c(void)
 int Parser::next(void) const
 {
     int ret = 0;
-    if (prepre != nullptr) {
+    if (prepre) {
         pre = prepre;
         cur = pre;
         prepre = nullptr;
-    } else if (pre != nullptr) {
+    } else if (pre) {
         cur = pre;
         pre = nullptr;
     } else {
-        ret = theLexer.getNextToken();
-        cur = theLexer.getToken();
-        if (ret == EOT && isFinish == false)
+        cur = theLexer.getNextToken();
+        // cur = theLexer.getToken();
+        if (cur.token_type == T_NONE && isFinish == false)
             fatalError(
                 "Meeting the EOF of the"
                 " file before compile finish.\n");

@@ -15,7 +15,7 @@ FILE *sourceFile;
 using namespace lex;
 
 char lex::Lex::tmpBuffer[TMPBUFFER_SIZE];
-lex::types::Token *Lex::currentToken = nullptr;
+// lex::types::Token *Lex::currentToken = nullptr;
 lex::types::Position *Lex::currentPos = nullptr;
 
 #if 0

@@ -14,7 +14,6 @@
 
 int errorCount = 0;
 int warningCount = 0;
-FILE *wxccErr;
 
 void HandleArg(int argc, char *argv[])
 {

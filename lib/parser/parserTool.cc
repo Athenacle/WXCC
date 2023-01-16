@@ -13,21 +13,18 @@ using namespace types;
 
 int Parser::tokenCompare(int compareTo) const
 {
-    /*__asm{
-	int 3
-	}*/
-    types::Token *to = theLexer.getToken();
+    Token &to = cur;
     //TODO: THIS FUNCTION NEED TO BE TESTED.
     if ((compareTo & TYPE_SSQ) == TYPE_SSQ)
-        return to->token_type == T_KEY
-               && (to->token_value.keyword & compareTo) == (compareTo & (int)TYPE_SSQ);
+        return to.token_type == T_KEY
+               && (to.token_value.keyword & compareTo) == (compareTo & (int)TYPE_SSQ);
 
     if ((compareTo & KEYWORD_MASK) == KEYWORD_MASK) {
-        return to->token_type == T_KEY && to->token_value.keyword == compareTo;
+        return to.token_type == T_KEY && to.token_value.keyword == compareTo;
     }
     if ((compareTo & OP_MASK) == OP_MASK) {
-        return to->token_type == T_OPERATOR && to->token_value.keyword == compareTo;
+        return to.token_type == T_OPERATOR && to.token_value.keyword == compareTo;
     }
 
-    return compareTo == to->token_type;
+    return compareTo == to.token_type;
 }
