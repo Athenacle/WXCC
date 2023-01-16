@@ -69,11 +69,11 @@ namespace
 #ifdef LEX_DEBUG
 //#define LEX_DEBUG_ASM_BP
 #endif
-
+/*
 int Lex::lexWarningCount = 0;
 int Lex::lexErrorCount = 0;
-
-void Lex::lexerWarning(int warningType, const char *message, ...) const
+*/
+void Lex::lexerWarning(int warningType, const char *message, ...)
 {
     lexWarningCount++;
 #if defined LEX_DEBUG_ASM_BP && defined WIN32
@@ -94,7 +94,7 @@ void Lex::lexerWarning(int warningType, const char *message, ...) const
     }
 }
 
-void Lex::lexerError(int errorType, const char *message, ...) const
+void Lex::lexerError(int errorType, const char *message, ...)
 {
     lexErrorCount++;
 #if defined LEX_DEBUG_ASM_BP && defined WIN32

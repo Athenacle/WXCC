@@ -1,9 +1,11 @@
 #include "lex/token.h"
 #include "lex/lexer.h"
+#include "lex/tools.h"
 
 using namespace lex;
 using namespace lex::types;
 using namespace lex::constants;
+using namespace lex::tools;
 
 
 Token::Token(KEYWORD key)
@@ -54,4 +56,15 @@ bool Token::operator==(const Token& other) const
             return true;
     }
     return false;
+}
+
+Token::~Token()
+{
+    if (token_type == T_ID || token_type == T_STRING) {
+        delete[] token_value.string;
+    }
+
+    if (isNumCon(*this)) {
+        delete token_value.numVal;
+    }
 }

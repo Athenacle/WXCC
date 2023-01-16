@@ -19,6 +19,13 @@ using namespace types;
 #define BACK      0
 #define LOOKAHEAD 1
 
+Lex::~Lex()
+{
+    if (currentPos) {
+        delete currentPos;
+    }
+}
+
 Lex::Lex(LexInputSource* s) : source(s)
 {
     currentPos = new Position(s->filename());

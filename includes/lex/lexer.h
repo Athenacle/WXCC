@@ -54,28 +54,23 @@ namespace lex
 {
     class Lex
     {
-        friend types::Token::Token(constants::KEYWORD);
-        friend types::Token::Token(constants::TYPE, const char *);
-        friend types::Token::Token(types::Number *);
-        //friend types::Token::Token(Token &tok);
-
         using Token = types::Token;
+        using Number = types::Number;
+        using Position = types::Position;
+
 
     private:
         Lex(const Lex &) = delete;
         Lex &operator=(const Lex &) = delete;
 
-        // static types::Token *currentToken;
-        static types::Position *currentPos;
+        Position *currentPos;
 
         LexInputSource *source;
 
-        types::Token *newTok;
+        char tmpBuffer[TMPBUFFER_SIZE];
 
-        static char tmpBuffer[TMPBUFFER_SIZE];
-
-        static int lexWarningCount;
-        static int lexErrorCount;
+        int lexWarningCount;
+        int lexErrorCount;
 
         ///// lex functions.
         char getNextChar(int);
@@ -83,10 +78,10 @@ namespace lex
         void getBufferUntilSp(void);
         void resynch(void);
         int getAChar(char *, int *);
-        types::Number *tryParseFloatNumber(char *, types::Number **);
-        types::Number *tryParseDecNumber(char *);
-        types::Number *tryParseHexNumber(char *);
-        types::Number *tryParseOctNumber(char *);
+        Number *tryParseFloatNumber(char *, Number **);
+        Number *tryParseDecNumber(char *);
+        Number *tryParseHexNumber(char *);
+        Number *tryParseOctNumber(char *);
 
         Token newNumber(char *, int);
         Token number(char);
@@ -100,30 +95,16 @@ namespace lex
         Token parseCharConstant(void);
         /////  lex functions end.
 
-        void lexerWarning(int warningType, const char *message, ...) const;
-        void lexerError(int warningType, const char *message, ...) const;
+        void lexerWarning(int warningType, const char *message, ...);
+        void lexerError(int warningType, const char *message, ...);
 
     public:
-#ifdef LEX_DEBUG
-        extern FILE *lexDebugOut;
-        void printToken(Token tok);
-        void lexDebugInit(void);
-#endif
-        // types::Token *getToken(void)
-        // {
-        //     return currentToken;
-        // }
-        types::Position *getPos(void)
+        Position *getPos(void)
         {
             return currentPos;
         }
-
-        // types::Token *getLastToken(void)
-        // {
-        //     return new types::Token(*currentToken);
-        // }
-
         Lex(LexInputSource *source);
+        ~Lex();
 
         Token getNextToken(void);
     };

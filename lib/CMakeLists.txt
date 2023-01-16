@@ -3,7 +3,7 @@
 add_library(libs STATIC  
                 env/environment.cc env/symbol.cc env/symbol.cc
                 inter/semantic.cc inter/tree.cc
-                lex/input.cc lex/lex.cc lex/lexDebug.cc  lex/lexWE.cc lex/token.cc
+                lex/input.cc lex/lex.cc lex/output.cc  lex/lexWE.cc lex/token.cc
                 parser/decl.cc parser/expr.cc parser/parser.cc parser/parserTool.cc
                 parser/parserWE.cc parser/stmt.cc
                 semantic/semacticWE.cc semantic/type.cc

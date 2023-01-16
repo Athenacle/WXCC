@@ -144,7 +144,7 @@ Type *Parser::c_parser_declaration_type_specifiers_opt(Type *ty) const
 
 Type *Parser::c_parser_declaration_type_specifiers(Type *ty) const
 {
-    next();
+    //next();
     Token to(cur);
     //next();
     if (!isBaseType(cur))  //whether the cur is the base type.int,char,etc.
@@ -212,13 +212,13 @@ cptql:
 ST *Parser::c_parser_direct_declarator(Type *ty) const
 {
     ST *retST = nullptr;
-    Token curTo;
     Type *retTY = nullptr;
     next();
     if (isID(cur)) {
-        curTo = mkToken();
+        Token curTo = cur;
+        //curTo = mkToken();
         retTY = c_parser_direct_declatator_opt(ty);
-        Symbol *sy = new Symbol(&cur, S_GLOBAL, ST_AUTO, S_GLOBAL);
+        Symbol *sy = new Symbol(&curTo, S_GLOBAL, ST_AUTO, S_GLOBAL);
         retST = new ST(sy, retTY);
     } else {
         if (matchOP(cur, OP_LEFTBRACK)) {

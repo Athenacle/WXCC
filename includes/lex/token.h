@@ -3,6 +3,8 @@
 
 #include "lex/constants.h"
 
+#include <cstdint>
+
 namespace lex
 {
     namespace types
@@ -14,7 +16,7 @@ namespace lex
             constants::NumberType numberType; /* enum NumberType */
             union {
                 double d_value;
-                int i_value;
+                uint64_t i_value;
             } val;
 
             Number(const Number &num) : Number()
@@ -115,6 +117,8 @@ namespace lex
                 token_pos = nullptr;
                 token_value.id_name = nullptr;
             }
+
+            ~Token();
         };
     };  //namespace types
 }  // namespace lex
