@@ -11,8 +11,6 @@
 #define SYSTEM_H_
 
 #if defined HAVE_CONFIG_H && !defined WIN32
-#define DEBUG
-#define _DEBUG
 #include "config.h"
 #endif
 

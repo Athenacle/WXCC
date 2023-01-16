@@ -92,13 +92,13 @@
 #define unlikely(x) ((x))
 #endif
 
-#if __cplusplus >= 201803L
+#ifdef __cplusplus 
 #if __has_cpp_attribute(likely)
 #define LIKELY [[likely]]
 #endif
 #endif
 
-#if __cplusplus >= 201603L
+#ifdef __cplusplus 
 #if __has_cpp_attribute(fallthrough)
 #define FALLTHROUGH [[fallthrough]];
 #endif
@@ -118,7 +118,7 @@
 #define FLATTEN
 #endif
 
-#if __cplusplus >= 200809L
+#ifdef  __cplusplus
 #if __has_cpp_attribute(noreturn)
 #define NORETURN [[noreturn]]
 #endif
