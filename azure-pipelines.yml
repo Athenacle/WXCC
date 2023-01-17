@@ -48,8 +48,7 @@ jobs:
           msbuildArchitecture: "x64"
           maximumCpuCount: true
 
-      - task: CMake@1
-        inputs: |
+      - script: |
           ctest --test-dir ./test
         displayName: "CMake Run Test"
 
@@ -72,7 +71,6 @@ jobs:
           cmakeArgs: "--build . --target all -j 2 --verbose"
         displayName: "CMake Build"
 
-      - task: CMake@1
-        inputs: |
-           ctest --test-dir ./test
+      - script: |
+          ctest --test-dir ./test
         displayName: "CMake Run Test"
