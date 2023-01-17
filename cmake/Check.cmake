@@ -18,6 +18,8 @@ if (UNIX)
     check_symbol_exists(get_nprocs sys/sysinfo.h UNIX_HAVE_GET_NPROCS)
     check_symbol_exists(setenv cstdlib UNIX_HAVE_SETENV)
     check_symbol_exists(mmap sys/mman.h UNIX_HAVE_MMAP)
+elseif(WIN32)
+    add_compile_options("/EHsc")
 endif ()
 
 check_cxx_source_compiles(

@@ -51,6 +51,7 @@
 include(FetchContent)
 
 set(FETCHCONTENT_BASE_DIR "${THIRD_PARTY_DIR}/gtest")
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_Declare(
   gtest_fetch
   DOWNLOAD_EXTRACT_TIMESTAMP OFF
