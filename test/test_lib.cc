@@ -8,30 +8,52 @@ namespace
     std::random_device rd;
 }
 
-const char* test::randomString(uint32_t length)
+namespace test
 {
-    char* mem = new char[length + 1];
-    mem[length] = 0;
+    const char* randomString(uint32_t length)
+    {
+        char* mem = new char[length + 1];
+        mem[length] = 0;
 
-    for (uint32_t i = 0; i < length; i++) {
-        char c = '\n';
-        for (; c == '\n';)
-            c = (rd() % ('~' - '!')) + '!';
-        mem[i] = c;
+        for (uint32_t i = 0; i < length; i++) {
+            char c = '\n';
+            for (; c == '\n';)
+                c = (rd() % ('~' - '!')) + '!';
+            mem[i] = c;
+        }
+
+        return mem;
     }
 
-    return mem;
-}
+    uint32_t random()
+    {
+        return rd();
+    }
 
-uint32_t test::random()
-{
-    return rd();
-}
+    uint32_t random(uint32_t mod)
+    {
+        return test::random() % mod;
+    }
 
-uint32_t test::random(uint32_t mod)
-{
-    return test::random() % mod;
-}
+    void split(std::vector<std::string>& out, const std::string& in, const std::string& sep)
+    {
+        std::string tmp(in);
+        do {
+            auto pos = tmp.find_first_of(sep);
+            if (pos == std::string::npos) {
+                if (tmp.length() > 0) {
+                    out.emplace_back(tmp);
+                }
+                break;
+            } else {
+                std::string sub(tmp, 0, pos);
+                tmp = tmp.substr(pos + sep.length());
+                out.emplace_back(sub);
+            }
+
+        } while (true);
+    }
+}  // namespace test
 
 #ifdef HAVE_FLEX_BISON
 #include <fmt/core.h>
@@ -52,26 +74,6 @@ namespace
 
 namespace test
 {
-
-    void split(std::vector<std::string>& out, const std::string& in, const std::string& sep)
-    {
-        std::string tmp(in);
-        do {
-            auto pos = tmp.find_first_of(sep);
-            if (pos == std::string::npos) {
-                if (tmp.length() > 0) {
-                    out.emplace_back(tmp);
-                }
-                break;
-            } else {
-                std::string sub(tmp, 0, pos);
-                tmp = tmp.substr(pos + sep.length());
-                out.emplace_back(sub);
-            }
-
-        } while (true);
-    }
-
     const char* randomSourceCode(uint32_t& count)
     {
         char buffer[64];
