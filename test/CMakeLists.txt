@@ -37,7 +37,7 @@ macro(add_subdirectory_test)
         list(APPEND LIBS ${file})
         target_link_libraries(${TN} PRIVATE GTest::GTest GTest::GMock libs test)
         target_include_directories(${TN} PRIVATE ${CMAKE_SOURCE_DIR}/lib)
-        add_test(${TN} ${TN} WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+        add_test(${TN} ${TN} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
     endforeach()
 endmacro()
 
@@ -52,3 +52,9 @@ add_executable(${TEST_NAME} ${LIBS})
 add_test(${TEST_NAME} ${TEST_NAME})
 target_link_libraries(${TEST_NAME} PRIVATE GTest::GTest GTest::GMock libs test)
 target_include_directories(${TEST_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/lib)
+target_compile_definitions(
+    ${TEST_NAME}
+    PRIVATE "-DUNITTEST_FILE=$<TARGET_FILE:${TEST_NAME}>"
+            "-DUNITTEST_FILENAME=$<TARGET_FILE_NAME:${TEST_NAME}>"
+            "$<$<BOOL:${RUN_ID}>:RUN_ID=${RUN_ID}>")
+add_custom_target(run-unittest COMMAND "$<TARGET_FILE:${TEST_NAME}>")
