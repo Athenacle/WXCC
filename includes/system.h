@@ -10,16 +10,8 @@
 #ifndef SYSTEM_H_
 #define SYSTEM_H_
 
-#if defined HAVE_CONFIG_H && !defined WIN32
+#if defined HAVE_CONFIG_H
 #include "config.h"
-#endif
-
-/// debug macros.
-#ifdef _DEBUG
-//#define LEX_DEBUG
-#define TOOL_DEBUG
-#define PARSER_DEBUG
-#define IR_DEBUG
 #endif
 
 #define USING_SYSTEM_MM_CALL

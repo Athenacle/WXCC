@@ -55,7 +55,7 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQU
 
     cxx_compiler_check_add(
         Wall
-        #Wno-useless-cast
+        Wno-useless-cast
         Wextra
         Wpedantic
         Wduplicated-branches
@@ -64,7 +64,10 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQU
         Wrestrict
         Wnull-dereference
         Wno-variadic-macros
-        #fno-permissive
+        fno-permissive
+        Wextra-semi
+        Wimplicit-float-conversion
+        Wshorten-64-to-32
         )
     if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         cxx_compiler_check_add(fstack-protector-strong)
