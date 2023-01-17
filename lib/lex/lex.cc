@@ -655,10 +655,14 @@ Token Lex::identifier(char* start)
         start[length++] = t;
     }
     *(start + length) = '\0';
-    //TODO: Test whether here should has a getNextChar(BACK);
-    getNextChar(BACK);
+    if (t != 0) {
+        getNextChar(BACK);
+    }
     return newIdentifier(tmpBuffer, (int)strlen(tmpBuffer) + 1);
 }
+
+
+#define CHECK_NEXT (!isalnum(getNextChar(LOOKAHEAD)) && (getNextChar(LOOKAHEAD) != '_'))
 
 Token Lex::letter(char peek)
 {
@@ -673,7 +677,7 @@ Token Lex::letter(char peek)
                 *(++p) = getNextChar(GET);
                 if (*p == 't') {
                     *(++p) = getNextChar(GET);
-                    if (*p == 'o' && !isalnum(getNextChar(LOOKAHEAD))) {
+                    if (*p == 'o' && CHECK_NEXT) {
                         tok.token_value.keyword = KEY_AUTO;
                         tok.token_pos = source->position();
                         return tok;
@@ -689,7 +693,7 @@ Token Lex::letter(char peek)
                     *(++p) = getNextChar(GET);
                     if (*p == 'a') {
                         *(++p) = getNextChar(GET);
-                        if (*p == 'k' && !isalnum(getNextChar(LOOKAHEAD))) {
+                        if (*p == 'k' && CHECK_NEXT) {
                             tok.token_value.keyword = KEY_BREAK;
                             tok.token_pos = source->position();
                             return tok;
@@ -705,7 +709,7 @@ Token Lex::letter(char peek)
                     *(++p) = getNextChar(GET);
                     if (*p == 's') {
                         *(++p) = getNextChar(GET);
-                        if (*p == 'e' && !isalnum(getNextChar(LOOKAHEAD))) {
+                        if (*p == 'e' && CHECK_NEXT) {
                             tok.token_value.keyword = KEY_CASE;
                             tok.token_pos = source->position();
                             return tok;
@@ -716,7 +720,7 @@ Token Lex::letter(char peek)
                     *(++p) = getNextChar(GET);
                     if (*p == 'a') {
                         *(++p) = getNextChar(GET);
-                        if (*p == 'r' && !isalnum(getNextChar(LOOKAHEAD))) {
+                        if (*p == 'r' && CHECK_NEXT) {
                             tok.token_value.keyword = KEY_CHAR;
                             tok.token_pos = source->position();
                             return tok;
@@ -730,7 +734,7 @@ Token Lex::letter(char peek)
                         switch (*p) {
                             case 's':
                                 *(++p) = getNextChar(GET);
-                                if (*p == 't' && !isalnum(getNextChar(LOOKAHEAD))) {
+                                if (*p == 't' && CHECK_NEXT) {
                                     tok.token_value.keyword = KEY_CONST;
                                     tok.token_pos = source->position();
                                     return tok;
@@ -744,7 +748,7 @@ Token Lex::letter(char peek)
                                         *(++p) = getNextChar(GET);
                                         if (*p == 'u') {
                                             *(++p) = getNextChar(GET);
-                                            if (*p == 'e' && !isalnum(getNextChar(LOOKAHEAD))) {
+                                            if (*p == 'e' && CHECK_NEXT) {
                                                 tok.token_value.keyword = KEY_CONTINUE;
                                                 tok.token_pos = source->position();
                                                 return tok;
@@ -769,7 +773,7 @@ Token Lex::letter(char peek)
                                 *(++p) = getNextChar(GET);
                                 if (*p == 'l') {
                                     *(++p) = getNextChar(GET);
-                                    if (*p == 't' && !isalnum(getNextChar(LOOKAHEAD))) {
+                                    if (*p == 't' && CHECK_NEXT) {
                                         tok.token_value.keyword = KEY_DEFAULT;
                                         tok.token_pos = source->position();
                                         return tok;
@@ -780,7 +784,9 @@ Token Lex::letter(char peek)
                     }
                     break;
                 case 'o':
-                    if (!isalnum(*(++p) = getNextChar(GET))) {
+                    *(++p) = getNextChar(GET);
+                    if (!isalnum(*p)) {
+                        getNextChar(BACK);
                         tok.token_value.keyword = KEY_DO;
                         tok.token_pos = source->position();
                         return tok;
@@ -791,7 +797,7 @@ Token Lex::letter(char peek)
                             *(++p) = getNextChar(GET);
                             if (*p == 'l') {
                                 *(++p) = getNextChar(GET);
-                                if (*p == 'e' && !isalnum(getNextChar(LOOKAHEAD))) {
+                                if (*p == 'e' && CHECK_NEXT) {
                                     tok.token_value.keyword = KEY_DOUBLE;
                                     tok.token_pos = source->position();
                                     return tok;
@@ -808,7 +814,7 @@ Token Lex::letter(char peek)
                     *(++p) = getNextChar(GET);
                     if (*p == 's') {
                         *(++p) = getNextChar(GET);
-                        if (*p == 'e' && !isalnum(getNextChar(LOOKAHEAD))) {
+                        if (*p == 'e' && CHECK_NEXT) {
                             tok.token_value.keyword = KEY_ELSE;
                             tok.token_pos = source->position();
                             return tok;
@@ -819,7 +825,7 @@ Token Lex::letter(char peek)
                     *(++p) = getNextChar(GET);
                     if (*p == 'u') {
                         *(++p) = getNextChar(GET);
-                        if (*p == 'm' && !isalnum(getNextChar(LOOKAHEAD))) {
+                        if (*p == 'm' && CHECK_NEXT) {
                             tok.token_value.keyword = KEY_ENUM;
                             tok.token_pos = source->position();
                             return tok;
@@ -834,7 +840,7 @@ Token Lex::letter(char peek)
                             *(++p) = getNextChar(GET);
                             if (*p == 'r') {
                                 *(++p) = getNextChar(GET);
-                                if (*p == 'n' && !isalnum(getNextChar(LOOKAHEAD))) {
+                                if (*p == 'n' && CHECK_NEXT) {
                                     tok.token_value.keyword = KEY_EXTERN;
                                     tok.token_pos = source->position();
                                     return tok;
@@ -850,7 +856,7 @@ Token Lex::letter(char peek)
             switch (*p) {
                 case 'o':
                     *(++p) = getNextChar(GET);
-                    if (*p == 'r' && !isalnum(getNextChar(LOOKAHEAD))) {
+                    if (*p == 'r' && CHECK_NEXT) {
                         tok.token_value.keyword = KEY_FOR;
                         tok.token_pos = source->position();
                         return tok;
@@ -862,7 +868,7 @@ Token Lex::letter(char peek)
                         *(++p) = getNextChar(GET);
                         if (*p == 'a') {
                             *(++p) = getNextChar(GET);
-                            if (*p == 't' && !isalnum(getNextChar(LOOKAHEAD))) {
+                            if (*p == 't' && CHECK_NEXT) {
                                 tok.token_value.keyword = KEY_FLOAT;
                                 tok.token_pos = source->position();
                                 return tok;
@@ -878,7 +884,7 @@ Token Lex::letter(char peek)
                 *(++p) = getNextChar(GET);
                 if (*p == 't') {
                     *(++p) = getNextChar(GET);
-                    if (*p == 'o' && !isalnum(getNextChar(LOOKAHEAD))) {
+                    if (*p == 'o' && CHECK_NEXT) {
                         tok.token_value.keyword = KEY_GOTO;
                         tok.token_pos = source->position();
                         return tok;
@@ -888,13 +894,13 @@ Token Lex::letter(char peek)
             break;
         case 'i': /* if int*/
             *(++p) = getNextChar(GET);
-            if (*p == 'f' && !isalnum(getNextChar(LOOKAHEAD))) {
+            if (*p == 'f' && CHECK_NEXT) {
                 tok.token_value.keyword = KEY_IF;
                 tok.token_pos = source->position();
                 return tok;
             } else if (*p == 'n') {
                 *(++p) = getNextChar(GET);
-                if (*p == 't' && !isalnum(getNextChar(LOOKAHEAD))) {
+                if (*p == 't' && CHECK_NEXT) {
                     tok.token_value.keyword = KEY_INT;
                     tok.token_pos = source->position();
                     return tok;
@@ -907,7 +913,7 @@ Token Lex::letter(char peek)
                 *(++p) = getNextChar(GET);
                 if (*p == 'n') {
                     *(++p) = getNextChar(GET);
-                    if (*p == 'g' && !isalnum(getNextChar(LOOKAHEAD))) {
+                    if (*p == 'g' && CHECK_NEXT) {
                         tok.token_value.keyword = KEY_LONG;
                         tok.token_pos = source->position();
                         return tok;
@@ -930,7 +936,7 @@ Token Lex::letter(char peek)
                                     *(++p) = getNextChar(GET);
                                     if (*p == 'e') {
                                         *(++p) = getNextChar(GET);
-                                        if (*p == 'r' && !isalnum(getNextChar(LOOKAHEAD))) {
+                                        if (*p == 'r' && CHECK_NEXT) {
                                             tok.token_value.keyword = KEY_REGISTER;
                                             tok.token_pos = source->position();
                                             return tok;
@@ -946,7 +952,7 @@ Token Lex::letter(char peek)
                             *(++p) = getNextChar(GET);
                             if (*p == 'r') {
                                 *(++p) = getNextChar(GET);
-                                if (*p == 'n' && !isalnum(getNextChar(LOOKAHEAD))) {
+                                if (*p == 'n' && CHECK_NEXT) {
                                     tok.token_value.keyword = KEY_RETURN;
                                     tok.token_pos = source->position();
                                     return tok;
@@ -965,7 +971,7 @@ Token Lex::letter(char peek)
                         *(++p) = getNextChar(GET);
                         if (*p == 'r') {
                             *(++p) = getNextChar(GET);
-                            if (*p == 't' && !isalnum(getNextChar(LOOKAHEAD))) {
+                            if (*p == 't' && CHECK_NEXT) {
                                 tok.token_value.keyword = KEY_SHORT;
                                 tok.token_pos = source->position();
                                 return tok;
@@ -982,7 +988,7 @@ Token Lex::letter(char peek)
                                 *(++p) = getNextChar(GET);
                                 if (*p == 'e') {
                                     *(++p) = getNextChar(GET);
-                                    if (*p == 'd' && !isalnum(getNextChar(LOOKAHEAD))) {
+                                    if (*p == 'd' && CHECK_NEXT) {
                                         tok.token_value.keyword = KEY_SIGNED;
                                         tok.token_pos = source->position();
                                         return tok;
@@ -996,7 +1002,7 @@ Token Lex::letter(char peek)
                                 *(++p) = getNextChar(GET);
                                 if (*p == 'o') {
                                     *(++p) = getNextChar(GET);
-                                    if (*p == 'f' && !isalnum(getNextChar(LOOKAHEAD))) {
+                                    if (*p == 'f' && CHECK_NEXT) {
                                         tok.token_value.keyword = KEY_SIZEOF;
                                         tok.token_pos = source->position();
                                         return tok;
@@ -1015,7 +1021,7 @@ Token Lex::letter(char peek)
                                 *(++p) = getNextChar(GET);
                                 if (*p == 'i') {
                                     *(++p) = getNextChar(GET);
-                                    if (*p == 'c' && !isalnum(getNextChar(LOOKAHEAD))) {
+                                    if (*p == 'c' && CHECK_NEXT) {
                                         tok.token_value.keyword = KEY_STATIC;
                                         tok.token_pos = source->position();
                                         return tok;
@@ -1029,7 +1035,7 @@ Token Lex::letter(char peek)
                                 *(++p) = getNextChar(GET);
                                 if (*p == 'c') {
                                     *(++p) = getNextChar(GET);
-                                    if (*p == 't' && !isalnum(getNextChar(LOOKAHEAD))) {
+                                    if (*p == 't' && CHECK_NEXT) {
                                         tok.token_value.keyword = KEY_STRUCT;
                                         tok.token_pos = source->position();
                                         return tok;
@@ -1048,7 +1054,7 @@ Token Lex::letter(char peek)
                             *(++p) = getNextChar(GET);
                             if (*p == 'c') {
                                 *(++p) = getNextChar(GET);
-                                if (*p == 'h' && !isalnum(getNextChar(LOOKAHEAD))) {
+                                if (*p == 'h' && CHECK_NEXT) {
                                     tok.token_value.keyword = KEY_SWITCH;
                                     tok.token_pos = source->position();
                                     return tok;
@@ -1070,7 +1076,7 @@ Token Lex::letter(char peek)
                             *(++p) = getNextChar(GET);
                             if (*p == 'e') {
                                 *(++p) = getNextChar(GET);
-                                if (*p == 'f') {
+                                if (*p == 'f' && CHECK_NEXT) {
                                     tok.token_value.keyword = KEY_TYPEDEF;
                                     tok.token_pos = source->position();
                                     return tok;
@@ -1090,7 +1096,7 @@ Token Lex::letter(char peek)
                         *(++p) = getNextChar(GET);
                         if (*p == 'o') {
                             *(++p) = getNextChar(GET);
-                            if (*p == 'n') {
+                            if (*p == 'n' && CHECK_NEXT) {
                                 tok.token_value.keyword = KEY_UNION;
                                 tok.token_pos = source->position();
                                 return tok;
@@ -1107,7 +1113,7 @@ Token Lex::letter(char peek)
                                     *(++p) = getNextChar(GET);
                                     if (*p == 'e') {
                                         *(++p) = getNextChar(GET);
-                                        if (*p == 'd' && !isalnum(getNextChar(LOOKAHEAD))) {
+                                        if (*p == 'd' && CHECK_NEXT) {
                                             tok.token_value.keyword = KEY_UNSIGNED;
                                             tok.token_pos = source->position();
                                             return tok;
@@ -1127,7 +1133,7 @@ Token Lex::letter(char peek)
                 switch (*p) {
                     case 'i': {
                         *(++p) = getNextChar(GET);
-                        if (*p == 'd') {
+                        if (*p == 'd' && CHECK_NEXT) {
                             tok.token_value.keyword = KEY_KVOID;
                             tok.token_pos = source->position();
                             return tok;
@@ -1144,7 +1150,7 @@ Token Lex::letter(char peek)
                                     *(++p) = getNextChar(GET);
                                     if (*p == 'l') {
                                         *(++p) = getNextChar(GET);
-                                        if (*p == 'e') {
+                                        if (*p == 'e' && CHECK_NEXT) {
                                             tok.token_value.keyword = KEY_VOLATILE;
                                             tok.token_pos = source->position();
                                             return tok;
@@ -1166,7 +1172,7 @@ Token Lex::letter(char peek)
                     *(++p) = getNextChar(GET);
                     if (*p == 'l') {
                         *(++p) = getNextChar(GET);
-                        if (*p == 'e') {
+                        if (*p == 'e' && CHECK_NEXT) {
                             tok.token_value.keyword = KEY_WHILE;
                             tok.token_pos = source->position();
                             return tok;

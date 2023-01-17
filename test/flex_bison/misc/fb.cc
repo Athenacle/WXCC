@@ -133,6 +133,7 @@ const char* yyfilename = nullptr;
 
 void yyReset()
 {
+    line = column = 1;
     yyf.reset();
     yylex_destroy();
 }
@@ -236,6 +237,8 @@ Token flex()
         tok.token_value.op = f->second;
     } else if (code == EoF) {
         tok.token_type = T_NONE;
+    } else {
+        assert(0);
     }
     types::Position pos(yyfile(), line, column);
     tok.token_pos = std::move(pos);

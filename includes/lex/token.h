@@ -62,7 +62,10 @@ namespace lex
             Position(Position &&) = default;
 
             Position &operator=(const Position &) = default;
+
             Position &operator=(Position &&) = default;
+
+            bool operator==(const Position &) const;
         };
 
         class Token
@@ -121,10 +124,12 @@ namespace lex
             Token(constants::KEYWORD);
             explicit Token(constants::TYPE, const char *);
             explicit Token(Number *);
-            Token(const Token &tok) = default;
+
             Token(constants::OP);
 
-            Token(Token &&) = default;
+            Token(Token &&);
+
+            Token(const Token &tok);
 
             Token()
             {

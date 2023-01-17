@@ -6,6 +6,7 @@
 
 using namespace lex;
 using namespace constants;
+using namespace types;
 
 TEST(Lexer, keywords)
 {
@@ -17,7 +18,7 @@ TEST(Lexer, keywords)
     MemoryLexInputSource mlis;
     mlis.fill(kw, sizeof(kw) - 1);
 
-    std::vector<lex::types::Token> toks = {
+    std::vector<Token> toks = {
         {KEY_AUTO},     {KEY_BREAK},  {KEY_CASE},    {KEY_CHAR},   {KEY_CONST},    {KEY_CONTINUE},
         {KEY_DEFAULT},  {KEY_DO},     {KEY_DOUBLE},  {KEY_ELSE},   {KEY_ENUM},     {KEY_EXTERN},
         {KEY_FLOAT},    {KEY_FOR},    {KEY_GOTO},    {KEY_IF},     {KEY_INT},      {KEY_LONG},
@@ -32,4 +33,38 @@ TEST(Lexer, keywords)
         auto lex = l.getNextToken();
         ASSERT_EQ(lex, t);
     }
+    auto lex = l.getNextToken();
+    ASSERT_EQ(lex.token_type, T_NONE);
+}
+
+
+TEST(Lexer, keywordsPrefixID)
+{
+    const char kw[] =
+        "auto_ breakk cases char_ constt2 continuee default_op doo doubled else1 enum100 "
+        "extern_ float123 forr goto123 if_ "
+        "intt long_a registerr returnnef shortted signed123 sizeoff staticc structs "
+        "switches typedeff unionion unsignedc123 "
+        "voidd volatiled whilee123_";
+
+    MemoryLexInputSource mlis;
+    mlis.fill(kw, sizeof(kw) - 1);
+
+    std::vector<std::string> ids;
+    test::split(ids, kw, " ");
+    std::vector<Token> toks;
+
+    for (const auto& id : ids) {
+        Token tok(T_ID, id.c_str());
+        toks.emplace_back(std::move(tok));
+    }
+
+    Lex l(&mlis);
+    for (const auto& t : toks) {
+        auto lex = l.getNextToken();
+        EXPECT_EQ(lex, t) << t.token_value.string;
+    }
+
+    auto lex = l.getNextToken();
+    ASSERT_EQ(lex.token_type, T_NONE);
 }

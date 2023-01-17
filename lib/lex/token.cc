@@ -5,11 +5,19 @@
 #include "lex/lexer.h"
 #include "lex/tools.h"
 
+#include "tools.h"
+
 using namespace lex;
 using namespace lex::types;
 using namespace lex::constants;
 using namespace lex::tools;
 
+
+bool Position::operator==(const Position& other) const
+{
+    return line == other.line && place == other.place && other.filename && filename
+           && *other.filename == *filename;
+}
 
 Token::Token(KEYWORD key)
 {
@@ -20,7 +28,7 @@ Token::Token(KEYWORD key)
 Token::Token(constants::TYPE ty, const char* cc)
 {
     token_type = ty;
-    token_value.string = cc;
+    token_value.string = utils::strdup(cc);
 }
 
 Token::Token(Number* n)
@@ -36,6 +44,27 @@ Token::Token(constants::OP op)
 {
     token_type = T_OPERATOR;
     token_value.op = op;
+}
+
+Token::Token(Token&& other)
+{
+    token_type = other.token_type;
+    token_pos = std::move(other.token_pos);
+    memcpy(&token_value, &other.token_value, sizeof(token_value));
+    other.token_type = T_NONE;
+}
+
+Token::Token(const Token& other)
+{
+    token_type = other.token_type;
+    token_pos = other.token_pos;
+    if (isNumCon(other)) {
+        token_value.numVal = new Number(*other.token_value.numVal);
+    } else if (token_type == T_ID || token_type == T_STRING) {
+        token_value.string = utils::strdup(other.token_value.string);
+    } else {
+        memcpy(&token_value, &other.token_value, sizeof(token_value));
+    }
 }
 
 bool Token::operator==(const Token& other) const
