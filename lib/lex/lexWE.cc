@@ -89,11 +89,6 @@ void Lex::lexerWarning(int warningType, const char *message, ...)
 void Lex::lexerError(int errorType, const char *message, ...)
 {
     lexErrorCount++;
-#if defined LEX_DEBUG_ASM_BP && defined WIN32
-    __asm {
-		int 3
-    }
-#endif
     fprintf(wxccErr, "Error.file: %s, line: %d.>> ", "", 0);
     switch (errorType) {
         case LEX_ERROR_STRING_MEET_NEWLINE: /* 1 */

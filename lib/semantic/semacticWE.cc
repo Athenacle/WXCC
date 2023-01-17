@@ -29,14 +29,8 @@ int semErrorCount = 0;
 void semError(int errType, ...)
 {
     semErrorCount++;
-#if defined SEM_DEBUG_ASM_BP && defined WIN32
-    __asm {
-		int 3
-    }
-#endif
-    //fprintf(wxccErr, "Error:line: %d.>> ", line);
-    switch (errType)
-    {
+
+    switch (errType) {
         case SEM_ERR_TOO_TYPE:
             fprintf(wxccErr, "%s", semErrors[errType]);
             break;

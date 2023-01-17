@@ -55,14 +55,7 @@ namespace
 void Parser::parserWarning(int warningType, ...) const
 {
     parserWarningCount++;
-#if defined PARSER_DEBUG_ASM_BP && defined WIN32
-    __asm {
-		int 3
-    }
-#endif
-
-    switch (warningType)
-    {
+    switch (warningType) {
         case PARER_WE_USE_STRING:
             goto use_string_warn;
         case PAR_WARNING_EMPTY_TRANSLATION_UNIT:
@@ -87,13 +80,7 @@ use_string_warn:
 void Parser::parserError(int errorType, ...) const
 {
     parserErrorCount++;
-#if defined PARSER_DEBUG_ASM_BP && defined WIN32
-    __asm {
-		int 3
-    }
-#endif
-    switch (errorType)
-    {
+    switch (errorType) {
         case PARER_WE_USE_STRING:
             goto use_string_err;
         case PAR_ERR_NEED_TYPE:

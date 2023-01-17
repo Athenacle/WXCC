@@ -213,7 +213,7 @@ Tree *Tree::MINUStree(const Tree *left, const Tree *right)
 
 Tree *Tree::CONDtree(Tree *, const Tree *, const Tree *)
 {
-    // __asm{int 3}
+    assert(0);
     return 0;
 }
 

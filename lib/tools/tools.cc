@@ -16,11 +16,7 @@ FILE* wxccErr;
 void fatalError(const char* message)
 {
     fprintf(stderr, "fatal error: %s.\n", message);
-#if defined TOOL_DEBUG && defined WIN32
-    __asm {
-		int 3
-    }
-#endif
+
     exit(EXIT_FAILURE);
 }
 
