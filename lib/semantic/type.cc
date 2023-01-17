@@ -47,7 +47,7 @@ namespace
         "NULL",
 
         "TW01: floating type with a signed/unsigned specifier. ignore.\n"};
-};  // namespace
+}  // namespace
 
 Type::Type(TYPE_OPERATOR _oper,
            Type *_baseType,
@@ -326,7 +326,7 @@ namespace NS_BASE_TYPE
         delete voidType;
         delete pvType;
     }
-};  // namespace NS_BASE_TYPE
+}  // namespace NS_BASE_TYPE
 /*
 const char* TypeException::toString( void ) const
 {

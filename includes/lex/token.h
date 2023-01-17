@@ -139,7 +139,7 @@ namespace lex
 
             ~Token();
         };
-    };  //namespace types
+    }  //namespace types
 }  // namespace lex
 
 #endif

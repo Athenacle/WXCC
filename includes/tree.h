@@ -62,7 +62,7 @@ namespace NS_EXPRE_IR
     };
 
     enum Node_S { NS_U, US_S, US_NONE };
-};  // namespace NS_EXPRE_IR
+}  // namespace NS_EXPRE_IR
 
 using namespace NS_EXPRE_IR;
 
@@ -218,6 +218,6 @@ namespace NS_EXPRE_IR
     typedef Tree *(*BinFunction)(const Tree *, const Tree *);
 
     BinFunction op2fun(const OP _op);
-};  // namespace NS_EXPRE_IR
+}  // namespace NS_EXPRE_IR
 
 #endif

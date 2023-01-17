@@ -29,7 +29,7 @@ namespace
         "PE08. Line %d: meet a declaration after statements."
         // PE_DECL_AFTER_STMT
     };
-};  // namespace
+}  // namespace
 
 int Function::parseParameters(void)
 {

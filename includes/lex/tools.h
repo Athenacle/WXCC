@@ -93,7 +93,7 @@ namespace lex
             return isOP(_tok) && (_tok.token_value.op & OP_ASGN_MASK) == OP_ASGN_MASK;
         }
 
-    };  //namespace tools
+    }  // namespace tools
 
 }  // namespace lex
 

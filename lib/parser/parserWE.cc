@@ -48,7 +48,7 @@ namespace
         "PE04. Line : %d : unmatched keyword \'%s\'.\n"
         // PAR_ERR_UNMATCHED_KEY
     };
-};  // namespace
+}  // namespace
 
 #define PARSER_DEBUG_ASM_BP
 

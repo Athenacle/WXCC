@@ -18,7 +18,7 @@ namespace
                                "EE.  : not an array.\n",
 
                                "EE.  : need a modifiable l-value."};
-};  // namespace
+}  // namespace
 
 BinFunction NS_EXPRE_IR::op2fun(const OP _op)
 {

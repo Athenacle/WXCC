@@ -22,7 +22,7 @@ namespace
 
 
     };
-};  // namespace
+}  // namespace
 
 int semErrorCount = 0;
 

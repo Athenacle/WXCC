@@ -30,7 +30,7 @@ namespace scope
         ST_EXTERN,
         ST_TYPEDEF
     };
-};  // namespace scope
+}  // namespace scope
 
 
 class Symbol

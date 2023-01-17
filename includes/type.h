@@ -61,7 +61,7 @@ namespace type_operator
 	*	so, set the size field of the function type to NO_LIMIT.
 	* Just a magic number, nothing else.
 	*/
-};  // namespace type_operator
+}  // namespace type_operator
 
 using namespace type_operator;
 
@@ -307,5 +307,5 @@ namespace NS_BASE_TYPE
 
     void InitBaseTypes(void);
     void DeInitBaseTypes(void);
-};  // namespace NS_BASE_TYPE
+}  // namespace NS_BASE_TYPE
 #endif

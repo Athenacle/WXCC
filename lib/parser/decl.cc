@@ -47,7 +47,7 @@ namespace
     const char *declWarning[] = {"NULL",
 
                                  "DW01. Line %d: lack of parameter list. Assert as void.\n"};
-};  // namespace
+}  // namespace
 
 int Parser::c_parser_translation_unit(Env &env) const
 {

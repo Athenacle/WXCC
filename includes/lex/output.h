@@ -14,6 +14,6 @@ namespace lex
         LexOutput(Lex& lexer, FILE* file);
         int output(void);
     };
-};  // namespace lex
+}  // namespace lex
 
 #endif

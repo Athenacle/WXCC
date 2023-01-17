@@ -64,7 +64,7 @@ namespace
         "LE14: illegal character \'%c\' exist in an OCT number constant.\n"
         /*LEX_ERROR_ILL_CHAR_IN_OCT	*/
     };
-};  // namespace
+}  // namespace
 
 #ifdef LEX_DEBUG
 #endif

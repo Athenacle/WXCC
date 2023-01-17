@@ -255,5 +255,5 @@ namespace NS_TABLE
         }
     };
 
-};  // namespace NS_TABLE
+}  // namespace NS_TABLE
 #endif

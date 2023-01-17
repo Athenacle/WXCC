@@ -25,7 +25,7 @@ namespace
         "\t\tLast declaration is at line %d.\n",
         // TE_ERR_REDECL
     };
-};  // namespace
+}  // namespace
 
 Env& Env::ExitEnv(void)
 {
