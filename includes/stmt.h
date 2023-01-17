@@ -14,22 +14,19 @@ class Stmt_Jump : public Stmt
 public:
     Label *trueEntry;
     Label *falseEntry;
-    Stmt_Jump() : trueEntry(NULL), falseEntry(NULL) {}
+    Stmt_Jump() : trueEntry(nullptr), falseEntry(nullptr) {}
 };
 
 class Stmt_Select : public Stmt
 {
-    ;
 };
 
 class Stmt_Iter : public Stmt
 {
-    ;
 };
 
 class Stmt_Block : public Stmt
 {
-    ;
 };
 
 

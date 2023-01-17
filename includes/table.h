@@ -7,9 +7,10 @@
 #ifndef TABLE_H
 #define TABLE_H
 
-#include "exception.h"
-#include "lex.h"
+#include "lex/lexer.h"
 
+#include "exception.h"
+#include "tools.h"
 
 using std::pair;
 
@@ -35,7 +36,7 @@ namespace NS_TABLE
     public:
         static unsigned long hash(const char* t)
         {
-            return NS_LEX_TOOLS::strHash(t);
+            return utils::strHash(t);
         }
     };
 
@@ -49,14 +50,14 @@ namespace NS_TABLE
 
         Table_iter()
         {
-            kPtr = NULL;
+            kPtr = nullptr;
         }
 
         Table_iter(const K* k) : kPtr(k) {}
 
         operator bool() const
         {
-            return kPtr == NULL;
+            return kPtr == nullptr;
         }
 
         const K& operator*(void) const
@@ -106,7 +107,7 @@ namespace NS_TABLE
             setZero(tableSize + INCR_SIZE);
             size_t i = 0;
             for (; i < tableSize; i++) {
-                if ((old + i) == NULL)
+                if ((old + i) == nullptr)
                     continue;
                 else {
                     PutIntoTable(*(tbl + i));
@@ -127,7 +128,7 @@ namespace NS_TABLE
         {
             ul index = KHASH::hash(it) % tableSize;
         put:
-            if (tbl + index == NULL) {
+            if (tbl + index == nullptr) {
                 *(tbl + index) = it;
                 stored++;
             } else {
@@ -140,27 +141,27 @@ namespace NS_TABLE
         item find(const T& t)
         {
             if (this->stored == 0)
-                return NULL;
+                return nullptr;
             ul hash = THASH::hash(t);
             ul index = hash % tableSize;
             ul i = index;
         fi:
-            if (*(tbl + index) != NULL) {
+            if (*(tbl + index) != nullptr) {
                 if (KHASH::hash(*(tbl + index)) == hash && C::cmp(*(tbl + index), t))
                     return *(tbl + index);
             } else {
                 index++;
-                if (*(tbl + index) == NULL)
-                    return NULL;
+                if (*(tbl + index) == nullptr)
+                    return nullptr;
                 if (index == tableSize) {
                     index = 0;
                 }
                 if (index == i) {
-                    return NULL;
+                    return nullptr;
                 }
                 goto fi;
             }
-            return NULL;
+            return nullptr;
         }
 
     public:
@@ -171,14 +172,14 @@ namespace NS_TABLE
             tbl = new item[_base_size];
             setZero(_base_size);
             threshold = (tableSize >> 2) + (tableSize >> 1);  // 3/4
-            up = down = NULL;
+            up = down = nullptr;
         }
 
         void PutIntoTable(K& k, unsigned long hashCode)
         {
             ul index = hashCode % tableSize;
         put:
-            if (tbl + index == NULL)
+            if (tbl + index == nullptr)
                 *(tbl + index) = k;
             else {
                 index++;
@@ -193,7 +194,7 @@ namespace NS_TABLE
             ul hashCode = THASH::hash(t);
             ul index = hashCode % tableSize;
         put:
-            if (*(tbl + index) == NULL)
+            if (*(tbl + index) == nullptr)
                 *(tbl + index) = k;
             else {
                 index++;
@@ -206,12 +207,12 @@ namespace NS_TABLE
         const item existAllScope(const T& t)
         {
             const item it = existCurrentScope(t);
-            if (it != NULL)
+            if (it != nullptr)
                 return it;
-            else if (up != NULL) {
+            else if (up != nullptr) {
                 return up->existAllScope(t);
             } else
-                return NULL;
+                return nullptr;
         }
 
         const item existCurrentScope(const T& t)
@@ -223,7 +224,7 @@ namespace NS_TABLE
         {
             item* firstItem = tbl;
             for (int i = 0; i < tableSize; i++)
-                if (firstItem != NULL)
+                if (firstItem != nullptr)
                     break;
             return Table_iter(&(firstItem->first.first));
         }
@@ -236,7 +237,7 @@ namespace NS_TABLE
         void clear(void)
         {
             for (int i = 0; i < tableSize; i++)
-                *(tbl + i) = NULL;
+                *(tbl + i) = nullptr;
         }
 
         void enterBlock(base* nextTable)
@@ -247,9 +248,9 @@ namespace NS_TABLE
 
         void exitBlock(void)
         {
-            if (this->up != NULL) {
-                this->up->down = NULL;
-                this->up = NULL;
+            if (this->up != nullptr) {
+                this->up->down = nullptr;
+                this->up = nullptr;
             }
         }
     };

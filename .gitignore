@@ -34,3 +34,5 @@
 src/config.h
 build/
 .vscode/
+out/
+.vs/

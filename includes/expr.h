@@ -1,10 +1,10 @@
 #ifndef EXPR_H
 #define EXPR_H
 
-#include "type.h"
-#include "tree.h"
 #include "exception.h"
 #include "semantic.h"
+#include "tree.h"
+#include "type.h"
 
 class Expr : public Block
 {
@@ -13,7 +13,7 @@ class Expr : public Block
     void printIR(void) {}
 
 public:
-    Expr(Tree *tree = NULL) : Block()
+    Expr(Tree *tree = nullptr) : Block()
     {
         exprTree = tree;
         /*const char *pc = Label::nextLabel();

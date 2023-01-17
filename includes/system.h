@@ -1,4 +1,4 @@
-﻿/* system configure.
+/* system configure.
 * Wang Xiaochun
 * zjjhwxc@gmail.com
 * January 20, 2013
@@ -7,21 +7,11 @@
 *
 */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef SYSTEM_H_
+#define SYSTEM_H_
 
-#if defined USE_CONFIG_H && !defined WIN32
-#define DEBUG
-#define _DEBUG
+#if defined HAVE_CONFIG_H
 #include "config.h"
-#endif
-
-/// debug macros.
-#ifdef _DEBUG
-//#define LEX_DEBUG
-#define TOOL_DEBUG
-#define PARSER_DEBUG
-#define IR_DEBUG
 #endif
 
 #define USING_SYSTEM_MM_CALL
@@ -38,32 +28,18 @@
 #endif
 
 /// system includes.
-#include <cstring>
-#include <cstdio>
-#include <cstdlib>
-
-#include <ctype.h>
-#include <cstdarg>
-#include <climits>
-#include <cfloat>
+#include <cassert>
+#include <cctype>
 #include <cerrno>
-#include <assert.h>
-
-#include <iostream>
-#include <map>
+#include <cfloat>
+#include <climits>
 #include <string>
-#include <utility>
-#include <iterator>
-#include <vector>
-class WXCC
-{
-};
 
 extern FILE *wxccErr;
 extern int errCount;
 extern int warningCount;
 void fatalError(const char *);
 
-#define GD_OUTPUT
+class Function;
 
 #endif

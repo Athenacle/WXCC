@@ -6,8 +6,10 @@
 *
 */
 
-#include "system.h"
+#include <vector>
 
+#include "system.h"
+#include "tools.h"
 
 #ifndef SEMANTIC_H
 #define SEMANTIC_H
@@ -47,10 +49,10 @@ class Label
 public:
     Label();
 
-    static char *nextLabel()
+    static const char *nextLabel()
     {
         labelNum--;
-        return strdup(Label().toString());
+        return utils::strdup(Label().toString());
     }
 
     void print(FILE *fp = wxccErr) const;
@@ -97,7 +99,7 @@ public:
     {
         currentIR->nextIR = ir;
         ir->preIR = currentIR;
-        ir->nextIR = NULL;
+        ir->nextIR = nullptr;
         currentIR = ir;
         return currentIR;
     }
@@ -142,7 +144,14 @@ public:
     IRList *continueList;
     IRList *breakList;
 
-    Block() : codeBegin(NULL), codeEnd(NULL), nextList(NULL), continueList(NULL), breakList(NULL) {}
+    Block()
+        : codeBegin(nullptr),
+          codeEnd(nullptr),
+          nextList(nullptr),
+          continueList(nullptr),
+          breakList(nullptr)
+    {
+    }
 };
 
 

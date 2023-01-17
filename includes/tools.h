@@ -1,4 +1,4 @@
-﻿/* useful tools.
+/* useful tools.
 * Wang Xiaochun
 * zjjhwxc@gmail.com
 * January 20, 2013
@@ -55,5 +55,14 @@ void *allocateMemory(size_t size);
 
 void deallocateMemory(void *toFree);
 //de-allocate memory. It works as free()
+
+
+namespace utils
+{
+
+    unsigned long strHash(const char *);
+
+    char *strdup(const char *);
+}  // namespace utils
 
 #endif
