@@ -12,6 +12,8 @@
 
 using namespace std;
 
+USING_V1
+
 std::map<OP, Tree *(*)(Env &, Tree *, Tree *)> op2fun;
 
 

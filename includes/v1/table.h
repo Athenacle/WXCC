@@ -14,6 +14,7 @@
 
 using std::pair;
 
+NAMESPACE_V1_BEGIN
 namespace NS_TABLE
 {
     const size_t BASE_SIZE = 29;
@@ -256,4 +257,6 @@ namespace NS_TABLE
     };
 
 }  // namespace NS_TABLE
+NAMESPACE_END
+
 #endif

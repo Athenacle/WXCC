@@ -12,11 +12,13 @@
 
 #include "lex/lexer.h"
 using std::iterator;
-using namespace lex::types;
-using namespace lex::constants;
 
 #undef HASH_TABLE_SIZE
 #define HASH_TABLE_SIZE 256
+
+NAMESPACE_V1_BEGIN
+using namespace lex::types;
+using namespace lex::constants;
 
 namespace scope
 {
@@ -96,5 +98,5 @@ public:
         return *this;
     }
 };
-
+NAMESPACE_END
 #endif

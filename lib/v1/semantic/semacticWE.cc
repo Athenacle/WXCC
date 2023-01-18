@@ -10,6 +10,7 @@
 #include "semantic.h"
 #include "type.h"
 
+USING_V1
 namespace
 {
     //char *semWarnings[] =
@@ -24,6 +25,7 @@ namespace
     };
 }  // namespace
 
+NAMESPACE_V1_BEGIN
 int semErrorCount = 0;
 
 void semError(int errType, ...)
@@ -51,3 +53,5 @@ void semError(int errType, ...)
 }
 
 void semWarning(int errType, ...);
+
+NAMESPACE_END

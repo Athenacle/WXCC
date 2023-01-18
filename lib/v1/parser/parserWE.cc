@@ -13,6 +13,7 @@
 #include "parser.h"
 #include "system.h"
 
+USING_V1
 int Parser::parserWarningCount = 0;
 int Parser::parserErrorCount = 0;
 

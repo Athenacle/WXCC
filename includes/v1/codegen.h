@@ -7,6 +7,10 @@
 #ifndef CODEGEN_H
 #define CODEGEN_H
 
+#include "system.h"
+
+NAMESPACE_V1_BEGIN
+
 enum IRs {
     IR_ADD,
     IR_MULT,
@@ -45,4 +49,6 @@ struct IR_Node {
  * X := T
  * goto 100
  */
+NAMESPACE_END
+
 #endif

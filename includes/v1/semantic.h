@@ -14,6 +14,7 @@
 #ifndef SEMANTIC_H
 #define SEMANTIC_H
 
+NAMESPACE_V1_BEGIN
 
 extern int semErrorCount;
 
@@ -109,7 +110,6 @@ public:
     static void reSetCurrent(IR *);
     static IR *reSetCurrentFirst(IR *);
 };
-using namespace std;  //for vector
 
 class IRList
 {
@@ -127,7 +127,7 @@ public:
 private:
     int irCount;
     IRList(IR &);
-    vector<IR *> list;
+    std::vector<IR *> list;
     static char *patch(IR &, const char *l, int length);
 };
 
@@ -154,5 +154,7 @@ public:
     }
 };
 
+
+NAMESPACE_END
 
 #endif

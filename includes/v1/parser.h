@@ -19,6 +19,8 @@
 #include "tree.h"
 #include "type.h"
 
+NAMESPACE_V1_BEGIN
+
 using namespace lex::constants;
 using namespace type_operator;
 
@@ -171,5 +173,6 @@ public:
 
     void begin_parse(Env& env) const;
 };
+NAMESPACE_END
 
 #endif

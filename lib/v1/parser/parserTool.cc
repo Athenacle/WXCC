@@ -9,6 +9,7 @@
 #include "parser.h"
 #include "system.h"
 
+USING_V1
 using namespace lex;
 using namespace types;
 

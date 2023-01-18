@@ -18,6 +18,8 @@
 #include "table.h"
 #include "type.h"
 
+NAMESPACE_V1_BEGIN
+
 using namespace NS_BASE_TYPE;
 //using namespace NS_IR;
 
@@ -119,6 +121,6 @@ public:
         return utils::strHash(this->getIDName());
     }
 };
-
+NAMESPACE_END
 
 #endif

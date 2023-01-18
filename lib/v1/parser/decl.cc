@@ -14,6 +14,8 @@
 #include "system.h"
 #include "type.h"
 
+USING_V1
+
 using namespace lex;
 using namespace constants;
 using namespace scope;

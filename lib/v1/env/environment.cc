@@ -12,6 +12,8 @@
 #include "table.h"
 #include "type.h"
 
+USING_V1
+
 using namespace scope;
 
 namespace

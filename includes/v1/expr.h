@@ -6,6 +6,7 @@
 #include "tree.h"
 #include "type.h"
 
+NAMESPACE_V1_BEGIN
 class Expr : public Block
 {
     Tree *exprTree;
@@ -42,6 +43,6 @@ public:
         return *exprTree;
     }
 };
-
+NAMESPACE_END
 
 #endif

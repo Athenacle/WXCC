@@ -1,6 +1,10 @@
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
 
+#include "system.h"
+
+NAMESPACE_V1_BEGIN
+
 class Exception
 {
 protected:
@@ -42,5 +46,7 @@ class ExprExcetion : public Exception
 public:
     static char* esprintf(const char* format, ...);
 };
+
+NAMESPACE_END
 
 #endif

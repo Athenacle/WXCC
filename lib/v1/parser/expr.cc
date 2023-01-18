@@ -17,6 +17,7 @@
 #include "system.h"
 #include "tree.h"
 
+USING_V1
 using namespace lex;
 using lex::tools::isASSIGN;
 using namespace NS_EXPRE_IR;

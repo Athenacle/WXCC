@@ -20,6 +20,8 @@
 int errorCount = 0;
 int warningCount = 0;
 
+USING_V1
+
 void initCompiler(void)
 {
     Type::initTO2c();

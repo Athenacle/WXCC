@@ -9,6 +9,7 @@
 
 #include "tools.h"
 
+USING_V1
 using namespace scope;
 
 void Symbol::setValue(Token *_tok)

@@ -13,6 +13,8 @@
 #include "symbol.h"
 #include "table.h"
 
+NAMESPACE_V1_BEGIN
+
 using namespace scope;
 using namespace NS_TABLE;
 
@@ -98,4 +100,6 @@ namespace NS_TABLE
         }
     };
 }  // namespace NS_TABLE
+NAMESPACE_END
+
 #endif

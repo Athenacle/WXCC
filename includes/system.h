@@ -40,6 +40,19 @@ extern int errCount;
 extern int warningCount;
 void fatalError(const char *);
 
+
+#define V1 v1
+
+#define NAMESPACE_V1_BEGIN \
+    namespace V1           \
+    {
+
+#define USING_V1      using namespace V1;
+
+#define NAMESPACE_END }
+
+NAMESPACE_V1_BEGIN
 class Function;
+NAMESPACE_END
 
 #endif

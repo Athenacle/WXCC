@@ -11,6 +11,7 @@
 #include "semantic.h"
 #include "tools.h"
 
+USING_V1
 //using namespace NS_SEMACTIC;
 using namespace type_operator;
 
@@ -21,6 +22,8 @@ using namespace type_operator;
 
 
 std::map<type_operator::TYPE_OPERATOR, const char *> Type::to2c;
+
+NAMESPACE_V1_BEGIN
 
 namespace
 {
@@ -340,3 +343,4 @@ void TypeException::setException(int exT, const char *exS)
 {
     Exception::setException(exT, exS);
 }
+NAMESPACE_END

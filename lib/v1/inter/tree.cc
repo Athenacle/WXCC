@@ -3,6 +3,8 @@
 #include "expr.h"
 #include "type.h"
 
+USING_V1
+
 using namespace NS_EXPRE_IR;
 
 namespace

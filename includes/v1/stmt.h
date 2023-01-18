@@ -2,6 +2,7 @@
 #define STMT_H
 
 #include "semantic.h"
+NAMESPACE_V1_BEGIN
 
 class Stmt : public Block
 {
@@ -32,5 +33,6 @@ class Stmt_Block : public Stmt
 
 enum STMT_TYPE { ST_LABELED, ST_COMPOUND, ST_EXPR, ST_SELECT, ST_JUMP };
 
+NAMESPACE_END
 
 #endif

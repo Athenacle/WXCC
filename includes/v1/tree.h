@@ -15,6 +15,7 @@
 #include "system.h"
 #include "type.h"
 
+NAMESPACE_V1_BEGIN
 namespace NS_EXPRE_IR
 {
     enum Node_OP {
@@ -219,5 +220,7 @@ namespace NS_EXPRE_IR
 
     BinFunction op2fun(const OP _op);
 }  // namespace NS_EXPRE_IR
+
+NAMESPACE_END
 
 #endif

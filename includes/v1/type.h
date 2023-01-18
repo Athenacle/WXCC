@@ -14,6 +14,7 @@
 #include "semantic.h"
 #include "symbol.h"
 
+NAMESPACE_V1_BEGIN
 namespace type_operator
 {
     /* enum type_operator
@@ -308,4 +309,7 @@ namespace NS_BASE_TYPE
     void InitBaseTypes(void);
     void DeInitBaseTypes(void);
 }  // namespace NS_BASE_TYPE
+
+NAMESPACE_END
+
 #endif

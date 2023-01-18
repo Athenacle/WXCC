@@ -16,6 +16,7 @@
 #include "symbol.h"
 #include "system.h"
 #include "type.h"
+NAMESPACE_V1_BEGIN
 
 class Function
 {
@@ -56,5 +57,5 @@ public:
     }
 };
 
-
+NAMESPACE_END
 #endif
