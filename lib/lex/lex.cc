@@ -632,17 +632,17 @@ Token Lex::number(char peek)
             } else if (tmpBuffer[1] == '\0') { /* there is a 0 */
                 return newNumber(tmpBuffer, 10);
             }
-            FALLTHROUGH;
+            FALLTHROUGH
         default: /* dec numbers */
             return newNumber(tmpBuffer, 10);
     }
 }
 
-Token Lex::newIdentifier(const char* name, int name_length)
+Token Lex::newIdentifier(const char* name, int)
 {
-    char* newName = new char[sizeof(char) * name_length];
-    strcpy(newName, name);
-    Token tok(T_ID, newName);
+    // char* newName = new char[sizeof(char) * name_length];
+    // strcpy(newName, name);
+    Token tok(T_ID, name);
     tok.token_pos = source->position();
     return tok;
 }
@@ -1520,6 +1520,8 @@ stringParse:
 
     Token tok(T_STRING, ret);
     tok.token_pos = source->position();
+    delete[] ret;
+
     return tok;
 }
 

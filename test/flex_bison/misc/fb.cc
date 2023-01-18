@@ -4,17 +4,17 @@
 #include <map>
 
 #include "fb_fwd.h"
-#include "fb_parser.h"
 #include "flex_bison.h"
 #include "tools.h"
 
 using namespace lex;
 using namespace lex ::constants;
 using namespace lex ::types;
+using namespace test;
 
-#define MAP_ADD(tt, v, map) \
-    do {                    \
-        map.emplace(tt, v); \
+#define MAP_ADD(tt, v, map)                                \
+    do {                                                   \
+        map.emplace(test::FlexBison_Parser::token::tt, v); \
     } while (false)
 
 namespace
@@ -84,7 +84,10 @@ namespace
 
     void parseNumber(const char* text)
     {
-        assert(yynumber == nullptr);
+        if (yynumber != nullptr) {
+            delete yynumber;
+        }
+
         yynumber = new FBNumber;
         memset(yynumber, 0, sizeof(struct FBNumber));
         yynumber->is_float = 0;
@@ -130,35 +133,38 @@ namespace
 
 FBNumber* yynumber = nullptr;
 const char* yyfilename = nullptr;
+const char* yyytext = nullptr;
+uint32_t yyret = 0;
 
-void yyReset()
+void yyReset(void)
 {
     line = column = 1;
     yyf.reset();
-    yylex_destroy();
 }
 
-void parseDecNumber(void)
+void parseDecNumber(const char* yytext)
 {
     parseNumber(yytext);
 }
 
-void parseHexNumber(void)
+void parseHexNumber(const char* yytext)
 {
     parseNumber(yytext);
 }
-void parseOctNumber(void)
+void parseOctNumber(const char* yytext)
 {
     parseNumber(yytext);
 }
-void parseFloatNumber(void)
+void parseFloatNumber(const char*)
 {
-    assert(yynumber == nullptr);
+    if (yynumber != nullptr) {
+        delete yynumber;
+    }
     yynumber = new FBNumber;
     memset(yynumber, 0, sizeof(struct FBNumber));
     yynumber->is_float = 1;
 
-    std::string s(yytext);
+    std::string s(yyytext);
     auto d = std::stold(s);
     std::transform(s.begin(), s.end(), s.begin(), [](char c) { return std::tolower(c); });
 
@@ -171,8 +177,7 @@ void parseFloatNumber(void)
     yynumber->data.f = d;
 }
 
-
-Token flex()
+Token flex(FlexBison_Lexer* ll)
 {
     static std::map<int, KEYWORD> keys;
     static std::map<int, OP> ops;
@@ -183,8 +188,10 @@ Token flex()
         buildOpMap(ops);
     }
     Token tok;
-    auto code = yylex();
-    if (code == CONSTANT) {
+    ll->next();
+    auto code = yyret;
+
+    if (code == FlexBison_Parser::token::token_kind_type::CONSTANT) {
         assert(yynumber != nullptr);
         tok.token_type = yynumber->is_float ? T_FLOAT_CON : T_INT_CON;
         tok.token_value.numVal = new Number();
@@ -214,11 +221,11 @@ Token flex()
         delete yynumber;
         yynumber = nullptr;
 
-    } else if (code == STRING_LITERAL) {
-        assert(*yytext == '"');
+    } else if (code == FlexBison_Parser::token::token_kind_type::STRING_LITERAL) {
+        assert(*yyytext == '"');
 
         tok.token_type = T_STRING;
-        auto result = utils::strdup(yytext + 1);
+        auto result = utils::strdup(yyytext + 1);
         auto ptr = result;
         while (*ptr)
             ptr += 1;
@@ -226,16 +233,16 @@ Token flex()
         assert(*ptr == '"');
         *ptr = 0;
         tok.token_value.string = result;
-    } else if (code == IDENTIFIER) {
+    } else if (code == FlexBison_Parser::token::token_kind_type::IDENTIFIER) {
         tok.token_type = T_ID;
-        tok.token_value.id_name = utils::strdup(yytext);
+        tok.token_value.id_name = utils::strdup(yyytext);
     } else if (auto f = keys.find(code); f != keys.end()) {
         tok.token_type = T_KEY;
         tok.token_value.keyword = f->second;
     } else if (auto f = ops.find(code); f != ops.end()) {
         tok.token_type = T_OPERATOR;
         tok.token_value.op = f->second;
-    } else if (code == EoF) {
+    } else if (code == FlexBison_Parser::token::token_kind_type::EoF) {
         tok.token_type = T_NONE;
     } else {
         assert(0);

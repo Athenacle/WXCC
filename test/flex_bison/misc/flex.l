@@ -6,160 +6,157 @@ P                       ([Pp][+-]?{D}+)
 FS            (f|F|l|L)
 IS                      ((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))
 
-
+%option c++
 %option nounput
 %option noinput
+%option stack
+%option noyywrap
+%option yylineno
+%option debug
+
+%option yyclass="test::FlexBison_Lexer"
+
 
 %{
+#include "flex_bison/misc/flex_bison_lexer.h"
+#include "location.hh"
 #include <stdio.h>
-#include "fb_parser.h"
+#include "bison_parser.tab.h"
 #include "flex_bison/misc/fb_fwd.h"
 
-void count(void);
 
 int column = 1;
 int line = 1;
+using namespace test;
+using tt =  test::FlexBison_Parser::token::token_kind_type;
+
+
+#define RETURN(kw) { yyret = tt::kw;  return test::FlexBison_Parser::make_##kw(test::location(&filename ,line,column));}
+
+#define YY_USER_ACTION {}
 
 %}
+
+
 
 %x COMMENT
 
 %%
-"/*"                    { count(); BEGIN COMMENT; }
-"//"[^\n]*              { count();  }
-<COMMENT>"*/"			{ count(); BEGIN INITIAL; }
-<COMMENT>.				{ count();}
+"/*"                    { count(YYText()); BEGIN COMMENT; }
+"//"[^\n]*              { count(YYText());  }
+<COMMENT>"*/"           { count(YYText()); BEGIN INITIAL; }
+<COMMENT>.              { count(YYText());}
 
 
 
-"auto"                       { count(); return(AUTO); }
-"break"                        { count(); return(BREAK); }
-"case"                        { count(); return(CASE); }
-"char"                        { count(); return(CHAR); }
-"const"                        { count(); return(CONST); }
-"continue"                    { count(); return(CONTINUE); }
-"default"                    { count(); return(DEFAULT); }
-"do"                        { count(); return(DO); }
-"double"                    { count(); return(DOUBLE); }
-"else"                        { count(); return(ELSE); }
-"enum"                        { count(); return(ENUM); }
-"extern"                    { count(); return(EXTERN); }
-"float"                        { count(); return(FLOAT); }
-"for"                        { count(); return(FOR); }
-"goto"                        { count(); return(GOTO); }
-"if"                        { count(); return(IF); }
-"int"                        { count(); return(INT); }
-"long"                        { count(); return(LONG); }
-"register"                    { count(); return(REGISTER); }
-"restrict"                    { count(); return(RESTRICT); }
-"return"                    { count(); return(RETURN); }
-"short"                        { count(); return(SHORT); }
-"signed"                    { count(); return(SIGNED); }
-"sizeof"                    { count(); return(SIZEOF); }
-"static"                    { count(); return(STATIC); }
-"struct"                    { count(); return(STRUCT); }
-"switch"                    { count(); return(SWITCH); }
-"typedef"                    { count(); return(TYPEDEF); }
-"union"                        { count(); return(UNION); }
-"unsigned"                    { count(); return(UNSIGNED); }
-"void"                        { count(); return(VOID); }
-"volatile"                    { count(); return(VOLATILE); }
-"while"                        { count(); return(WHILE); }
+"auto"                          { count(YYText()); RETURN(AUTO); }
+"break"                         { count(YYText()); RETURN(BREAK); }
+"case"                          { count(YYText()); RETURN(CASE); }
+"char"                          { count(YYText()); RETURN(CHAR); }
+"const"                         { count(YYText()); RETURN(CONST); }
+"continue"                      { count(YYText()); RETURN(CONTINUE); }
+"default"                       { count(YYText()); RETURN(DEFAULT); }
+"do"                            { count(YYText()); RETURN(DO); }
+"double"                        { count(YYText()); RETURN(DOUBLE); }
+"else"                          { count(YYText()); RETURN(ELSE); }
+"enum"                          { count(YYText()); RETURN(ENUM); }
+"extern"                        { count(YYText()); RETURN(EXTERN); }
+"float"                         { count(YYText()); RETURN(FLOAT); }
+"for"                           { count(YYText()); RETURN(FOR); }
+"goto"                          { count(YYText()); RETURN(GOTO); }
+"if"                            { count(YYText()); RETURN(IF); }
+"int"                           { count(YYText()); RETURN(INT); }
+"long"                          { count(YYText()); RETURN(LONG); }
+"register"                      { count(YYText()); RETURN(REGISTER); }
+"restrict"                      { count(YYText()); RETURN(RESTRICT); }
+"return"                        { count(YYText()); RETURN(RETURN); }
+"short"                         { count(YYText()); RETURN(SHORT); }
+"signed"                        { count(YYText()); RETURN(SIGNED); }
+"sizeof"                        { count(YYText()); RETURN(SIZEOF); }
+"static"                        { count(YYText()); RETURN(STATIC); }
+"struct"                        { count(YYText()); RETURN(STRUCT); }
+"switch"                        { count(YYText()); RETURN(SWITCH); }
+"typedef"                       { count(YYText()); RETURN(TYPEDEF); }
+"union"                         { count(YYText()); RETURN(UNION); }
+"unsigned"                      { count(YYText()); RETURN(UNSIGNED); }
+"void"                          { count(YYText()); RETURN(VOID); }
+"volatile"                      { count(YYText()); RETURN(VOLATILE); }
+"while"                         { count(YYText()); RETURN(WHILE); }
 
-{L}({L}|{D})*              { count(); return(IDENTIFIER); }
+{L}({L}|{D})*                   { count(YYText()); RETURN(IDENTIFIER); }
 
-0[xX]{H}+{IS}?                          { count(); parseHexNumber();  return(CONSTANT); }
-0[0-7]*{IS}?                          { count(); parseOctNumber();  return(CONSTANT); }
-[1-9]{D}*{IS}?                          { count(); parseDecNumber();  return(CONSTANT); }
-L?'(\\.|[^\\'\n])+'                      { count(); return(CONSTANT); }
+0[xX]{H}+{IS}?                  { count(YYText()); parseHexNumber(YYText());  RETURN(CONSTANT); }
+0[0-7]*{IS}?                    { count(YYText()); parseOctNumber(YYText());  RETURN(CONSTANT); }
+[1-9]{D}*{IS}?                  { count(YYText()); parseDecNumber(YYText());  RETURN(CONSTANT); }
+L?'(\\.|[^\\'\n])+'             { count(YYText()); RETURN(CONSTANT); }
 
-{D}+{E}{FS}?                          { count(); return(CONSTANT); }
-{D}*"."{D}+{E}?{FS}?                { count(); return(CONSTANT); }
-{D}+"."{D}*{E}?{FS}?                { count(); return(CONSTANT); }
-0[xX]{H}+{P}{FS}?                      { count(); return(CONSTANT); }
-0[xX]{H}*"."{H}+{P}?{FS}?           { count(); return(CONSTANT); }
-0[xX]{H}+"."{H}*{P}?{FS}?           { count(); return(CONSTANT); }
+{D}+{E}{FS}?                    { count(YYText()); RETURN(CONSTANT); }
+{D}*"."{D}+{E}?{FS}?            { count(YYText()); RETURN(CONSTANT); }
+{D}+"."{D}*{E}?{FS}?            { count(YYText()); RETURN(CONSTANT); }
+0[xX]{H}+{P}{FS}?               { count(YYText()); RETURN(CONSTANT); }
+0[xX]{H}*"."{H}+{P}?{FS}?       { count(YYText()); RETURN(CONSTANT); }
+0[xX]{H}+"."{H}*{P}?{FS}?       { count(YYText()); RETURN(CONSTANT); }
 
 
-L?\"(\\.|[^\\"\n])*\"                { count(); return(STRING_LITERAL); }
+L?\"(\\.|[^\\"\n])*\"           { count(YYText()); RETURN(STRING_LITERAL); }
 
-"..."                                    { count(); return(ELLIPSIS); }
-">>="                                    { count(); return(RIGHT_ASSIGN); }
-"<<="                                    { count(); return(LEFT_ASSIGN); }
-"+="                                    { count(); return(ADD_ASSIGN); }
-"-="                                    { count(); return(SUB_ASSIGN); }
-"*="                                    { count(); return(MUL_ASSIGN); }
-"/="                                    { count(); return(DIV_ASSIGN); }
-"%="                                    { count(); return(MOD_ASSIGN); }
-"&="                                    { count(); return(AND_ASSIGN); }
-"^="                                    { count(); return(XOR_ASSIGN); }
-"|="                                    { count(); return(OR_ASSIGN); }
-">>"                                    { count(); return(RIGHT_OP); }
-"<<"                                    { count(); return(LEFT_OP); }
-"++"                                    { count(); return(INC_OP); }
-"--"                                    { count(); return(DEC_OP); }
-"->"                                    { count(); return(PTR_OP); }
-"&&"                                    { count(); return(AND_OP); }
-"||"                                    { count(); return(OR_OP); }
-"<="                                    { count(); return(LE_OP); }
-">="                                    { count(); return(GE_OP); }
-"=="                                    { count(); return(EQ_OP); }
-"!="                                    { count(); return(NE_OP); }
-";"                                          { count(); return(';'); }
-("{"|"<%")                                { count(); return('{'); }
-("}"|"%>")                                { count(); return('}'); }
-","                                          { count(); return(','); }
-":"                                          { count(); return(':'); }
-"="                                          { count(); return('='); }
-"("                                          { count(); return('('); }
-")"                                          { count(); return(')'); }
-("["|"<:")                                { count(); return('['); }
-("]"|":>")                                { count(); return(']'); }
-"."                                          { count(); return('.'); }
-"&"                                          { count(); return('&'); }
-"!"                                          { count(); return('!'); }
-"~"                                          { count(); return('~'); }
-"-"                                          { count(); return('-'); }
-"+"                                          { count(); return('+'); }
-"*"                                          { count(); return('*'); }
-"/"                                          { count(); return('/'); }
-"%"                                          { count(); return('%'); }
-"<"                                          { count(); return('<'); }
-">"                                          { count(); return('>'); }
-"^"                                          { count(); return('^'); }
-"|"                                          { count(); return('|'); }
-"?"                                          { count(); return('?'); }
+"..."                           { count(YYText()); RETURN(ELLIPSIS); }
+">>="                           { count(YYText()); RETURN(RIGHT_ASSIGN); }
+"<<="                           { count(YYText()); RETURN(LEFT_ASSIGN); }
+"+="                            { count(YYText()); RETURN(ADD_ASSIGN); }
+"-="                            { count(YYText()); RETURN(SUB_ASSIGN); }
+"*="                            { count(YYText()); RETURN(MUL_ASSIGN); }
+"/="                            { count(YYText()); RETURN(DIV_ASSIGN); }
+"%="                            { count(YYText()); RETURN(MOD_ASSIGN); }
+"&="                            { count(YYText()); RETURN(AND_ASSIGN); }
+"^="                            { count(YYText()); RETURN(XOR_ASSIGN); }
+"|="                            { count(YYText()); RETURN(OR_ASSIGN); }
+">>"                            { count(YYText()); RETURN(RIGHT_OP); }
+"<<"                            { count(YYText()); RETURN(LEFT_OP); }
+"++"                            { count(YYText()); RETURN(INC_OP); }
+"--"                            { count(YYText()); RETURN(DEC_OP); }
+"->"                            { count(YYText()); RETURN(PTR_OP); }
+"&&"                            { count(YYText()); RETURN(AND_OP); }
+"||"                            { count(YYText()); RETURN(OR_OP); }
+"<="                            { count(YYText()); RETURN(LE_OP); }
+">="                            { count(YYText()); RETURN(GE_OP); }
+"=="                            { count(YYText()); RETURN(EQ_OP); }
+"!="                            { count(YYText()); RETURN(NE_OP); }
+";"                             { count(YYText()); RETURN(SEMICOLON); }
+("{"|"<%")                      { count(YYText()); RETURN(LEFTBRACE); }
+("}"|"%>")                      { count(YYText()); RETURN(RIGHTBRACE); }
+","                             { count(YYText()); RETURN(COMMA); }
+":"                             { count(YYText()); RETURN(COLON); }
+"="                             { count(YYText()); RETURN(ASSIGN); }
+"("                             { count(YYText()); RETURN(LEFTBRACK); }
+")"                             { count(YYText()); RETURN(RIGHTBRACK); }
+("["|"<:")                      { count(YYText()); RETURN(LEFTSQBRAC); }
+("]"|":>")                      { count(YYText()); RETURN(RIGHTSQBRAC); }
+"."                             { count(YYText()); RETURN(PERIOD); }
+"&"                             { count(YYText()); RETURN(BITAND); }
+"!"                             { count(YYText()); RETURN(LOGNOT); }
+"~"                             { count(YYText()); RETURN(BITNOT); }
+"-"                             { count(YYText()); RETURN(MINUS); }
+"+"                             { count(YYText()); RETURN(PLUS); }
+"*"                             { count(YYText()); RETURN(MULT); }
+"/"                             { count(YYText()); RETURN(DIV); }
+"%"                             { count(YYText()); RETURN(MOD); }
+"<"                             { count(YYText()); RETURN(LT); }
+">"                             { count(YYText()); RETURN(GT); }
+"^"                             { count(YYText()); RETURN(BITXOR); }
+"|"                             { count(YYText()); RETURN(BITOR); }
+"?"                             { count(YYText()); RETURN(QUESTION); }
 
-[ \t\v\n\f]                                  { count(); }
+[ \t\v\n\f]                     { count(YYText()); }
 .            { /* Add code to complain about unmatched characters */ }
 
-<<EOF>>                                      {return EoF;}
+<<EOF>>                                      {RETURN(EoF);}
 %%
 
-int yywrap(void)
-{
-    return 1;
-}
-
-#if 0
-void comment(void)
-{
-    char c, prev = 0;
-
-    while ((c = input()) != 0)      /* (EOF maps to 0) */
-    {
-        if (c == '/' && prev == '*')
-            return;
-        prev = c;
-    }
-    error("unterminated comment");
-}
-#endif
-
-
-void count(void)
+void count(const char* yytext)
 {
     int i;
+    yyytext = yytext;
 
     for (i = 0; yytext[i] != '\0'; i++)
         if (yytext[i] == '\n'){
@@ -187,5 +184,5 @@ int check_type(void)
 *    it actually will only return IDENTIFIER
 */
 
-    return IDENTIFIER;
+    return tt::IDENTIFIER;
 }

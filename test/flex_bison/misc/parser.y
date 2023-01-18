@@ -1,48 +1,163 @@
-%{
-#include "flex_bison/misc/fb_fwd.h"
-%}
+%require "3.2"
+%language "c++"
+%define api.value.type variant
+%define api.token.constructor
+%defines
+%define api.namespace {test}
+%define api.parser.class {FlexBison_Parser}
+
+%locations
+
+
+%code requires{
+namespace test{
+      class FlexBison_Lexer;
+      class FlexBison_Parser;
+}
+}
+
+%code top{
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#if defined GCC_COMPLIABLE
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
+
+#include "flex_bison/misc/flex_bison_lexer.h"
+
+namespace test{
+  FlexBison_Parser::symbol_type
+             yylex(FlexBison_Lexer&lval);
+}
+}
+
+%lex-param {test::FlexBison_Lexer &scanner}
+%parse-param {test::FlexBison_Lexer &scanner}
+%define parse.trace
+%define parse.error verbose
+%define parse.assert true
+
+
+%token EoF 0 "end of file"
 
 %token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
-%token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
-%token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
-%token SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
-%token XOR_ASSIGN OR_ASSIGN TYPE_NAME
 
-%token TYPEDEF EXTERN STATIC AUTO REGISTER INLINE RESTRICT
-%token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
-%token BOOL COMPLEX IMAGINARY
-%token STRUCT UNION ENUM ELLIPSIS
+%token INC_OP               "++"
+%token DEC_OP               "--"
+%token LEFT_OP              "<<"
+%token RIGHT_OP             ">>"
+%token LE_OP                "<="
+%token GE_OP                ">="
+%token EQ_OP                "=="
+%token NE_OP                "!="
 
-%token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
+%token PTR_OP               "->"
 
-%token EoF
+%token AND_OP               "&&"
+%token OR_OP                "||"
+%token MUL_ASSIGN           "*="
+%token DIV_ASSIGN           "/="
+%token MOD_ASSIGN           "%="
+%token ADD_ASSIGN           "+="
+%token SUB_ASSIGN           "-="
+%token LEFT_ASSIGN          "<<="
+%token RIGHT_ASSIGN         ">>="
+%token AND_ASSIGN           "&="
+%token XOR_ASSIGN           "^="
+%token OR_ASSIGN            "|="
+
+%token SEMICOLON            ";"
+%token LEFTBRACE            "{"
+%token RIGHTBRACE           "}"
+%token LEFTSQBRAC           "["
+%token RIGHTSQBRAC          "]"
+%token LEFTBRACK            "("
+%token RIGHTBRACK           ")"
+%token PERIOD               "."
+%token COMMA                ","
+%token ASSIGN               "="
+%token COLON                ":"
+%token BITAND               "&"
+%token LOGNOT               "!"
+%token BITNOT               "~"
+%token MINUS                "-"
+%token PLUS                 "+"
+%token MULT                 "*"
+%token DIV                  "/"
+%token MOD                  "%"
+%token LT                   "<"
+%token GT                   ">"
+%token BITXOR               "^"
+%token BITOR                "|"
+%token QUESTION             "?"
+
+%token TYPEDEF              "typedef"
+%token EXTERN               "extern"
+%token STATIC               "static"
+%token AUTO                 "auto"
+%token REGISTER             "register"
+%token INLINE               "inline"
+%token RESTRICT             "restrict"
+%token CHAR                 "char"
+%token SHORT                "short"
+%token INT                  "int"
+%token LONG                 "long"
+%token VOID                 "void"
+%token SIGNED               "signed"
+%token UNSIGNED             "unsigned"
+%token FLOAT                "float"
+%token DOUBLE               "double"
+%token CONST                "const"
+%token VOLATILE             "volatile"
+%token STRUCT               "struct"
+%token UNION                "union"
+%token ENUM                 "enum"
+%token ELLIPSIS             "..."
+
+%token CASE                 "case"
+%token DEFAULT              "default"
+%token IF                   "if"
+%token ELSE                 "else"
+%token SWITCH               "switch"
+%token WHILE                "while"
+%token DO                   "do"
+%token FOR                  "for"
+%token GOTO                 "goto"
+%token CONTINUE             "continue"
+%token BREAK                "break"
+%token RETURN               "return"
 
 %start translation_unit
+
+%nonassoc ELSE
+
 %%
 
 primary_expression
       : IDENTIFIER
       | CONSTANT
       | STRING_LITERAL
-      | '(' expression ')'
+      | LEFTBRACK expression RIGHTBRACE
       ;
 
 postfix_expression
       : primary_expression
-      | postfix_expression '[' expression ']'
-      | postfix_expression '(' ')'
-      | postfix_expression '(' argument_expression_list ')'
-      | postfix_expression '.' IDENTIFIER
+      | postfix_expression LEFTSQBRAC expression RIGHTSQBRAC
+      | postfix_expression LEFTBRACE RIGHTBRACE
+      | postfix_expression LEFTBRACE argument_expression_list RIGHTBRACE
+      | postfix_expression PERIOD IDENTIFIER
       | postfix_expression PTR_OP IDENTIFIER
       | postfix_expression INC_OP
       | postfix_expression DEC_OP
-      | '(' type_name ')' '{' initializer_list '}'
-      | '(' type_name ')' '{' initializer_list ',' '}'
+      | LEFTBRACK type_name RIGHTBRACK LEFTBRACE initializer_list RIGHTBRACE
+      | LEFTBRACK type_name RIGHTBRACK LEFTBRACE initializer_list COMMA RIGHTBRACE
       ;
 
 argument_expression_list
       : assignment_expression
-      | argument_expression_list ',' assignment_expression
+      | argument_expression_list COMMA assignment_expression
       ;
 
 unary_expression
@@ -51,34 +166,34 @@ unary_expression
       | DEC_OP unary_expression
       | unary_operator cast_expression
       | SIZEOF unary_expression
-      | SIZEOF '(' type_name ')'
+      | SIZEOF LEFTBRACK type_name RIGHTBRACK
       ;
 
 unary_operator
-      : '&'
-      | '*'
-      | '+'
-      | '-'
-      | '~'
-      | '!'
+      : BITAND
+      | MULT
+      | PLUS
+      | MINUS
+      | BITNOT
+      | LOGNOT
       ;
 
 cast_expression
       : unary_expression
-      | '(' type_name ')' cast_expression
+      | LEFTBRACK type_name RIGHTBRACK cast_expression
       ;
 
 multiplicative_expression
       : cast_expression
-      | multiplicative_expression '*' cast_expression
-      | multiplicative_expression '/' cast_expression
-      | multiplicative_expression '%' cast_expression
+      | multiplicative_expression MULT cast_expression
+      | multiplicative_expression DIV cast_expression
+      | multiplicative_expression MOD cast_expression
       ;
 
 additive_expression
       : multiplicative_expression
-      | additive_expression '+' multiplicative_expression
-      | additive_expression '-' multiplicative_expression
+      | additive_expression PLUS multiplicative_expression
+      | additive_expression MINUS multiplicative_expression
       ;
 
 shift_expression
@@ -89,8 +204,8 @@ shift_expression
 
 relational_expression
       : shift_expression
-      | relational_expression '<' shift_expression
-      | relational_expression '>' shift_expression
+      | relational_expression LT shift_expression
+      | relational_expression GT shift_expression
       | relational_expression LE_OP shift_expression
       | relational_expression GE_OP shift_expression
       ;
@@ -103,17 +218,17 @@ equality_expression
 
 and_expression
       : equality_expression
-      | and_expression '&' equality_expression
+      | and_expression BITAND equality_expression
       ;
 
 exclusive_or_expression
       : and_expression
-      | exclusive_or_expression '^' and_expression
+      | exclusive_or_expression BITXOR and_expression
       ;
 
 inclusive_or_expression
       : exclusive_or_expression
-      | inclusive_or_expression '|' exclusive_or_expression
+      | inclusive_or_expression BITOR exclusive_or_expression
       ;
 
 logical_and_expression
@@ -128,7 +243,7 @@ logical_or_expression
 
 conditional_expression
       : logical_or_expression
-      | logical_or_expression '?' expression ':' conditional_expression
+      | logical_or_expression QUESTION expression COLON conditional_expression
       ;
 
 assignment_expression
@@ -137,7 +252,7 @@ assignment_expression
       ;
 
 assignment_operator
-      : '='
+      : ASSIGN
       | MUL_ASSIGN
       | DIV_ASSIGN
       | MOD_ASSIGN
@@ -152,7 +267,7 @@ assignment_operator
 
 expression
       : assignment_expression
-      | expression ',' assignment_expression
+      | expression COMMA assignment_expression
       ;
 
 constant_expression
@@ -160,8 +275,8 @@ constant_expression
       ;
 
 declaration
-      : declaration_specifiers ';'
-      | declaration_specifiers init_declarator_list ';'
+      : declaration_specifiers SEMICOLON
+      | declaration_specifiers init_declarator_list SEMICOLON
       ;
 
 declaration_specifiers
@@ -177,12 +292,12 @@ declaration_specifiers
 
 init_declarator_list
       : init_declarator
-      | init_declarator_list ',' init_declarator
+      | init_declarator_list COMMA init_declarator
       ;
 
 init_declarator
       : declarator
-      | declarator '=' initializer
+      | declarator ASSIGN initializer
       ;
 
 storage_class_specifier
@@ -203,17 +318,13 @@ type_specifier
       | DOUBLE
       | SIGNED
       | UNSIGNED
-      | BOOL
-      | COMPLEX
-      | IMAGINARY
       | struct_or_union_specifier
       | enum_specifier
-      | TYPE_NAME
       ;
 
 struct_or_union_specifier
-      : struct_or_union IDENTIFIER '{' struct_declaration_list '}'
-      | struct_or_union '{' struct_declaration_list '}'
+      : struct_or_union IDENTIFIER LEFTBRACE struct_declaration_list RIGHTBRACE
+      | struct_or_union LEFTBRACE struct_declaration_list RIGHTBRACE
       | struct_or_union IDENTIFIER
       ;
 
@@ -228,7 +339,7 @@ struct_declaration_list
       ;
 
 struct_declaration
-      : specifier_qualifier_list struct_declarator_list ';'
+      : specifier_qualifier_list struct_declarator_list SEMICOLON
       ;
 
 specifier_qualifier_list
@@ -240,31 +351,31 @@ specifier_qualifier_list
 
 struct_declarator_list
       : struct_declarator
-      | struct_declarator_list ',' struct_declarator
+      | struct_declarator_list COMMA struct_declarator
       ;
 
 struct_declarator
       : declarator
-      | ':' constant_expression
-      | declarator ':' constant_expression
+      | COLON constant_expression
+      | declarator COLON constant_expression
       ;
 
 enum_specifier
-      : ENUM '{' enumerator_list '}'
-      | ENUM IDENTIFIER '{' enumerator_list '}'
-      | ENUM '{' enumerator_list ',' '}'
-      | ENUM IDENTIFIER '{' enumerator_list ',' '}'
+      : ENUM LEFTBRACE enumerator_list RIGHTBRACE
+      | ENUM IDENTIFIER LEFTBRACE enumerator_list RIGHTBRACE
+      | ENUM LEFTBRACE enumerator_list COMMA RIGHTBRACE
+      | ENUM IDENTIFIER LEFTBRACE enumerator_list COMMA RIGHTBRACE
       | ENUM IDENTIFIER
       ;
 
 enumerator_list
       : enumerator
-      | enumerator_list ',' enumerator
+      | enumerator_list COMMA enumerator
       ;
 
 enumerator
       : IDENTIFIER
-      | IDENTIFIER '=' constant_expression
+      | IDENTIFIER ASSIGN constant_expression
       ;
 
 type_qualifier
@@ -285,25 +396,25 @@ declarator
 
 direct_declarator
       : IDENTIFIER
-      | '(' declarator ')'
-      | direct_declarator '[' type_qualifier_list assignment_expression ']'
-      | direct_declarator '[' type_qualifier_list ']'
-      | direct_declarator '[' assignment_expression ']'
-      | direct_declarator '[' STATIC type_qualifier_list assignment_expression ']'
-      | direct_declarator '[' type_qualifier_list STATIC assignment_expression ']'
-      | direct_declarator '[' type_qualifier_list '*' ']'
-      | direct_declarator '[' '*' ']'
-      | direct_declarator '[' ']'
-      | direct_declarator '(' parameter_type_list ')'
-      | direct_declarator '(' identifier_list ')'
-      | direct_declarator '(' ')'
+      | LEFTBRACK declarator RIGHTBRACK
+      | direct_declarator LEFTSQBRAC  type_qualifier_list assignment_expression RIGHTSQBRAC
+      | direct_declarator LEFTSQBRAC  type_qualifier_list RIGHTSQBRAC
+      | direct_declarator LEFTSQBRAC  assignment_expression RIGHTSQBRAC
+      | direct_declarator LEFTSQBRAC  STATIC type_qualifier_list assignment_expression RIGHTSQBRAC
+      | direct_declarator LEFTSQBRAC  type_qualifier_list STATIC assignment_expression RIGHTSQBRAC
+      | direct_declarator LEFTSQBRAC  type_qualifier_list MULT RIGHTSQBRAC
+      | direct_declarator LEFTSQBRAC  MULT RIGHTSQBRAC
+      | direct_declarator LEFTSQBRAC  RIGHTSQBRAC
+      | direct_declarator LEFTBRACK parameter_type_list RIGHTBRACK
+      | direct_declarator LEFTBRACK identifier_list RIGHTBRACK
+      | direct_declarator LEFTBRACK RIGHTBRACK
       ;
 
 pointer
-      : '*'
-      | '*' type_qualifier_list
-      | '*' pointer
-      | '*' type_qualifier_list pointer
+      : MULT
+      | MULT type_qualifier_list
+      | MULT pointer
+      | MULT type_qualifier_list pointer
       ;
 
 type_qualifier_list
@@ -314,12 +425,12 @@ type_qualifier_list
 
 parameter_type_list
       : parameter_list
-      | parameter_list ',' ELLIPSIS
+      | parameter_list COMMA ELLIPSIS
       ;
 
 parameter_list
       : parameter_declaration
-      | parameter_list ',' parameter_declaration
+      | parameter_list COMMA parameter_declaration
       ;
 
 parameter_declaration
@@ -330,7 +441,7 @@ parameter_declaration
 
 identifier_list
       : IDENTIFIER
-      | identifier_list ',' IDENTIFIER
+      | identifier_list COMMA IDENTIFIER
       ;
 
 type_name
@@ -345,34 +456,34 @@ abstract_declarator
       ;
 
 direct_abstract_declarator
-      : '(' abstract_declarator ')'
-      | '[' ']'
-      | '[' assignment_expression ']'
-      | direct_abstract_declarator '[' ']'
-      | direct_abstract_declarator '[' assignment_expression ']'
-      | '[' '*' ']'
-      | direct_abstract_declarator '[' '*' ']'
-      | '(' ')'
-      | '(' parameter_type_list ')'
-      | direct_abstract_declarator '(' ')'
-      | direct_abstract_declarator '(' parameter_type_list ')'
+      : LEFTBRACK abstract_declarator RIGHTBRACK
+      | LEFTSQBRAC RIGHTSQBRAC
+      | LEFTSQBRAC assignment_expression RIGHTSQBRAC
+      | direct_abstract_declarator LEFTSQBRAC RIGHTSQBRAC
+      | direct_abstract_declarator LEFTSQBRAC assignment_expression RIGHTSQBRAC
+      | LEFTSQBRAC MULT RIGHTSQBRAC
+      | direct_abstract_declarator   LEFTSQBRAC MULT RIGHTSQBRAC
+      | LEFTBRACK RIGHTBRACK
+      | LEFTBRACK parameter_type_list RIGHTBRACK
+      | direct_abstract_declarator LEFTBRACK RIGHTBRACK
+      | direct_abstract_declarator LEFTBRACK parameter_type_list RIGHTBRACK
       ;
 
 initializer
       : assignment_expression
-      | '{' initializer_list '}'
-      | '{' initializer_list ',' '}'
+      | LEFTBRACE initializer_list RIGHTBRACE
+      | LEFTBRACE initializer_list COMMA RIGHTBRACE
       ;
 
 initializer_list
       : initializer
       | designation initializer
-      | initializer_list ',' initializer
-      | initializer_list ',' designation initializer
+      | initializer_list COMMA initializer
+      | initializer_list COMMA designation initializer
       ;
 
 designation
-      : designator_list '='
+      : designator_list ASSIGN
       ;
 
 designator_list
@@ -381,28 +492,33 @@ designator_list
       ;
 
 designator
-      : '[' constant_expression ']'
-      | '.' IDENTIFIER
+      : LEFTSQBRAC constant_expression RIGHTSQBRAC
+      | PERIOD IDENTIFIER
       ;
 
 statement
+      : none_if_stmt
+      | if_statement
+      ;
+
+none_if_stmt
       : labeled_statement
       | compound_statement
       | expression_statement
-      | selection_statement
       | iteration_statement
       | jump_statement
+      | switch_stmt
       ;
 
 labeled_statement
-      : IDENTIFIER ':' statement
-      | CASE constant_expression ':' statement
-      | DEFAULT ':' statement
+      : IDENTIFIER COLON statement
+      | CASE constant_expression COLON statement
+      | DEFAULT COLON statement
       ;
 
 compound_statement
-      : '{' '}'
-      | '{' block_item_list '}'
+      : LEFTBRACE RIGHTBRACE
+      | LEFTBRACE block_item_list RIGHTBRACE
       ;
 
 block_item_list
@@ -416,36 +532,63 @@ block_item
       ;
 
 expression_statement
-      : ';'
-      | expression ';'
+      : SEMICOLON
+      | expression SEMICOLON
+      ;
+/*
+selection_statement
+      : IF LEFTBRACK expression RIGHTBRACK statement
+      | IF LEFTBRACK expression RIGHTBRACK statement ELSE statement
+      | SWITCH LEFTBRACK expression RIGHTBRACK statement
+      ;
+*/
+
+switch_stmt
+      : SWITCH LEFTBRACK expression RIGHTBRACK statement
+      ;
+/*
+selection_statement
+      : if_statement
+      | 
+      ;
+*/
+/*      : IF LEFTBRACK expression RIGHTBRACK statement %prec LOWER_THEN_ELSE
+      | IF LEFTBRACK expression RIGHTBRACK statement ELSE statement
+      ;*/
+if_statement
+      : if_branch none_if_stmt
+      | if_branch else_branch
       ;
 
-selection_statement
-      : IF '(' expression ')' statement
-      | IF '(' expression ')' statement ELSE statement
-      | SWITCH '(' expression ')' statement
+else_branch:
+      ELSE statement
       ;
+
+if_branch
+      :  IF LEFTBRACK expression RIGHTBRACK statement
+
 
 iteration_statement
-      : WHILE '(' expression ')' statement
-      | DO statement WHILE '(' expression ')' ';'
-      | FOR '(' expression_statement expression_statement ')' statement
-      | FOR '(' expression_statement expression_statement expression ')' statement
-      | FOR '(' declaration expression_statement ')' statement
-      | FOR '(' declaration expression_statement expression ')' statement
+      : WHILE LEFTBRACK expression RIGHTBRACK statement
+      | DO statement WHILE LEFTBRACK expression RIGHTBRACK SEMICOLON
+      | FOR LEFTBRACK expression_statement expression_statement RIGHTBRACK statement
+      | FOR LEFTBRACK expression_statement expression_statement expression RIGHTBRACK statement
+      | FOR LEFTBRACK declaration expression_statement RIGHTBRACK statement
+      | FOR LEFTBRACK declaration expression_statement expression RIGHTBRACK statement
       ;
 
 jump_statement
-      : GOTO IDENTIFIER ';'
-      | CONTINUE ';'
-      | BREAK ';'
-      | RETURN ';'
-      | RETURN expression ';'
+      : GOTO IDENTIFIER SEMICOLON
+      | CONTINUE SEMICOLON
+      | BREAK SEMICOLON
+      | RETURN SEMICOLON
+      | RETURN expression SEMICOLON
       ;
 
 translation_unit
       : external_declaration
       | translation_unit external_declaration
+      | EoF
       ;
 
 external_declaration
@@ -465,3 +608,16 @@ declaration_list
 
 
 %%
+
+namespace test{
+
+void FlexBison_Parser::error(const location &loc , const std::string &message) {
+
+        std::cerr << "error" << loc << ": " << message << std::endl;
+}
+
+FlexBison_Parser::symbol_type yylex(FlexBison_Lexer&scanner){
+      return scanner.next();
+}
+
+}

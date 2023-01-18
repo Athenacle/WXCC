@@ -10,6 +10,13 @@ namespace
 
 namespace test
 {
+    bool openFile(std::ifstream& ifs, const std::string& file)
+    {
+        std::ifstream istrm(file, std::ios::binary);
+        ifs = std::move(istrm);
+        return ifs.is_open();
+    }
+
     const char* randomString(uint32_t length)
     {
         char* mem = new char[length + 1];
@@ -74,10 +81,11 @@ namespace
 
 namespace test
 {
+
     const char* randomSourceCode(uint32_t& count)
     {
         char buffer[64];
-        uint32_t total;
+        uint32_t total = 0;
 
         auto randID = [&]() {
             auto leng = (rd() % 60) + 1;
@@ -97,12 +105,10 @@ namespace test
         for (uint32_t i = 0; i < count; i++) {
             auto r = test::random(100);
             if (r < 30) {
-                total++;
                 out = out.append(randomKeyword());
             } else if (r < 60) {
                 // number;
                 auto rn = test::random();
-                total++;
                 if (auto rm = rn % 100; rm < 60) {
                     // int
                     if (rm < 50) {
@@ -120,7 +126,6 @@ namespace test
                 // id
                 randID();
                 out = out.append(buffer);
-                total++;
             } else if (r < 95) {
                 // str
                 randID();
@@ -129,6 +134,12 @@ namespace test
                 out.append("\"");
             } else {
             }
+
+            if (r < 95) {
+                total++;
+            }
+
+
             if (r < 40) {
                 out.append(" ");
             } else if (r < 50) {

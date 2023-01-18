@@ -8,6 +8,8 @@ using namespace lex;
 
 class FlexBisonLexer : public testing::Test
 {
+    std::ifstream yyin;
+
 protected:
     static const char* buf;
 
@@ -15,14 +17,14 @@ protected:
 
     static uint32_t tokenCount;
 
-    FILE* yyfp;
+    test::FlexBison_Lexer* flexin;
 
     FileLexInputSource flis;
     Lex l;
 
     static void SetUpTestSuite()
     {
-        tokenCount = test::random(3000) + 1500;
+        tokenCount = test::random(3000) + 2500;
 
         filename = "flex_bison_random_lexer_test";
 
@@ -51,17 +53,17 @@ protected:
         flis.openFile(filename);
         l.setSource(&flis);
 
-        yyfp = fopen(filename, "rb");
-        yyin = yyfp;
+        ASSERT_TRUE(test::openFile(yyin, filename));
+        flexin = new test::FlexBison_Lexer(&yyin);
+
         yyfilename = filename;
     }
 
     virtual void TearDown() override
     {
         yyReset();
-        if (yyfp) {
-            fclose(yyfp);
-        }
+        delete flexin;
+        flexin = nullptr;
     }
 };
 const char* FlexBisonLexer::filename;
@@ -70,9 +72,9 @@ uint32_t FlexBisonLexer::tokenCount = 0;
 
 TEST_F(FlexBisonLexer, randomLexer)
 {
-    uint32_t i = 0;
+    MAYBE_UNUSED uint32_t i = 0;
     while (true) {
-        Token fb(flex());
+        Token fb(flex(flexin));
         Token lexer(l.getNextToken());
 
         EXPECT_EQ(fb, lexer);
