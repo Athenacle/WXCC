@@ -12,26 +12,32 @@
 #include <unordered_map>
 
 #include "lex/lexer.h"
+#include "lex/print.h"
 
 using namespace lex;
 using namespace lex::constants;
 using namespace lex::types;
 
-namespace
+namespace lex
 {
-    void buildKeymap(std::unordered_map<KEYWORD, std::string> &keys)
+    namespace print
     {
-        auto func = [](std::string::traits_type::char_type c) { return std::tolower(c); };
+        std::unordered_map<KEYWORD, std::string> keywordToStringMap;
+        std::unordered_map<constants::OP, std::string> operatorToStringMap;
+
+        void buildKeymap()
+        {
+            auto func = [](std::string::traits_type::char_type c) { return std::tolower(c); };
 
 #define KEYWORDS_ADD(k)                                         \
     do {                                                        \
         std::string kv(#k);                                     \
         std::transform(kv.begin(), kv.end(), kv.begin(), func); \
-        keys.emplace(KEY_##k, kv);                              \
+        keywordToStringMap.emplace(KEY_##k, kv);                \
     } while (false)
 
-        keys.emplace(KEY_KVOID, "void");
-        // clang-format off
+            keywordToStringMap.emplace(KEY_KVOID, "void");
+            // clang-format off
         KEYWORDS_ADD(AUTO);     KEYWORDS_ADD(BREAK);    KEYWORDS_ADD(CASE);
         KEYWORDS_ADD(CHAR);     KEYWORDS_ADD(CONST);    KEYWORDS_ADD(CONTINUE);
         KEYWORDS_ADD(DEFAULT);  KEYWORDS_ADD(DO);       KEYWORDS_ADD(DOUBLE);
@@ -43,29 +49,19 @@ namespace
         KEYWORDS_ADD(STRUCT);   KEYWORDS_ADD(SWITCH);   KEYWORDS_ADD(TYPEDEF);
         KEYWORDS_ADD(UNION);    KEYWORDS_ADD(UNSIGNED); KEYWORDS_ADD(VOLATILE);
         KEYWORDS_ADD(WHILE);
-        // clang-format on
+            // clang-format on
 
 #undef KEYWORDS_ADD
-    }
-
-    const std::string &dispatchKeywords(KEYWORD key)
-    {
-        static std::unordered_map<KEYWORD, std::string> keys;
-        if (unlikely(keys.size() == 0)) {
-            buildKeymap(keys);
         }
-        return keys[key];
-    }
 
-    void buildOperators(std::unordered_map<OP, std::tuple<std::string, const char *>> &ops)
-    {
-#define OPERATOR_ADD(op, c)                            \
-    do {                                               \
-        auto msg = fmt::format("{:<13}\t{}", #op, c);  \
-        ops.emplace(OP_##op, std::make_tuple(msg, c)); \
+        void buildOperatorMap()
+        {
+#define OPERATOR_ADD(op, c)                      \
+    do {                                         \
+        operatorToStringMap.emplace(OP_##op, c); \
     } while (false)
 
-        // clang-format off
+            // clang-format off
         OPERATOR_ADD(LOGNOT, "!");          OPERATOR_ADD(MOD, "%");         OPERATOR_ADD(BITXOR, "^");
         OPERATOR_ADD(BITAND, "&");          OPERATOR_ADD(MULT, "*");        OPERATOR_ADD(PLUS, "+");
         OPERATOR_ADD(MINUS, "-");           OPERATOR_ADD(BITNOT, "~");      OPERATOR_ADD(BITOR, "|");
@@ -82,18 +78,16 @@ namespace
         OPERATOR_ADD(ALDIV, "/=");          OPERATOR_ADD(ALMOD, "%=");      OPERATOR_ADD(ALLEFTSHIFT, "<<=");
         OPERATOR_ADD(ALRIGHTSHIFT, ">>=");  OPERATOR_ADD(ALBITAND, "&=");   OPERATOR_ADD(ALBITXOR, "^=");
         OPERATOR_ADD(ALBITOR, "|=");        OPERATOR_ADD(SIZEOF, "sizeof");
-        // clang-format on
-    }
-
-    const std::string &dispatchOperator(OP op)
-    {
-        static std::unordered_map<OP, std::tuple<std::string, const char *>> ops;
-        if (unlikely(ops.size() == 0)) {
-            buildOperators(ops);
+            // clang-format on
         }
+#undef OPERATOR_ADD
 
-        return std::get<0>(ops[op]);
-    }
+    }  // namespace print
+}  // namespace lex
+
+
+namespace
+{
 
     const char *TokenType(const Token &tok)
     {
@@ -125,9 +119,9 @@ namespace
             case T_FLOAT_CON:
                 return fmt::format("{}", *tok.token_value.numVal);
             case T_KEY:
-                return dispatchKeywords(tok.token_value.keyword);
+                return fmt::format("{}", tok.token_value.keyword);
             case T_OPERATOR:
-                return dispatchOperator(tok.token_value.op);
+                return fmt::format("{}", tok.token_value.op);
             default:
                 assert(0);
         }

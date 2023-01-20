@@ -46,6 +46,14 @@ namespace lex
             return isOP(_tok) && _tok.token_value.op == _op;
         }
 
+        bool inline isStorageClassSpecifier(const Token &tok)
+        {
+            auto kw = tok.token_value.keyword;
+            return is(tok, T_KEY)
+                   && (kw == KEY_TYPEDEF || kw == KEY_EXTERN || kw == KEY_STATIC || kw == KEY_AUTO
+                       || kw == KEY_REGISTER);
+        }
+
         bool inline matchQualifier(const Token &_tok)
         {
             return _tok.token_type == T_KEY

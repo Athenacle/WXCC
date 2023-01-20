@@ -55,4 +55,21 @@ NAMESPACE_V1_BEGIN
 class Function;
 NAMESPACE_END
 
+#define NAMESPACE_V2_BEGIN \
+    namespace wxcc_v2      \
+    {
+#define NAMESPACE_BEGIN NAMESPACE_V2_BEGIN
+
+#define USING_V2        using namespace wxcc_v2;
+
+class NoneCopyable
+{
+    NoneCopyable(const NoneCopyable &) = delete;
+    NoneCopyable &operator=(const NoneCopyable &) = delete;
+
+protected:
+    NoneCopyable() = default;
+    ~NoneCopyable() = default;
+};
+
 #endif

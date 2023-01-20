@@ -78,6 +78,8 @@ namespace lex
 
         bool openFile(const char *);
 
+        bool openStdin();
+
         virtual char next(GET_TYPE) override;
 
         virtual bool fillBuffer() override;

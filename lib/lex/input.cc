@@ -70,6 +70,13 @@ bool FileLexInputSource::fillBuffer()
     return r > 0;
 }
 
+bool FileLexInputSource::openStdin()
+{
+    fp = stdin;
+    file = std::make_shared<std::string>("stdin");
+    return true;
+}
+
 bool FileLexInputSource::openFile(const char *fn)
 {
     fp = fopen(fn, "rb");

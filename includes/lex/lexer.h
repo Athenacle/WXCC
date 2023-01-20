@@ -108,6 +108,11 @@ namespace lex
         {
             source = s;
         }
+
+        const char *filename() const
+        {
+            return source->filename();
+        }
     };
 }  // namespace lex
 

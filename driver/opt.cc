@@ -2,10 +2,26 @@
 #include "config.h"
 #endif
 
+#include <fmt/core.h>
+
 #include <argparse/argparse.hpp>
 
 #include "driver.h"
 
+FILE* openOutput(const CommandOptions& opt, utils::ErrorManager& mgr)
+{
+    FILE* ret = nullptr;
+
+    if (opt.output.length() == 0 || opt.output == "-") {
+        ret = stdout;
+    } else {
+        ret = fopen(opt.output.c_str(), "wb");
+        if (ret == nullptr) {
+            mgr.fatal("open output file {} failed: {}", opt.output, strerror(errno));
+        }
+    }
+    return ret;
+}
 
 bool parseCommandOptions(CommandOptions& opt, int argc, const char* argv[])
 {

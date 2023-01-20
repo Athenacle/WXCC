@@ -10,6 +10,7 @@
 
 #include "system.h"
 
+
 void fatalError(const char *message);
 //a fatal error happened. Handle it and exit the compiler.
 
@@ -64,5 +65,6 @@ namespace utils
 
     char *strdup(const char *);
 }  // namespace utils
+
 
 #endif

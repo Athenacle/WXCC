@@ -12,6 +12,11 @@ target_link_libraries(v1 PUBLIC fmt)
 
 add_library(libs STATIC   
                 lex/input.cc lex/lex.cc lex/output.cc  lex/lexWE.cc lex/token.cc
+                environment/identifier.cc
+                parser/parser.cc parser/declaration.cc
+                semantic/type.cc
+                tools/error_manager.cc
                 tools/tools.cc)
+
 target_include_directories(libs PUBLIC ${CMAKE_SOURCE_DIR}/includes ${CMAKE_SOURCE_DIR}/includes/v1)
 target_link_libraries(libs PUBLIC fmt)

@@ -71,7 +71,7 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQU
         Wimplicit-float-conversion
         Wshorten-64-to-32
         )
-    if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
         cxx_compiler_check_add(fstack-protector-strong)
     endif ()
 endif ()

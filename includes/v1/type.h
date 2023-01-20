@@ -18,33 +18,33 @@ NAMESPACE_V1_BEGIN
 namespace type_operator
 {
     /* enum type_operator
-	* 0x0100
-	*  [0 0 0 0 0 0 0 0]  [0 0 0 0 0 0 0 0]     [0 0 0 0 0 0 0 0] [0 0 0 0 0 0 0 0]
-	*   0: BASIC_TYPE      0: AGGREGATE_TYPE     0: SIGNED
-	*   1: NOT_BASIC TYPE  1: NOT_AGGREGATE_TYPE 1: UNSIGNED
-	*   2: POINTER_TYPE                          2: NONE_SIG
-	*   3: FUNCTION_TYPE
-	*   4: SPECIFIER_TYPE
-	*/
+    * 0x0100
+    *  [0 0 0 0 0 0 0 0]  [0 0 0 0 0 0 0 0]     [0 0 0 0 0 0 0 0] [0 0 0 0 0 0 0 0]
+    *   0: BASIC_TYPE      0: AGGREGATE_TYPE     0: SIGNED
+    *   1: NOT_BASIC TYPE  1: NOT_AGGREGATE_TYPE 1: UNSIGNED
+    *   2: POINTER_TYPE                          2: NONE_SIG
+    *   3: FUNCTION_TYPE
+    *   4: SPECIFIER_TYPE
+    */
     enum TYPE_OPERATOR {
         TO_VOID = 0x01000000,
-        /* BASIC_TYPE		*/
+        /* BASIC_TYPE        */
         TO_CHAR = 0x01000001,
         TO_INT = 0x01000012,
         TO_LONG = 0x01000013,
         TO_SHORT = 0x01000014,
         TO_FLOAT = 0x01000015,
         TO_DOUBLE = 0x01000016,
-        /* AGGREGATE_TYPE	*/
+        /* AGGREGATE_TYPE    */
         TO_STRUCT = 0x01000101,
         TO_UNION = 0x01000102,
         TO_ARRAY = 0x01000103,
         TO_ENUM = 0x01000104,
-        /* POINTER_TYPE		*/
+        /* POINTER_TYPE        */
         TO_POINTER = 0x01000200,
-        /* FUNCTION_TYPE	*/
+        /* FUNCTION_TYPE    */
         TO_FUNCTION = 0x01000300,
-        /* SPECIFIER_TYPE	*/
+        /* SPECIFIER_TYPE    */
         TO_CONST = 0x01004001,
         TO_VOLATILE = 0x01004002,
 
@@ -58,10 +58,10 @@ namespace type_operator
     const unsigned long SIGNED_MASK = 0x01005000u;
     const unsigned long NO_LIMIT = 0x7fffffffu;
     /* because the sizeof operator cannot be operated on a function.
-	*	i.e. the size of a function cannot be calculated.
-	*	so, set the size field of the function type to NO_LIMIT.
-	* Just a magic number, nothing else.
-	*/
+    *    i.e. the size of a function cannot be calculated.
+    *    so, set the size field of the function type to NO_LIMIT.
+    * Just a magic number, nothing else.
+    */
 }  // namespace type_operator
 
 using namespace type_operator;
@@ -82,10 +82,10 @@ class Type
 {
     friend class Function;
 
-    TYPE_OPERATOR type_op; /* enum type_operator	*/
-    Type *base_type;       /* operand/return type	*/
+    TYPE_OPERATOR type_op; /* enum type_operator    */
+    Type *base_type;       /* operand/return type    */
     int align;             /* alignment size (byte)*/
-    int size;              /* total size (byte)	*/
+    int size;              /* total size (byte)    */
     Symbol *sym;
 
     const char *name;
@@ -96,11 +96,11 @@ class Type
         struct function_para {
             Type *paraList;
             /* the function type. parameter sequential list, which is
-			* terminated by a ((struct type *)NULL) pointer.
-			*
-			* when the function has a variadic parameter, the end of the
-			* list should contain the TO_VOID, then the NULL.
-			*/
+            * terminated by a ((struct type *)NULL) pointer.
+            *
+            * when the function has a variadic parameter, the end of the
+            * list should contain the TO_VOID, then the NULL.
+            */
         } f;
         struct array_nElement {
             int nElements;
@@ -218,67 +218,67 @@ public:
 /* EXAMPLES for types.
 *
 * 1.int a; the type struct in the symbol of 'a' should be
-*	{TO_INT, NULL, 4, 4, p_a, (NULL)}
+*    {TO_INT, NULL, 4, 4, p_a, (NULL)}
 *
 * 2.int array[10];
-*	{ARRAY, {TO_INT, NULL, 4, 4, NULL, NULL}, 4, 40, p_arr, (10)}
+*    {ARRAY, {TO_INT, NULL, 4, 4, NULL, NULL}, 4, 40, p_arr, (10)}
 *
 *
 *   int array[10][10];
-*	{ARRAY,
-*		{ARRAY,
-*			{TO_INT, NULL, 4, 4, NULL, NULL},
-*		4, 40, NULL, (10)},
-*	4, 400, p_arr, (10)}
+*    {ARRAY,
+*        {ARRAY,
+*            {TO_INT, NULL, 4, 4, NULL, NULL},
+*        4, 40, NULL, (10)},
+*    4, 400, p_arr, (10)}
 *
-*   extern int array[];	--  incompleted type
+*   extern int array[];    --  incompleted type
 *      {ARRAY, {TO_INT, NULL, 4, 4, NULL, NULL}, 4, 0, p_arr, (0)}
 *
 *
 * 3.const volatile int * p;
-*	{TO_POINTER
-*	        {TO_CONST,
-*	              {TO_VOLATILE,
-*	                      {TO_INT, NULL, 4, 4, NULL, (NULL)},
-*	              4, 4, NULL, (NULL)}
-*	      4 , 4, NULL, (NULL)}
-*	 4, 4, p_p, (NULL)}
+*    {TO_POINTER
+*            {TO_CONST,
+*                  {TO_VOLATILE,
+*                          {TO_INT, NULL, 4, 4, NULL, (NULL)},
+*                  4, 4, NULL, (NULL)}
+*          4 , 4, NULL, (NULL)}
+*     4, 4, p_p, (NULL)}
 *
 *   const int* volatile p;
-*	{TO_VOLATILE
-*	        {TO_POINTER,
-*	              {TO_CONST,
-*	                      {TO_INT, NULL, 4, 4, NULL, (NULL)},
-*	              4, 4, NULL, (NULL)}
-*	      4 , 4, NULL, (NULL)}
-*	 4, 4, p_p, (NULL)}
+*    {TO_VOLATILE
+*            {TO_POINTER,
+*                  {TO_CONST,
+*                          {TO_INT, NULL, 4, 4, NULL, (NULL)},
+*                  4, 4, NULL, (NULL)}
+*          4 , 4, NULL, (NULL)}
+*     4, 4, p_p, (NULL)}
 *   void *p;
-*	{TO_POINTER,
-*		{TO_VOID, NULL, 0, 0, NULL, (NULL)},
-*	4, 4, p_p, (NULL)}
+*    {TO_POINTER,
+*        {TO_VOID, NULL, 0, 0, NULL, (NULL)},
+*    4, 4, p_p, (NULL)}
 *
 *
 * 5.int fun(void);
-*	{TO_FUNCTION,
-*		{TO_INT, NULL, 4, 4, NULL, (NULL)}
+*    {TO_FUNCTION,
+*        {TO_INT, NULL, 4, 4, NULL, (NULL)}
 4, NO_LIMITED, p_fun, ({TO_VOID, NULL, 0, 0, NULL, NULL} -> NULL)}.
 *
 *   void fun(int a, double b);
-*	{TO_FUNCTION,
-*		{TO_VOID, NULL, 0, 0, NULL, (NULL)},
-*	4, NO_LIMITED, p_fun, ({TO_INT,NULL, 4, 4, NULL, NULL} ->
-*		{TO_DOUBLE, NULL, 8, 8, NULL, NULL} -> NULL) }
+*    {TO_FUNCTION,
+*        {TO_VOID, NULL, 0, 0, NULL, (NULL)},
+*    4, NO_LIMITED, p_fun, ({TO_INT,NULL, 4, 4, NULL, NULL} ->
+*        {TO_DOUBLE, NULL, 8, 8, NULL, NULL} -> NULL) }
 *
 *   int printf(const char * format, ...)
-*	{TO_FUNCTION,
-*		{TO_INT, NULL, 4, 4, NULL, (NULL)},
-*			4, NO_LIMITED, p_printf,
-*			({TO_POINTER,
-*				{TO_CONST,
-*					{TO_CHAR, NULL, 4, 1, NULL, (NULL)},
-*						4, 1, NULL, (NULL)},
-*				4, 4, NULL, NULL} ->
-*				{TO_VOID, NULL, 0, 0, NULL, NULL} -> NULL)}
+*    {TO_FUNCTION,
+*        {TO_INT, NULL, 4, 4, NULL, (NULL)},
+*            4, NO_LIMITED, p_printf,
+*            ({TO_POINTER,
+*                {TO_CONST,
+*                    {TO_CHAR, NULL, 4, 1, NULL, (NULL)},
+*                        4, 1, NULL, (NULL)},
+*                4, 4, NULL, NULL} ->
+*                {TO_VOID, NULL, 0, 0, NULL, NULL} -> NULL)}
 *
 */
 

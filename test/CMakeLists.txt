@@ -43,6 +43,7 @@ macro(add_subdirectory_test)
 endmacro()
 
 add_subdirectory_test(lex)
+add_subdirectory_test(utils)
 
 if (${FLEX_FOUND} AND ${BISON_FOUND})
     target_compile_definitions(test PUBLIC HAVE_FLEX_BISON)
