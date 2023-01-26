@@ -55,6 +55,8 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQU
         endforeach ()
     endmacro ()
 
+    check_cxx_compiler_flag(-fno-exceptions COMPILER_SUPPORT_FNO_EXCEPTIONS)
+
     cxx_compiler_check_add(
         Wall
         Wno-useless-cast

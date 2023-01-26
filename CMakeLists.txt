@@ -15,7 +15,7 @@ file(MAKE_DIRECTORY ${THIRD_PARTY_DIR})
 option(CLANG_TIDY "Enable clang-tidy" OFF)
 
 if (${CLANG_TIDY})
-    set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*,-concurrency-mt-unsafe")
+    set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
 endif ()
 
 if (NOT ${CMAKE_BUILD_TYPE})
