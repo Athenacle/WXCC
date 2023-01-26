@@ -18,6 +18,7 @@ IS                      ((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))
 
 
 %{
+// NOLINTBEGIN
 #include "flex_bison/misc/flex_bison_lexer.h"
 #include "location.hh"
 #include <stdio.h>
@@ -186,3 +187,5 @@ int check_type(void)
 
     return tt::IDENTIFIER;
 }
+
+// NOLINTEND

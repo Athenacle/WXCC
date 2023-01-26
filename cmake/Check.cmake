@@ -18,7 +18,7 @@ if (UNIX)
     check_symbol_exists(get_nprocs sys/sysinfo.h UNIX_HAVE_GET_NPROCS)
     check_symbol_exists(setenv cstdlib UNIX_HAVE_SETENV)
     check_symbol_exists(mmap sys/mman.h UNIX_HAVE_MMAP)
-elseif(WIN32)
+elseif (WIN32)
     add_compile_options("/EHsc")
 endif ()
 
@@ -69,8 +69,7 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQU
         fno-permissive
         Wextra-semi
         Wimplicit-float-conversion
-        Wshorten-64-to-32
-        )
+        Wshorten-64-to-32)
     if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
         cxx_compiler_check_add(fstack-protector-strong)
     endif ()

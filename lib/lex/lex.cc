@@ -1678,3 +1678,12 @@ end:
     Token tok;
     return tok;
 }
+
+Lex& Lex::operator=(Lex&& l)
+{
+    source = l.source;
+    memcpy(tmpBuffer, l.tmpBuffer, TMPBUFFER_SIZE);
+    lexWarningCount = l.lexWarningCount;
+    lexErrorCount = l.lexErrorCount;
+    return *this;
+}

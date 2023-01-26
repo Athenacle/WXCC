@@ -35,7 +35,7 @@ namespace
         }
     }
 
-    bool checkQualifier(const Token &tok, const Type::QualifierContainer &t, ErrorManager &mgr)
+    bool checkQualifier(const Token &tok, const Type::QualifierContainer &t, ErrorManager *mgr)
     {
         assert(is(tok, T_KEY));
         auto kw = tok.token_value.keyword;
@@ -44,12 +44,12 @@ namespace
             return true;
         } else {
             if (auto exists = findQualifier(t); exists == kw) {
-                mgr.warning(pos, "duplicate storage-class-specifier '{}' found. ignore.", kw);
+                mgr->warning(pos, "duplicate storage-class-specifier '{}' found. ignore.", kw);
             } else {
-                mgr.error(pos,
-                          "conflit storage-class-specifier '{}' found, previous is '{}'. ignore.",
-                          kw,
-                          exists);
+                mgr->error(pos,
+                           "conflit storage-class-specifier '{}' found, previous is '{}'. ignore.",
+                           kw,
+                           exists);
             }
         }
         return false;

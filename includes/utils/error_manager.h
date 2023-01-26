@@ -18,18 +18,35 @@ namespace utils
         int warning_;
         int info_;
 
+    public:
         static constexpr int FATAL = 0;
         static constexpr int ERROR = 1;
         static constexpr int WARNING = 2;
         static constexpr int INFO = 3;
 
-        void output(int level, const Position&, std::string&&);
+    protected:
+        virtual void output(int level, const Position&, std::string&&);
         void output(int level, std::string&&);
+
         void addCounter(int level);
 
 
     public:
+        int errorCount() const
+        {
+            return err_;
+        }
+        int warningCount() const
+        {
+            return warning_;
+        }
+        int infoCount() const
+        {
+            return info_;
+        }
+
         ErrorManager();
+        virtual ~ErrorManager();
 
         template <class... T>
         void error(const Position& pos, const char* fmt, T&&... args)

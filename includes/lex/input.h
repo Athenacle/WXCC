@@ -64,6 +64,11 @@ namespace lex
 
         void fill(const char *, size_t);
 
+        void fill(const char *str)
+        {
+            return fill(str, std::char_traits<char>::length(str));
+        }
+
         virtual const char *filename() override;
     };
 

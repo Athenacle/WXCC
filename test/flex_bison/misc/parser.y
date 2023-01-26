@@ -17,6 +17,8 @@ namespace test{
 }
 
 %code top{
+
+// NOLINTBEGIN
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -621,3 +623,5 @@ FlexBison_Parser::symbol_type yylex(FlexBison_Lexer&scanner){
 }
 
 }
+
+// NOLINTEND

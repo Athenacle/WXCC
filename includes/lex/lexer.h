@@ -104,6 +104,8 @@ namespace lex
 
         Token getNextToken(void);
 
+        Lex &operator=(Lex &&);
+
         void setSource(LexInputSource *s)
         {
             source = s;

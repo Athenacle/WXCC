@@ -155,3 +155,6 @@ namespace test
 }  // namespace test
 
 #endif
+
+
+ErrorManagerMock::~ErrorManagerMock() {}

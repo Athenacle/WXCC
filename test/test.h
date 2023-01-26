@@ -3,6 +3,9 @@
 #include <gtest/gtest.h>
 
 #include <fstream>
+#include <queue>
+
+#include "utils/error_manager.h"
 
 namespace test
 {
@@ -22,3 +25,16 @@ namespace test
     const char* randomSourceCode(uint32_t&);
 #endif
 }  // namespace test
+
+class ErrorManagerMock : public utils::ErrorManager
+{
+    std::queue<std::tuple<int, std::string>> msg;
+
+public:
+    virtual ~ErrorManagerMock();
+    /*
+    virtual void output(int level, const Position&, std::string&&);
+        virtual void output(int level, std::string&&);
+    */
+    MOCK_METHOD(void, output, (int, const lex::types::Position&, std::string&&), (override));
+};

@@ -39,6 +39,8 @@ MemoryLexInputSource::MemoryLexInputSource()
     lastCol = 1;
     bufsize = 0;
     buf = end = pointer = nullptr;
+
+    file = std::make_shared<std::string>(filename());
 }
 
 

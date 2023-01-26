@@ -88,3 +88,5 @@ ErrorManager::ErrorManager()
 {
     err_ = warning_ = info_ = 0;
 }
+
+ErrorManager::~ErrorManager() {}

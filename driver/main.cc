@@ -32,7 +32,7 @@ int main(int argc, const char* argv[])
         fclose(fp);
     } else {
         TranslationUnit unit;
-        Parser par(lexer, mgr);
+        Parser par(lexer, &mgr);
         par.parse(unit);
     }
 }

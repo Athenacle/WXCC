@@ -69,6 +69,14 @@ namespace utils
             return (v & 1) == 1;
         }
     };
+
+    template <class ENUM, class... ARGS>
+    class EnumCheck
+    {
+        using tuple = std::tuple<ARGS...>;
+        tuple tt;
+    };
+
 }  // namespace utils
 
 #endif
