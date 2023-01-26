@@ -1,7 +1,7 @@
 include(GTest)
 enable_testing()
 
-find_package(FLEX 2.99)
+find_package(FLEX 2.6)
 find_package(BISON 3.0)
 
 set(TEST_NAME ${PROJECT_NAME}_all_in_one)
@@ -25,8 +25,6 @@ if (${FLEX_FOUND} AND ${BISON_FOUND})
 endif ()
 
 add_library(test STATIC ${TEST_LIB_SRC})
-
-set(FFF_INC /usr/include/boost)
 
 target_link_libraries(test PRIVATE GTest::GTest GTest::GMock libs)
 target_include_directories(
