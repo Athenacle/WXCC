@@ -27,9 +27,9 @@ endif ()
 add_library(test STATIC ${TEST_LIB_SRC})
 
 target_link_libraries(test PRIVATE GTest::GTest GTest::GMock libs)
-target_include_directories(test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/includes
-                                       ${CMAKE_CURRENT_BINARY_DIR} ${FLEX_INCLUDE_DIRS})
-
+target_include_directories(
+    test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/includes
+                ${CMAKE_CURRENT_BINARY_DIR} $<$<BOOL:${FLEX_FOUND}>:${FLEX_INCLUDE_DIRS}>)
 set(LIBS)
 macro (add_subdirectory_test)
     file(GLOB files ${ARGN}/*.cc)
