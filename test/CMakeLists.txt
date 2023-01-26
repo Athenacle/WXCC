@@ -1,7 +1,7 @@
 include(GTest)
 enable_testing()
 
-find_package(FLEX 2.6)
+find_package(FLEX 2.99)
 find_package(BISON 3.0)
 
 set(TEST_NAME ${PROJECT_NAME}_all_in_one)
@@ -26,10 +26,12 @@ endif ()
 
 add_library(test STATIC ${TEST_LIB_SRC})
 
+set(FFF_INC /usr/include/boost)
+
 target_link_libraries(test PRIVATE GTest::GTest GTest::GMock libs)
 target_include_directories(
     test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/includes
-                ${CMAKE_CURRENT_BINARY_DIR} $<$<BOOL:${FLEX_FOUND}>:${FLEX_INCLUDE_DIRS}>)
+                ${CMAKE_CURRENT_BINARY_DIR} $<$<BOOL:${FLEX_INCLUDE_DIRS}>:${FLEX_INCLUDE_DIRS}>)
 set(LIBS)
 macro (add_subdirectory_test)
     file(GLOB files ${ARGN}/*.cc)
