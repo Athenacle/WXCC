@@ -54,7 +54,7 @@ jobs:
         # queries: security-extended,security-and-quality
 
     - name: Install Dependencies
-      run: apt update && apt install -y libfl-dev
+      run: sudo apt update && sudo apt install -y libfl-dev
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)

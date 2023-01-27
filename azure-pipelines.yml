@@ -61,8 +61,8 @@ jobs:
       - checkout: self
       - script: |
           mkdir ./build \
-          && apt update \
-          && apt install -y libfl-dev
+          && sudo apt update \
+          && sudo apt install -y libfl-dev
         displayName: "Install Dependencies"
 
       - task: CMake@1
