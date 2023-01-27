@@ -9,9 +9,9 @@ using namespace NS_EXPRE_IR;
 
 namespace
 {
-    const int UNDECLARED_ID = 1;
-    const int NOTARRAY = 2;
-    const int NEED_LVALUE = 3;
+    const int undeclaredId = 1;
+    const int notarray = 2;
+    const int needLvalue = 3;
 
     const char *treeError[] = {"NULL",
 
@@ -22,9 +22,9 @@ namespace
                                "EE.  : need a modifiable l-value."};
 }  // namespace
 
-BinFunction NS_EXPRE_IR::op2fun(const OP _op)
+BinFunction NS_EXPRE_IR::op2fun(const OP op)
 {
-    switch (_op) {
+    switch (op) {
         case OP_PLUS:
             return Tree::PLUStree;
         case OP_MINUS:
@@ -63,19 +63,21 @@ BinFunction NS_EXPRE_IR::op2fun(const OP _op)
     return nullptr;
 }
 
-Tree *Tree::IDtree(Env &env, const char *IDname)
+Tree *Tree::IDtree(Env &env, const char *iDname)
 {
-    Identifier *id = env.findID(IDname);
-    if (id == nullptr)
-        id = env.findFUNC(IDname);
-    if (id == nullptr)
+    Identifier *id = env.findID(iDname);
+    if (id == nullptr) {
+        id = env.findFUNC(iDname);
+    }
+    if (id == nullptr) {
         return nullptr;
+    }
     id->useID();
     Tree *tp = new Tree(NOP_ID, id->getType());
 #ifdef GD_OUTPUT
     tp->treeString = const_cast<char *>(id->getIDname());
 #endif
-    tp->setValue(IDname);
+    tp->setValue(iDname);
 
     return tp;
 }
@@ -123,8 +125,8 @@ Tree *Tree::ASGNtree(const Tree *left, const Tree *right)
     Tree *ret = nullptr;
     const Type &t = left->getType();
     if (t.getTYOP() == TO_ARRAY || t.getTYOP() == TO_FUNCTION) {
-        ExprExcetion *ee = new ExprExcetion();
-        char *r = ExprExcetion::esprintf(treeError[NEED_LVALUE]);
+        auto *ee = new ExprExcetion();
+        char *r = ExprExcetion::esprintf(treeError[needLvalue]);
         ee->setError(r);
         throw ee;
     } else {
@@ -132,15 +134,17 @@ Tree *Tree::ASGNtree(const Tree *left, const Tree *right)
         char buf[20];
         const char *rightStr = nullptr;
         const char *leftStr = nullptr;
-        if (right->t != nullptr)
+        if (right->t != nullptr) {
             rightStr = right->t->toString();
-        else
+        } else {
             rightStr = right->toString();
+        }
 
-        if (left->t != nullptr)
+        if (left->t != nullptr) {
             leftStr = left->t->toString();
-        else
+        } else {
             leftStr = left->toString();
+        }
 
         sprintf(buf, "\t%s = %s\n", leftStr, rightStr);
         IR *ir = new IR(strdup(buf));
@@ -213,10 +217,10 @@ Tree *Tree::MINUStree(const Tree *left, const Tree *right)
     return ret;
 }
 
-Tree *Tree::CONDtree(Tree *, const Tree *, const Tree *)
+Tree *Tree::CONDtree(Tree * /*unused*/, const Tree * /*unused*/, const Tree * /*unused*/)
 {
     assert(0);
-    return 0;
+    return nullptr;
 }
 
 
@@ -514,7 +518,7 @@ Tree *Tree::ORtree(Tree *left, Tree *right)
         right = Tree::EQtree(right, Tree::CONSTtree(0));
     }
     Tree *ret = new Tree(NOP_LOR, *NS_BASE_TYPE::intType, left, right);
-    Label *la = new Label();
+    auto *la = new Label();
     MAYBE_UNUSED IR *ir = new IR(*la);
 
     IR *firstGOTO = new IR("%s : \n", false);
@@ -538,7 +542,7 @@ Tree *Tree::ANDtree(Tree *left, Tree *right)
         right = Tree::EQtree(right, Tree::CONSTtree(0));
     }
     Tree *ret = new Tree(NOP_LAND, *NS_BASE_TYPE::intType, left, right);
-    Label *la = new Label();
+    auto *la = new Label();
 
     IR *firstGOTO = new IR("%s : \n", false);
     IR::appendIR(right->codebegin->preIR, firstGOTO);
@@ -551,12 +555,12 @@ Tree *Tree::ANDtree(Tree *left, Tree *right)
     return ret;
 }
 
-const char *Tree::tmpString(void) const
+const char *Tree::tmpString() const
 {
     return t->toString();
 }
 
-const char *Tree::toString(void) const
+const char *Tree::toString() const
 {
     return this->treeString;
 }

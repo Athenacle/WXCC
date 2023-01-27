@@ -24,8 +24,8 @@ void fatalError(const char* message)
 unsigned long utils::strHash(const char* st)
 {
     // Knuth[1973b]: TAOCP Vol2
-    unsigned long hash = 1315423911ul;
-    while (size_t ch = (size_t)*st++) {
+    unsigned long hash = 1315423911UL;
+    while (auto ch = (size_t)*st++) {
         hash = ((hash << 13) ^ (hash >> 3)) ^ ch;
     }
     return hash;

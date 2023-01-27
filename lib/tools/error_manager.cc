@@ -11,7 +11,7 @@ namespace fmt
 {
     template <>
     struct formatter<Position> {
-        constexpr auto parse(fmt::format_parse_context& ctx)
+        static constexpr auto parse(fmt::format_parse_context& ctx)
         {
             return ctx.begin();
         }
@@ -89,4 +89,4 @@ ErrorManager::ErrorManager()
     err_ = warning_ = info_ = 0;
 }
 
-ErrorManager::~ErrorManager() {}
+ErrorManager::~ErrorManager() = default;

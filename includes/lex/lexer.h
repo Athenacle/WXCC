@@ -75,7 +75,7 @@ namespace lex
         void skipBlank(void);
         void getBufferUntilSp(void);
         void resynch(void);
-        int getAChar(char *, int *);
+        static int getAChar(const char *, int *);
         Number *tryParseFloatNumber(char *, Number **);
         Number *tryParseDecNumber(char *);
         Number *tryParseHexNumber(char *);
@@ -104,7 +104,7 @@ namespace lex
 
         Token getNextToken(void);
 
-        Lex &operator=(Lex &&);
+        Lex &operator=(Lex &&) noexcept;
 
         void setSource(LexInputSource *s)
         {

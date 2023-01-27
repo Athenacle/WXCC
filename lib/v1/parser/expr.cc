@@ -36,7 +36,7 @@ Expr *Parser::c_parser_expressions(Env &env) const
     catch (const Exception &ee) {
         c_parser_expression_recover();
     }
-    return 0;
+    return nullptr;
 }
 
 Tree *Parser::c_parser_base_expressions(Env &env, MAYBE_UNUSED int k) const
@@ -71,14 +71,14 @@ Tree *Parser::c_parser_expressions_1(Env &env, MAYBE_UNUSED int k) const
 
 Tree *Parser::c_parser_dispatch_comp_assignment(const OP op, Tree *leftT, Env &env) const
 {
-    int _op = op;
+    //int  op = op;
     Tree *tr = nullptr;
     Tree *rightT = nullptr;
 
 
     rightT = c_parser_expressions_1(env, 0);
 
-    switch (_op) {
+    switch (op) {
         case OP_ASSIGN:
             //rightT = c_parser_expressions_1(env, 0);
             tr = Tree::ASGNtree(leftT, rightT);
@@ -177,11 +177,12 @@ Tree *Parser::c_parser_expressions_3(Env &env, int k) const
     return p;
 }
 
-void Parser::c_parser_expression_recover(void) const
+void Parser::c_parser_expression_recover() const
 {
     // when exception occurs, skip all the symbols until next ;
-    for (next(); !(cur == OP_SEMICOLON); next())
+    for (next(); !(cur == OP_SEMICOLON); next()) {
         ;
+    }
 }
 
 Tree *Parser::c_parser_unary_expr(Env &env) const
@@ -193,13 +194,14 @@ Tree *Parser::c_parser_unary_expr(Env &env) const
     TYPE_OPERATOR to;
     MAYBE_UNUSED Node_OP nop;
     if (ty == T_OPERATOR && !tools::matchOP(cur, OP_LEFTBRACK)) {
-        OP _op = cur.token_value.op;
-        switch (_op) {
+        OP op = cur.token_value.op;
+        switch (op) {
             case OP_MULT:
                 next();
                 tp = c_parser_unary_expr(env);
-                if (tp == nullptr)
+                if (tp == nullptr) {
                     assert(0);
+                }
                 objectType = &tp->getType();
 
                 to = objectType->getTYOP();
@@ -217,8 +219,9 @@ Tree *Parser::c_parser_unary_expr(Env &env) const
             case OP_BITAND:  //lea
                 next();
                 tp = c_parser_unary_expr(env);
-                if (tp == nullptr)
+                if (tp == nullptr) {
                     assert(0);
+                }
                 if (tp->getNOP() == NOP_CNST) {
                     assert(0);
                 } else {
@@ -256,9 +259,9 @@ Tree *Parser::c_parser_unary_expr(Env &env) const
                 next();
                 if (cur == T_ID) {
                     Identifier *id = env.findID(cur.token_value.id_name);
-                    if (id == nullptr)
+                    if (id == nullptr) {
                         assert(0);
-                    else {
+                    } else {
                         size = id->getType().getSize();
                     }
                 } else {
@@ -270,9 +273,9 @@ Tree *Parser::c_parser_unary_expr(Env &env) const
                             delete ty;
                         } else if (cur == T_ID) {
                             Identifier *id = env.findID(cur.token_value.id_name);
-                            if (id == nullptr)
+                            if (id == nullptr) {
                                 assert(0);
-                            else {
+                            } else {
                                 size = id->getType().getSize();
                             }
                         }
@@ -343,7 +346,8 @@ Tree *Parser::c_parser_expr_func_call(Env &env, Tree *funcID) const
         if (cur == OP_COMMA) {
             next();
             continue;
-        } else if (cur == OP_RIGHTBRACK) {
+        }
+        if (cur == OP_RIGHTBRACK) {
             next();
             break;
         }
@@ -410,7 +414,8 @@ char *ExprExcetion::esprintf(const char *format, ...)
                 buf--;
                 p++;
                 continue;
-            } else if (*(p + 1) == 'd') {
+            }
+            if (*(p + 1) == 'd') {
                 int i = va_arg(ap, int);
                 sprintf(buf, "%d", i);
                 buf++;

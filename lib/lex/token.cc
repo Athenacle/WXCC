@@ -33,10 +33,11 @@ Token::Token(constants::TYPE ty, const char* cc)
 
 Token::Token(Number* n)
 {
-    if (n->numberType == NT_FL || n->numberType == NT_DB)
+    if (n->numberType == NT_FL || n->numberType == NT_DB) {
         token_type = T_FLOAT_CON;
-    else if (n->numberType == NT_CH)
+    } else if (n->numberType == NT_CH) {
         token_type = T_CHAR_CON;
+    }
     token_value.numVal = n;
 }
 
@@ -46,7 +47,7 @@ Token::Token(constants::OP op)
     token_value.op = op;
 }
 
-Token::Token(Token&& other)
+Token::Token(Token&& other) noexcept
 {
     token_type = other.token_type;
     token_pos = std::move(other.token_pos);

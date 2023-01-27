@@ -18,11 +18,11 @@ using namespace lex;
 using namespace constants;
 using namespace types;
 
-#define GET       -1
-#define BACK      0
-#define LOOKAHEAD 1
+#define GET       (-1)
+#define BACK      (0)
+#define LOOKAHEAD (1)
 
-Lex::~Lex() {}
+Lex::~Lex() = default;
 
 Lex::Lex(LexInputSource* s) : source(s) {}
 
@@ -37,7 +37,7 @@ char Lex::getNextChar(int type)
     return source->next(t);
 }
 
-void Lex::skipBlank(void)
+void Lex::skipBlank()
 {
     char t;
 sb:
@@ -55,24 +55,26 @@ sb:
     goto sb;
 }
 
-void Lex::getBufferUntilSp(void)
+void Lex::getBufferUntilSp()
 {
     int i = 0;
     char c = getNextChar(GET);
     for (;; i++) {
         tmpBuffer[i] = c;
         c = getNextChar(GET);
-        if (c == '.' || c == '+' || c == '-')
+        if (c == '.' || c == '+' || c == '-') {
             continue;
-        if (!isalnum(c))
+        }
+        if (isalnum(c) == 0) {
             break;
+        }
         /* stop copying to buffer while reach a not-number or not-alpha*/
     }
     getNextChar(BACK);
     tmpBuffer[i + 1] = '\0';
 }
 
-void Lex::resynch(void)
+void Lex::resynch()
 /*re-synchnoize token:
 	* #line 85 "lex.c"
 	* #line 86
@@ -85,10 +87,9 @@ void Lex::resynch(void)
         tmpBuffer[i] = t;
     }
     tmpBuffer[i] = '\0';
-    return;
 }
 
-int Lex::getAChar(char* pos, int* length)
+int Lex::getAChar(const char* pos, int* length)
 {
     char tc = *pos;
     int result = 0;
@@ -120,22 +121,21 @@ int Lex::getAChar(char* pos, int* length)
                     return '\"';
                 case '\?':
                     return '\?';
-                case '0':                         /* oct escape*/
-                    if (isdigit(tc = *(pos + 2))) /* eg. \01 */
+                case '0':                              /* oct escape*/
+                    if (isdigit(tc = *(pos + 2)) != 0) /* eg. \01 */
                     {
                         if (tc == '9') {
                             break;
                         }
                         (*length)++;
                         result = (result << 3) + tc - '0';
-                        if (isdigit(tc = *(pos + 3))) /* eg. \002 */
+                        if (isdigit(tc = *(pos + 3)) != 0) /* eg. \002 */
                         {
                             if (tc == '9') {
                                 break;
-                            } else {
-                                result = (result << 3) + tc - '0';
-                                (*length)++;
                             }
+                            result = (result << 3) + tc - '0';
+                            (*length)++;
                         }
                         return result;
                     }
@@ -222,12 +222,15 @@ Number* Lex::tryParseFloatNumber(char* numberBuffer, Number** dest)
 	*	FLOATING-SUFFIX:
 	*		one of F f L l
 	*/
-    int reachE = 0, reachP = 0, reachL = 0, reachF = 0;
+    int reachE = 0;
+    int reachP = 0;
+    int reachL = 0;
+    int reachF = 0;
     double result;
     char* tp = numberBuffer;
     (*dest)->type = T_FLOAT_CON;
     (*dest)->numberType = NT_DB;
-    for (; *tp; tp++) {
+    for (; *tp != 0; tp++) {
         switch (*tp) {
             case '.':
 
@@ -299,8 +302,9 @@ Number* Lex::tryParseFloatNumber(char* numberBuffer, Number** dest)
                 }
                 (*dest)->numberType = NT_FL;
             }
-            if (reachL == 1)
+            if (reachL == 1) {
                 (*dest)->numberType = NT_LD;
+            }
         }
     }
 
@@ -313,7 +317,7 @@ parseFloatError:
 
 NumberType& constants::operator|=(NumberType& nt, unsigned long mask)
 {
-    unsigned long ult = static_cast<unsigned long>(nt.type());
+    auto ult = static_cast<unsigned long>(nt.type());
     ult = ult | mask;
     nt = static_cast<NumberType>(ult);
     return nt;
@@ -322,14 +326,15 @@ NumberType& constants::operator|=(NumberType& nt, unsigned long mask)
 Number* Lex::tryParseDecNumber(char* numberBuffer)
 {
     char* tp = numberBuffer;
-    int reachU = 0, reachL = 0;
+    int reachU = 0;
+    int reachL = 0;
     uint64_t result = 0;
     Number* ret;
     int times = 0;
     ret = new Number();
     ret->numberType = NT_SI;
     ret->type = T_INT_CON;
-    while (*(tp)) {
+    while (*(tp) != 0) {
         switch (*tp) {
             case '1':
             case '2':
@@ -390,7 +395,8 @@ parHexNumFinish:
 Number* Lex::tryParseHexNumber(char* numberBuffer)
 {
     char* tp = numberBuffer;
-    int reachU = 0, reachL = 0;
+    int reachU = 0;
+    int reachL = 0;
     int result = 0;
     Number* ret;
     int times = 0;
@@ -398,7 +404,7 @@ Number* Lex::tryParseHexNumber(char* numberBuffer)
     ret->numberType = NT_SI;
     ret->type = T_INT_CON;
     tp += 2; /* ignore the '0x' or '0X' character */
-    while (*(tp)) {
+    while (*(tp) != 0) {
         switch (*tp) {
             case '1':
             case '2':
@@ -481,14 +487,15 @@ parHexNumFinish:
 Number* Lex::tryParseOctNumber(char* numberBuffer)
 {
     char* tp = numberBuffer;
-    int reachU = 0, reachL = 0;
+    int reachU = 0;
+    int reachL = 0;
     int result = 0;
     Number* ret;
     int times = 0;
     ret = new Number();
     ret->numberType = NT_SI;
     ret->type = T_INT_CON;
-    while (*(tp)) {
+    while (*(tp) != 0) {
         switch (*tp) {
             case '1':
             case '2':
@@ -624,7 +631,7 @@ Token Lex::number(char peek)
     getBufferUntilSp();
     switch (peek) {
         case '0':
-            if (isdigit(tmpBuffer[1])) /* oct numbers */
+            if (isdigit(tmpBuffer[1]) != 0) /* oct numbers */
             {
                 return newNumber(tmpBuffer, 8);
             } else if (tmpBuffer[1] == 'x' || tmpBuffer[1] == 'X') { /*hex numbers*/
@@ -638,7 +645,7 @@ Token Lex::number(char peek)
     }
 }
 
-Token Lex::newIdentifier(const char* name, int)
+Token Lex::newIdentifier(const char* name, int /*unused*/)
 {
     // char* newName = new char[sizeof(char) * name_length];
     // strcpy(newName, name);
@@ -651,7 +658,7 @@ Token Lex::identifier(char* start)
 {
     char t = *start;
     int length = 0;
-    for (; isalnum(t) || t == '_'; t = getNextChar(GET)) {
+    for (; (isalnum(t) != 0) || t == '_'; t = getNextChar(GET)) {
         start[length++] = t;
     }
     *(start + length) = '\0';
@@ -785,13 +792,13 @@ Token Lex::letter(char peek)
                     break;
                 case 'o':
                     *(++p) = getNextChar(GET);
-                    if (!isalnum(*p)) {
+                    if (isalnum(*p) == 0) {
                         getNextChar(BACK);
                         tok.token_value.keyword = KEY_DO;
                         tok.token_pos = source->position();
                         return tok;
-
-                    } else if (*p == 'u') {
+                    }
+                    if (*p == 'u') {
                         *(++p) = getNextChar(GET);
                         if (*p == 'b') {
                             *(++p) = getNextChar(GET);
@@ -898,7 +905,8 @@ Token Lex::letter(char peek)
                 tok.token_value.keyword = KEY_IF;
                 tok.token_pos = source->position();
                 return tok;
-            } else if (*p == 'n') {
+            }
+            if (*p == 'n') {
                 *(++p) = getNextChar(GET);
                 if (*p == 't' && CHECK_NEXT) {
                     tok.token_value.keyword = KEY_INT;
@@ -1471,7 +1479,7 @@ Token Lex::parseOperator(char peek)
     return operators(peek);
 }
 
-Token Lex::parseString(void)
+Token Lex::parseString()
 {
     char t;
     char* tp = tmpBuffer;
@@ -1525,7 +1533,7 @@ stringParse:
     return tok;
 }
 
-Token Lex::parseCharConstant(void)
+Token Lex::parseCharConstant()
 {
     char t;
     char* tp = tmpBuffer;
@@ -1579,7 +1587,7 @@ Token Lex::parseCharConstant(void)
     return tok;
 }
 
-Token Lex::getNextToken(void)
+Token Lex::getNextToken()
 {
     for (;;) {
         skipBlank();
@@ -1679,7 +1687,7 @@ end:
     return tok;
 }
 
-Lex& Lex::operator=(Lex&& l)
+Lex& Lex::operator=(Lex&& l) noexcept
 {
     source = l.source;
     memcpy(tmpBuffer, l.tmpBuffer, TMPBUFFER_SIZE);

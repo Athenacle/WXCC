@@ -40,7 +40,7 @@ namespace parser
     public:
         Parser(lex::Lex &l, utils::ErrorManager *m) : lexer_(l), mgr_(m) {}
 
-        Parser &operator=(Parser &&);
+        Parser &operator=(Parser &&) noexcept;
 
         bool parse(TranslationUnit &);
     };

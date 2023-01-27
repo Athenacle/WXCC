@@ -24,10 +24,10 @@ using namespace type_operator;
 
 namespace
 {
-    const int DE_NEED_COMMA = 1;
-    const int DE_INVALID_DECL = 2;
-    const int DE_MORE_DECL_WITH_FUNC = 3;
-    const int DE_LACK_FUNC_PROTO = 4;
+    const int deNeedComma = 1;
+    const int deInvalidDecl = 2;
+    const int deMoreDeclWithFunc = 3;
+    const int deLackFuncProto = 4;
 
     const char *declError[] = {
         "NULL",
@@ -45,7 +45,7 @@ namespace
         // DE_LACK_FUNC_PROTO
     };
 
-    const int DW_LACK_PARA_LIST = 1;
+    const int dwLackParaList = 1;
     const char *declWarning[] = {"NULL",
 
                                  "DW01. Line %d: lack of parameter list. Assert as void.\n"};
@@ -66,8 +66,9 @@ int Parser::c_parser_translation_unit(Env &env) const
         }
         lexRet = next();
     }
-    if (n == 0)
+    if (n == 0) {
         parserWarning(PAR_WARNING_EMPTY_TRANSLATION_UNIT);
+    }
     return 0;
 }
 
@@ -100,9 +101,9 @@ meet_comma:
         } else if (matchOP(cur, OP_COMMA)) {
             goto meet_comma;
         } else if (matchOP(cur, OP_LEFTBRACE)) {
-            if (declared != 1)
-                parserError(PAR_ERR_INT, declError[DE_MORE_DECL_WITH_FUNC], cur.token_pos.line);
-            else {
+            if (declared != 1) {
+                parserError(PAR_ERR_INT, declError[deMoreDeclWithFunc], cur.token_pos.line);
+            } else {
                 MAYBE_UNUSED ST *retST = c_parser_funtion_definition(env, *id);
             }
         } else {
@@ -110,13 +111,15 @@ meet_comma:
             if (!need(OP_SEMICOLON)) {
             typeErr:
                 next();
-                if (matchOP(cur, OP_SEMICOLON))
+                if (matchOP(cur, OP_SEMICOLON)) {
                     goto typeErrFinish;
+                }
                 if (!isBaseType(cur)) {
                     goto typeErr;
                 }
-                if (isID(cur))
+                if (isID(cur)) {
                     goto meet_comma;
+                }
                 //错误处理准则： 不断丢弃输入，直至遇到分号或标识符
             }
         }
@@ -158,9 +161,8 @@ Type *Parser::c_parser_declaration_type_specifiers(Type *ty) const
         const TypeException &checkRet = Type::check(*retType);
         if (checkRet.no_exception()) {
             return retType;
-        } else {
-            parserError(PARER_WE_USE_STRING, checkRet.toString());
         }
+        parserError(PARER_WE_USE_STRING, checkRet.toString());
     }
     return NS_BASE_TYPE::intType;
 }
@@ -199,10 +201,11 @@ cptql:
 
     if (matchQualifier(cur)) {
         TYPE_OPERATOR qType;
-        if (cur.token_value.keyword == KEY_CONST)
+        if (cur.token_value.keyword == KEY_CONST) {
             qType = TO_CONST;
-        else
+        } else {
             qType = TO_VOLATILE;
+        }
         retType = new Type(qType, retType);
         goto cptql;
     } else {
@@ -220,7 +223,7 @@ ST *Parser::c_parser_direct_declarator(Type *ty) const
         Token curTo = cur;
         //curTo = mkToken();
         retTY = c_parser_direct_declatator_opt(ty);
-        Symbol *sy = new Symbol(&curTo, S_GLOBAL, ST_AUTO, S_GLOBAL);
+        auto *sy = new Symbol(&curTo, S_GLOBAL, ST_AUTO, S_GLOBAL);
         retST = new ST(sy, retTY);
     } else {
         if (matchOP(cur, OP_LEFTBRACK)) {
@@ -266,14 +269,14 @@ Type *Parser::c_parser_direct_declatator_opt(Type *ty) const
 //	DECLARATION-SPECIFIERS DECLARATOR
 //	DECLARATION-SPECIFIERS [ ABSTRACT-DECLARATOR ]
 
-Type *Parser::c_parser_parameter_type_list(void) const
+Type *Parser::c_parser_parameter_type_list() const
 {
     Type *parameterList = nullptr;
     next();
     if (matchOP(cur, OP_RIGHTBRACK))  // no parameter. eg. void foo();
     {
         parameterList = NS_BASE_TYPE::voidType;
-        parserWarning(PARER_WE_USE_STRING, declWarning[DW_LACK_PARA_LIST], cur.token_pos.line);
+        parserWarning(PARER_WE_USE_STRING, declWarning[dwLackParaList], cur.token_pos.line);
     } else {
         if (matchKEY(cur, KEY_KVOID) || matchKEY(cur, KEY_TVOID)) {
             parameterList = NS_BASE_TYPE::voidType;
@@ -290,16 +293,17 @@ Type *Parser::c_parser_parameter_type_list(void) const
                     new Type(TO_FUNCPARA, retST->second, 0, parameterList, 4, 4, retST->first);
                 //retST->second->setSym(retST->first);
                 //Type::setAsPara(*(retST->second));
-                if (parameterList == nullptr)
+                if (parameterList == nullptr) {
                     parameterList = retST->second;
-                else
+                } else {
                     parameterList->nextPara(retST->second);
+                }
             }
             next();
             if (matchOP(cur, OP_COMMA)) {
                 goto paraList;
             } else if (matchQualifier(cur) || isBaseType(cur)) {
-                parserError(PARER_WE_USE_STRING, declError[DE_NEED_COMMA], cur.token_pos.line);
+                parserError(PARER_WE_USE_STRING, declError[deNeedComma], cur.token_pos.line);
             } else if (matchOP(cur, OP_RIGHTBRACK)) {
                 ;
             }

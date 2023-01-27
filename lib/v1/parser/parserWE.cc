@@ -53,7 +53,7 @@ namespace
 
 #define PARSER_DEBUG_ASM_BP
 
-void Parser::parserWarning(int warningType, ...) const
+void Parser::parserWarning(int warningType, ...)
 {
     parserWarningCount++;
     switch (warningType) {
@@ -75,10 +75,9 @@ use_string_warn:
     int i = va_arg(ap, int);
     fprintf(wxccErr, str, i);
     va_end(ap);
-    return;
 }
 
-void Parser::parserError(int errorType, ...) const
+void Parser::parserError(int errorType, ...)
 {
     parserErrorCount++;
     switch (errorType) {
@@ -151,5 +150,4 @@ use_string_err:
     int i = va_arg(ap, int);
     fprintf(wxccErr, str, i);
     va_end(ap);
-    return;
 }

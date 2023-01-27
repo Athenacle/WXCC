@@ -125,7 +125,7 @@ private:
     Block* c_parser_select_statement(Env&) const;
     Block* c_parser_iter_statement(Env&) const;
     Block* c_parser_expr_statement(Env&) const;
-    Block* c_parser_label_statement(Env&) const;
+    static Block* c_parser_label_statement(Env&);
     Tree* c_parser_expr_func_call(Env&, Tree*) const;
     Block* c_parser_iter_for(Env&) const;
     Block* c_parser_iter_while(Env&) const;
@@ -144,8 +144,8 @@ private:
     void c_parser_expression_recover(void) const;
     //------------------functions end------------------------------.
 
-    void parserWarning(int warningType, ...) const;
-    void parserError(int errorType, ...) const;
+    static void parserWarning(int warningType, ...);
+    static void parserError(int errorType, ...);
     bool need(const OP) const;
     bool need(const TYPE) const;
     int tokenCompare(int) const;

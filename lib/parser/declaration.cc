@@ -24,7 +24,8 @@ namespace
         assert(!t.allZero());
         if (t.test<Type::Q_AUTO>()) {
             return KEY_AUTO;
-        } else if (t.test<Type::Q_EXTERN>()) {
+        }
+        if (t.test<Type::Q_EXTERN>()) {
             return KEY_EXTERN;
         } else if (t.test<Type::Q_REGISTER>()) {
             return KEY_REGISTER;
@@ -42,21 +43,21 @@ namespace
         auto &pos = tok.token_pos;
         if (t.allZero()) {
             return true;
-        } else {
-            if (auto exists = findQualifier(t); exists == kw) {
-                mgr->warning(pos, "duplicate storage-class-specifier '{}' found. ignore.", kw);
-            } else {
-                mgr->error(pos,
-                           "conflit storage-class-specifier '{}' found, previous is '{}'. ignore.",
-                           kw,
-                           exists);
-            }
         }
+        if (auto exists = findQualifier(t); exists == kw) {
+            mgr->warning(pos, "duplicate storage-class-specifier '{}' found. ignore.", kw);
+        } else {
+            mgr->error(pos,
+                       "conflit storage-class-specifier '{}' found, previous is '{}'. ignore.",
+                       kw,
+                       exists);
+        }
+
         return false;
     }
 }  // namespace
 
-Type *Parser::parseDeclarationSpecifiers(TranslationUnit &)
+Type *Parser::parseDeclarationSpecifiers(TranslationUnit & /*unused*/)
 {
     Type::QualifierContainer ttl;
     Type *ret = nullptr;

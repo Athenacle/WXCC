@@ -24,13 +24,12 @@ Position LexInputSource::position() const
 
 LexInputSource::LexInputSource() : line(1), column(0) {}
 
-LexInputSource::~LexInputSource() {}
+LexInputSource::~LexInputSource() = default;
 
 MemoryLexInputSource::~MemoryLexInputSource()
 {
-    if (buf != nullptr) {
-        delete[] buf;
-    }
+    delete[] buf;
+
     buf = end = pointer = nullptr;
 }
 
@@ -46,7 +45,7 @@ MemoryLexInputSource::MemoryLexInputSource()
 
 FileLexInputSource::~FileLexInputSource()
 {
-    if (fp) {
+    if (fp != nullptr) {
         fclose(fp);
     }
 }
@@ -65,9 +64,9 @@ const char *FileLexInputSource::filename()
 
 bool FileLexInputSource::fillBuffer()
 {
-    const uint32_t BUFFSIZE = 4096;
-    char buf[BUFFSIZE];
-    auto r = fread(buf, 1, BUFFSIZE, fp);
+    const uint32_t buffsize = 4096;
+    char buf[buffsize];
+    auto r = fread(buf, 1, buffsize, fp);
     fill(buf, r);
     return r > 0;
 }
@@ -101,7 +100,7 @@ char MemoryLexInputSource::next(LexInputSource::GET_TYPE type)
     }
     auto c = *(pointer);
 
-    if (c && type == LexInputSource::GET_TYPE::GET_CHAR) {
+    if ((c != 0) && type == LexInputSource::GET_TYPE::GET_CHAR) {
         if (c == '\n') {
             line++;
             lastCol = column;
@@ -129,12 +128,11 @@ char MemoryLexInputSource::next(LexInputSource::GET_TYPE type)
 char FileLexInputSource::next(LexInputSource::GET_TYPE type)
 {
     auto ret = MemoryLexInputSource::next(type);
-    if (ret == '\0' && !feof(fp)) {
+    if (ret == '\0' && (feof(fp) == 0)) {
         fillBuffer();
         return MemoryLexInputSource::next(type);
-    } else {
-        return ret;
     }
+    return ret;
 }
 
 void MemoryLexInputSource::fill(const char *in, size_t s)
@@ -171,7 +169,7 @@ void MemoryLexInputSource::fill(const char *in, size_t s)
         delete[] buf;
         buf = nb;
         buf[nbs] = 0;
-        if (c) {
+        if (c != 0) {
             assert(c == *pointer);
         }
     }

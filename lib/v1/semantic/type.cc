@@ -15,10 +15,9 @@ USING_V1
 //using namespace NS_SEMACTIC;
 using namespace type_operator;
 
-#define TYPE_ERR_TOO_TYPES    1
-#define TYPE_ERR_BOTH_USIGNED 2
+enum { TYPE_ERR_TOO_TYPES = 1, TYPE_ERR_BOTH_USIGNED = 2 };
 
-#define TYPE_WARN_USFN        1
+enum { TYPE_WARN_USFN = 1 };
 
 
 std::map<type_operator::TYPE_OPERATOR, const char *> Type::to2c;
@@ -27,10 +26,10 @@ NAMESPACE_V1_BEGIN
 
 namespace
 {
-    const int TE_FUNC_RET_FUNC = 3;
-    const int TE_FUNC_RET_ARR = 4;
+    const int teFuncRetFunc = 3;
+    const int teFuncRetArr = 4;
     const int TE_FUNC_NEED_FUNC = 5;
-    const int TE_ARR_CONT_FUNC = 6;
+    const int teArrContFunc = 6;
     const char *typeError[] = {
         "NULL",
 
@@ -52,44 +51,41 @@ namespace
         "TW01: floating type with a signed/unsigned specifier. ignore.\n"};
 }  // namespace
 
-Type::Type(TYPE_OPERATOR _oper,
-           Type *_baseType,
-           int _arrEls,
-           Type *_list,
-           int _size,
-           int _align,
-           void *_symbol)
+Type::Type(
+    TYPE_OPERATOR oper, Type *baseType, int arrEls, Type *list, int size, int align, void *symbol)
 {
     this->sym = nullptr;
     this->name = nullptr;
-    type_op = _oper;
-    size = _size;
-    base_type = _baseType;
+    type_op = oper;
+    size = size;
+    base_type = baseType;
     u.a.nElements = 0;
     u.f.paraList = nullptr;
-    if (_oper == TO_CHAR)
+    if (oper == TO_CHAR) {
         size = 1;
-    else if (_oper == TO_DOUBLE)
+    } else if (oper == TO_DOUBLE) {
         size = 4;
-    else if (_oper == TO_ARRAY) {
-        size = _arrEls * _baseType->size;
-        u.a.nElements = _arrEls;
-    } else if (_oper == TO_FUNCTION) {
+    } else if (oper == TO_ARRAY) {
+        size = arrEls * baseType->size;
+        u.a.nElements = arrEls;
+    } else if (oper == TO_FUNCTION) {
         size = type_operator::NO_LIMIT;
-        u.f.paraList = _list;
+        u.f.paraList = list;
     }
-    align = _align;
-    sym = static_cast<Symbol *>(_symbol);
+    align = align;
+    sym = static_cast<Symbol *>(symbol);
 }
 
 const TypeException &Type::checkType(const Type &ty, TypeException &te)
 {
-    if (ty.type_op == TO_FUNCTION)
+    if (ty.type_op == TO_FUNCTION) {
         te = checkFunction(ty, te);
+    }
 
-    if (ty.type_op == TO_ARRAY)
+    if (ty.type_op == TO_ARRAY) {
         if (ty.base_type->type_op == TO_FUNCTION) { /* asm {int 3} */
         }
+    }
     //TODO: an array whose element is functions.
 
     int meetSigned = 0;
@@ -99,26 +95,31 @@ const TypeException &Type::checkType(const Type &ty, TypeException &te)
 
     const Type *tpp = &ty;
     for (; tpp != nullptr; tpp = tpp->base_type) {
-        if (matchBaseType(*tpp))
+        if (matchBaseType(*tpp)) {
             meetBaseType++;
-        if (tpp->type_op == TO_SIGNED)
+        }
+        if (tpp->type_op == TO_SIGNED) {
             meetSigned++;
-        if (tpp->type_op == TO_UNSIGNED)
+        }
+        if (tpp->type_op == TO_UNSIGNED) {
             meetUSigned++;
-        if (tpp->type_op == TO_DOUBLE || tpp->type_op == TO_FLOAT)
+        }
+        if (tpp->type_op == TO_DOUBLE || tpp->type_op == TO_FLOAT) {
             meetFloat++;
+        }
     }
-    if (meetBaseType > 1)
+    if (meetBaseType > 1) {
         te.setError(typeError[TYPE_ERR_TOO_TYPES]);
-    else if ((meetUSigned > 0 && meetSigned > 0))
+    } else if ((meetUSigned > 0 && meetSigned > 0)) {
         te.setError(typeError[TYPE_ERR_BOTH_USIGNED]);
-    else if (meetSigned + meetUSigned >= 2 && meetFloat >= 0)
+    } else if (meetSigned + meetUSigned >= 2 && meetFloat >= 0) {
         te.setError(typeError[TYPE_WARN_USFN]);
+    }
 
     return te;
 }
 
-void Type::print(void)
+void Type::print()
 {
     char buf[100] = {0};
     print(buf);
@@ -135,51 +136,51 @@ char *Type::print(char *buffer)
         ptr += sprintf(ptr, " (*)(");
         ptr = u.f.paraList->print(ptr);
         return ptr + sprintf(ptr, ").");
-    } else {
-        if (type_op == TO_POINTER) {
-            if (base_type->type_op == TO_ARRAY) {
-                char *ptr = buffer;
-                ptr = base_type->base_type->print(ptr);
-                return ptr
-                       + sprintf(ptr,
-                                 "%s (*)[%d] ",
-                                 base_type->base_type->print(ptr),
-                                 base_type->u.a.nElements);
-            } else if (base_type->type_op == TO_FUNCTION) {
-                char *ptr = buffer;
-                ptr = this->base_type->print(ptr);
-                //ptr += sprintf(ptr, "(*)(");
-                Type *ty = this->u.f.paraList;
-            paraPrint:
-                ptr = ty->print(ptr);
-                if (ty != nullptr) {
-                    ty = ty->u.f.paraList;
-                    goto paraPrint;
-                }
-
-            } else {
-                char *ptr = base_type->print(buffer);
-                return ptr + sprintf(ptr, " * ");
-            }
-        } else if (type_op == TO_ARRAY) {
-            char *ptr = base_type->print(buffer);
-            return ptr + sprintf(ptr, "[%d]", u.a.nElements);
-        } else if (type_op == TO_FUNCPARA) {
-            char *ptr = base_type->print(buffer);
-
-            if (u.f.paraList != nullptr) {
-                ptr += sprintf(ptr, ", ");
-                return u.f.paraList->print(ptr);
-            } else
-                return ptr;
-        } else {
-            return buffer + sprintf(buffer, "%s", to2c[type_op]);
-        }
     }
+    if (type_op == TO_POINTER) {
+        if (base_type->type_op == TO_ARRAY) {
+            char *ptr = buffer;
+            ptr = base_type->base_type->print(ptr);
+            return ptr
+                   + sprintf(ptr,
+                             "%s (*)[%d] ",
+                             base_type->base_type->print(ptr),
+                             base_type->u.a.nElements);
+        } else if (base_type->type_op == TO_FUNCTION) {
+            char *ptr = buffer;
+            ptr = this->base_type->print(ptr);
+            //ptr += sprintf(ptr, "(*)(");
+            Type *ty = this->u.f.paraList;
+        paraPrint:
+            ptr = ty->print(ptr);
+            if (ty != nullptr) {
+                ty = ty->u.f.paraList;
+                goto paraPrint;
+            }
+
+        } else {
+            char *ptr = base_type->print(buffer);
+            return ptr + sprintf(ptr, " * ");
+        }
+    } else if (type_op == TO_ARRAY) {
+        char *ptr = base_type->print(buffer);
+        return ptr + sprintf(ptr, "[%d]", u.a.nElements);
+    } else if (type_op == TO_FUNCPARA) {
+        char *ptr = base_type->print(buffer);
+
+        if (u.f.paraList != nullptr) {
+            ptr += sprintf(ptr, ", ");
+            return u.f.paraList->print(ptr);
+        } else
+            return ptr;
+    } else {
+        return buffer + sprintf(buffer, "%s", to2c[type_op]);
+    }
+
     return buffer;
 }
 
-void Type::initTO2c(void)
+void Type::initTO2c()
 {
     to2c[TO_CHAR] = "char";
     to2c[TO_INT] = "int";
@@ -197,7 +198,7 @@ void Type::initTO2c(void)
     to2c[TO_UNSIGNED] = "unsigned";
 }
 
-const char *Type::getTYPEName(void)
+const char *Type::getTYPEName()
 {
     print();
     return name;
@@ -207,13 +208,15 @@ const TypeException &Type::checkFunction(const Type &ty, TypeException &te)
 {
     assert(ty.type_op == TO_FUNCTION);
 
-    if (ty.base_type->type_op == TO_FUNCTION)
-        te.setError(typeError[TE_FUNC_RET_FUNC]);
-    if (ty.base_type->type_op == TO_ARRAY)
-        te.setError(typeError[TE_FUNC_RET_ARR]);
-    if (ty.u.f.paraList == nullptr)
+    if (ty.base_type->type_op == TO_FUNCTION) {
+        te.setError(typeError[teFuncRetFunc]);
+    }
+    if (ty.base_type->type_op == TO_ARRAY) {
+        te.setError(typeError[teFuncRetArr]);
+    }
+    if (ty.u.f.paraList == nullptr) {
         te.setError("internal error.");
-    else {
+    } else {
         Type::checkPara(*ty.u.f.paraList, te);
         if (!te.no_exception()) {
             te.setError(te.toString());
@@ -224,16 +227,16 @@ const TypeException &Type::checkFunction(const Type &ty, TypeException &te)
 
 const TypeException &Type::checkPara(const Type &para, TypeException &te)
 {
-    if (para.u.f.paraList == nullptr)
+    if (para.u.f.paraList == nullptr) {
         return te;
-    else {
-        if (para.u.f.paraList->type_op != TO_FUNCPARA)
-            te.setError("internal error.");
-        else if (para.u.f.paraList->base_type->type_op == TO_FUNCTION) {
-            te.setError(typeError[TE_FUNC_NEED_FUNC]);
-        }
-        Type::checkPara(*para.u.f.paraList, te);
     }
+    if (para.u.f.paraList->type_op != TO_FUNCPARA)
+        te.setError("internal error.");
+    else if (para.u.f.paraList->base_type->type_op == TO_FUNCTION) {
+        te.setError(typeError[TE_FUNC_NEED_FUNC]);
+    }
+    Type::checkPara(*para.u.f.paraList, te);
+
     return te;
 }
 
@@ -247,10 +250,11 @@ const TypeException &Type::check(const Type &ty)
 const TypeException &Type::checkArray(const Type &ty, TypeException &te)
 {
     assert(ty.type_op == TO_ARRAY);
-    if (ty.base_type->type_op == TO_FUNCTION)
-        te.setError(typeError[TE_ARR_CONT_FUNC]);
-    else
+    if (ty.base_type->type_op == TO_FUNCTION) {
+        te.setError(typeError[teArrContFunc]);
+    } else {
         te = Type::checkType(*ty.base_type, te);
+    }
     return te;
 }
 
@@ -287,7 +291,7 @@ namespace NS_BASE_TYPE
     Type *voidType;
     Type *pvType;
 
-    void InitBaseTypes(void)
+    void InitBaseTypes()
     {
         try {
             charType = new Type(TO_CHAR, nullptr, 1);
@@ -313,7 +317,7 @@ namespace NS_BASE_TYPE
         }
     }
 
-    void DeInitBaseTypes(void)
+    void DeInitBaseTypes()
     {
         delete charType;
         delete ucharType;
@@ -337,7 +341,7 @@ const char* TypeException::toString( void ) const
 }
 */
 
-TypeException::~TypeException() {}
+TypeException::~TypeException() = default;
 
 void TypeException::setException(int exT, const char *exS)
 {

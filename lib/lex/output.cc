@@ -18,16 +18,14 @@ using namespace lex;
 using namespace lex::constants;
 using namespace lex::types;
 
-namespace lex
+namespace lex::print
 {
-    namespace print
-    {
-        std::unordered_map<KEYWORD, std::string> keywordToStringMap;
-        std::unordered_map<constants::OP, std::string> operatorToStringMap;
+    std::unordered_map<KEYWORD, std::string> keywordToStringMap;
+    std::unordered_map<constants::OP, std::string> operatorToStringMap;
 
-        void buildKeymap()
-        {
-            auto func = [](std::string::traits_type::char_type c) { return std::tolower(c); };
+    void buildKeymap()
+    {
+        auto func = [](std::string::traits_type::char_type c) { return std::tolower(c); };
 
 #define KEYWORDS_ADD(k)                                         \
     do {                                                        \
@@ -36,8 +34,8 @@ namespace lex
         keywordToStringMap.emplace(KEY_##k, kv);                \
     } while (false)
 
-            keywordToStringMap.emplace(KEY_KVOID, "void");
-            // clang-format off
+        keywordToStringMap.emplace(KEY_KVOID, "void");
+        // clang-format off
         KEYWORDS_ADD(AUTO);     KEYWORDS_ADD(BREAK);    KEYWORDS_ADD(CASE);
         KEYWORDS_ADD(CHAR);     KEYWORDS_ADD(CONST);    KEYWORDS_ADD(CONTINUE);
         KEYWORDS_ADD(DEFAULT);  KEYWORDS_ADD(DO);       KEYWORDS_ADD(DOUBLE);
@@ -49,19 +47,19 @@ namespace lex
         KEYWORDS_ADD(STRUCT);   KEYWORDS_ADD(SWITCH);   KEYWORDS_ADD(TYPEDEF);
         KEYWORDS_ADD(UNION);    KEYWORDS_ADD(UNSIGNED); KEYWORDS_ADD(VOLATILE);
         KEYWORDS_ADD(WHILE);
-            // clang-format on
+        // clang-format on
 
 #undef KEYWORDS_ADD
-        }
+    }
 
-        void buildOperatorMap()
-        {
+    void buildOperatorMap()
+    {
 #define OPERATOR_ADD(op, c)                      \
     do {                                         \
         operatorToStringMap.emplace(OP_##op, c); \
     } while (false)
 
-            // clang-format off
+        // clang-format off
         OPERATOR_ADD(LOGNOT, "!");          OPERATOR_ADD(MOD, "%");         OPERATOR_ADD(BITXOR, "^");
         OPERATOR_ADD(BITAND, "&");          OPERATOR_ADD(MULT, "*");        OPERATOR_ADD(PLUS, "+");
         OPERATOR_ADD(MINUS, "-");           OPERATOR_ADD(BITNOT, "~");      OPERATOR_ADD(BITOR, "|");
@@ -78,18 +76,17 @@ namespace lex
         OPERATOR_ADD(ALDIV, "/=");          OPERATOR_ADD(ALMOD, "%=");      OPERATOR_ADD(ALLEFTSHIFT, "<<=");
         OPERATOR_ADD(ALRIGHTSHIFT, ">>=");  OPERATOR_ADD(ALBITAND, "&=");   OPERATOR_ADD(ALBITXOR, "^=");
         OPERATOR_ADD(ALBITOR, "|=");        OPERATOR_ADD(SIZEOF, "sizeof");
-            // clang-format on
-        }
+        // clang-format on
+    }
 #undef OPERATOR_ADD
 
-    }  // namespace print
-}  // namespace lex
+}  // namespace lex::print
 
 
 namespace
 {
 
-    const char *TokenType(const Token &tok)
+    const char *tokenType(const Token &tok)
     {
 #define TYPE(t, s) \
     case t:        \
@@ -108,7 +105,7 @@ namespace
         }
     }
 
-    std::string TokenValue(const Token &tok)
+    std::string tokenValue(const Token &tok)
     {
         switch (tok.token_type) {
             case T_ID:
@@ -133,7 +130,7 @@ namespace fmt
 
     template <>
     struct formatter<Number> {
-        constexpr auto parse(fmt::format_parse_context &ctx)
+        static constexpr auto parse(fmt::format_parse_context &ctx)
         {
             return ctx.begin();
         }
@@ -180,7 +177,7 @@ namespace fmt
 
     template <>
     struct formatter<Token> {
-        constexpr auto parse(fmt::format_parse_context &ctx)
+        static constexpr auto parse(fmt::format_parse_context &ctx)
         {
             return ctx.begin();
         }
@@ -189,12 +186,12 @@ namespace fmt
         template <typename FormatContext>
         auto format(const Token &t, FormatContext &ctx) const
         {
-            return fmt::format_to(ctx.out(), "{:<20}| {}", TokenType(t), TokenValue(t));
+            return fmt::format_to(ctx.out(), "{:<20}| {}", tokenType(t), tokenValue(t));
         }
     };
 }  // namespace fmt
 
-int LexOutput::output(void)
+int LexOutput::output()
 {
     int count = 0;
     do {

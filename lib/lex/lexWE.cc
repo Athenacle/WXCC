@@ -17,7 +17,7 @@ namespace
         "LW02: illegal token \"%s\" after # has been found. This line will be ignored.\n",
         /* LEX_WARNING_ILL_MACRO_TOKEN */
 
-        "LW03: the octal and hex number has not been implemented in this version of WXCC.\n"
+        "LW03: the octal and hex number has not been implemented in this version of WXCC.\n",
         "\t\t\t\t\t\tThe number %s will be ignored.\n"};
 
     const char *const lexErrors[] = {

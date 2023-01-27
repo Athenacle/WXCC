@@ -52,6 +52,5 @@ void semError(int errType, ...)
     }
 }
 
-void semWarning(int errType, ...);
 
 NAMESPACE_END

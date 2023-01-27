@@ -29,7 +29,7 @@ std::map<OP, char> Parser::op2c;
 std::map<TYPE, const char*> Parser::tp2s;
 std::map<OP, int> Parser::op2l;
 
-void Parser::initParser(void)
+void Parser::initParser()
 {
     InitKey2to();
     InitOp2c();
@@ -45,39 +45,37 @@ void Parser::begin_parse(Env& env) const
 bool Parser::need(const OP op) const
 {
     next();
-    if (matchOP(cur, op))
+    if (matchOP(cur, op)) {
         return true;
-    else {
-        if (isOP(cur))
-            parserError(PAR_ERR_NEED_C_CC, cur.token_pos.line, op2c[op], op2c[cur.token_value.op]);
-        else if (isBaseType(cur)) {
-            parserError(PAR_ERR_NEED_C_CS, op2c[op], "type");
-        } else if (isID(cur)) {
-            parserError(PAR_ERR_NEED_C_CC, cur.token_pos.line, op2c[op], op2c[cur.token_value.op]);
-        } else {
-            parserError(PAR_ERR_NEED_C_CS, op2c[op], "others");
-        }
-        pushBack();
-        return false;
     }
+    if (isOP(cur))
+        parserError(PAR_ERR_NEED_C_CC, cur.token_pos.line, op2c[op], op2c[cur.token_value.op]);
+    else if (isBaseType(cur)) {
+        parserError(PAR_ERR_NEED_C_CS, op2c[op], "type");
+    } else if (isID(cur)) {
+        parserError(PAR_ERR_NEED_C_CC, cur.token_pos.line, op2c[op], op2c[cur.token_value.op]);
+    } else {
+        parserError(PAR_ERR_NEED_C_CS, op2c[op], "others");
+    }
+    pushBack();
+    return false;
 }
 
 bool Parser::need(const TYPE _ty) const
 {
     next();
-    if (is(cur, _ty))
+    if (is(cur, _ty)) {
         return true;
-    else {
-        if (isOP(cur))
-            parserError(PAR_ERR_NEED_C_CS, tp2s[_ty], op2c[cur.token_value.op]);
-        else if (isBaseType(cur)) {
-            parserError(PAR_ERR_NEED_SS, tp2s[_ty], tp2s[cur.token_type]);
-        } else
-            parserError(PAR_ERR_NEED_C_CS, "others");
-
-        pushBack();
-        return false;
     }
+    if (isOP(cur))
+        parserError(PAR_ERR_NEED_C_CS, tp2s[_ty], op2c[cur.token_value.op]);
+    else if (isBaseType(cur)) {
+        parserError(PAR_ERR_NEED_SS, tp2s[_ty], tp2s[cur.token_type]);
+    } else
+        parserError(PAR_ERR_NEED_C_CS, "others");
+
+    pushBack();
+    return false;
 }
 
 Parser::~Parser()
@@ -85,7 +83,7 @@ Parser::~Parser()
     //delete
 }
 
-void Parser::InitTp2S(void)
+void Parser::InitTp2S()
 {
     tp2s[T_FLOAT_CON] = "floating point constant.";
     tp2s[T_ID] = "identifier.";
@@ -96,7 +94,7 @@ void Parser::InitTp2S(void)
 }
 
 
-void Parser::InitKey2to(void)
+void Parser::InitKey2to()
 {
     key2to[KEY_CHAR] = TO_CHAR;
     key2to[KEY_DOUBLE] = TO_DOUBLE;
@@ -110,7 +108,7 @@ void Parser::InitKey2to(void)
     key2to[KEY_VOLATILE] = TO_VOLATILE;
 }
 
-void Parser::InitOp2c(void)
+void Parser::InitOp2c()
 {
     op2c[OP_SEMICOLON] = ';';
     op2c[OP_COMMA] = ',';
@@ -123,7 +121,7 @@ void Parser::InitOp2c(void)
     op2c[OP_LEFTSQBRAC] = '[';
 }
 
-int Parser::next(void) const
+int Parser::next() const
 {
     int ret = 0;
     if (prepre) {
@@ -136,15 +134,16 @@ int Parser::next(void) const
     } else {
         cur = theLexer.getNextToken();
         // cur = theLexer.getToken();
-        if (cur.token_type == T_NONE && isFinish == false)
+        if (cur.token_type == T_NONE && !isFinish) {
             fatalError(
                 "Meeting the EOF of the"
                 " file before compile finish.\n");
+        }
     }
     return ret;
 }
 
-void Parser::InitOp2l(void)
+void Parser::InitOp2l()
 {
     op2l[OP_SEMICOLON] = 0;
     op2l[OP_RIGHTBRACK] = 0;
@@ -193,9 +192,9 @@ void Parser::InitOp2l(void)
     op2l[OP_BITNOT] = 14;
 }
 
-Block* Parser::c_parser_label_statement(Env&) const
+Block* Parser::c_parser_label_statement(Env& /*unused*/)
 {
-    return 0;
+    return nullptr;
 }
 
 

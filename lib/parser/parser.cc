@@ -19,11 +19,10 @@ void Parser::parseTranslationUnit(TranslationUnit &unit)
         // empty translation unit
         mgr_->info("empty source file: {}", lexer_.filename());
         return;
-    } else {
-        pushback(std::move(tok));
-
-        auto specifier = parseDeclarationSpecifiers(unit);
     }
+    pushback(std::move(tok));
+
+    auto specifier = parseDeclarationSpecifiers(unit);
 }
 
 bool Parser::parse(TranslationUnit &unit)
@@ -35,13 +34,12 @@ bool Parser::parse(TranslationUnit &unit)
 
 Token Parser::next()
 {
-    if (lookahead_.size() == 0) {
+    if (lookahead_.empty()) {
         return lexer_.getNextToken();
-    } else {
-        Token ret(lookahead_.front());
-        lookahead_.pop();
-        return ret;
     }
+    Token ret(lookahead_.front());
+    lookahead_.pop();
+    return ret;
 }
 
 void Parser::pushback(Token &&tok)
@@ -49,11 +47,11 @@ void Parser::pushback(Token &&tok)
     lookahead_.emplace(std::move(tok));
 }
 
-Parser &Parser::operator=(Parser &&p)
+Parser &Parser::operator=(Parser &&p) noexcept
 {
     lexer_ = std::move(p.lexer_);
     lookahead_ = std::move(p.lookahead_);
-    mgr_ = std::move(p.mgr_);
+    mgr_ = p.mgr_;
     return *this;
 }
 

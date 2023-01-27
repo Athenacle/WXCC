@@ -127,7 +127,7 @@ namespace lex
 
             Token(constants::OP);
 
-            Token(Token &&);
+            Token(Token &&) noexcept;
 
             Token(const Token &tok);
 

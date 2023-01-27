@@ -18,7 +18,7 @@ using namespace scope;
 
 namespace
 {
-    const int TE_ERR_REDECL = 1;
+    const int teErrRedecl = 1;
 
     const char* tableError[] = {
         "NULL",
@@ -29,7 +29,7 @@ namespace
     };
 }  // namespace
 
-Env& Env::ExitEnv(void)
+Env& Env::ExitEnv()
 {
     Env* ret = this->up;
     this->down = nullptr;
@@ -53,7 +53,7 @@ void Env::newIdentifier(Identifier* id)
             idCounts++;
         } else {
             semError(USE_MY_STR_SSD,
-                     tableError[TE_ERR_REDECL],
+                     tableError[teErrRedecl],
                      id->getSymbolLine(),
                      id->getIDName(),
                      (idret)->getSymbolLine());
@@ -65,7 +65,7 @@ void Env::newIdentifier(Identifier* id)
             funcCounts++;
         } else {
             semError(USE_MY_STR_SSD,
-                     tableError[TE_ERR_REDECL],
+                     tableError[teErrRedecl],
                      id->getSymbolLine(),
                      id->getIDName(),
                      (funcRet)->getSymbolLine());

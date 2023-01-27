@@ -70,7 +70,7 @@ using namespace NS_EXPRE_IR;
 class Tree  // only used for Expr
 {
 public:
-    void emit(const char *string, FILE *out = wxccErr);
+    static void emit(const char *string, FILE *out = wxccErr);
 
     static void initOP2fun(void);
 

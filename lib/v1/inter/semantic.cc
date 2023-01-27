@@ -41,8 +41,9 @@ int Label::labelNum = 0;
 Label::Label()
 {
     sprintf(labelString, "L%d", labelNum++);
-    if (labelNum >= 1000)
+    if (labelNum >= 1000) {
         assert(0);
+    }
 }
 
 void Label::print(FILE *fp) const
@@ -62,8 +63,9 @@ IR::IR()
 IR::IR(const char *str, bool append)
 {
     this->IRstring = str;
-    if (append)
+    if (append) {
         appendIR(this);
+    }
 }
 
 
@@ -142,8 +144,9 @@ void IR::print(IR *begin, FILE *dest)
 	}*/
     do {
         tp = tp->nextIR;
-        if (tp == nullptr)
+        if (tp == nullptr) {
             break;
+        }
         fprintf(dest, tp->IRstring.c_str(), tp->dest);
     } while (1);
 }
@@ -155,15 +158,17 @@ IR::IR(Label &l, bool append)
     char *buf = new char[strlen(pl) + 10];
     sprintf(buf, "%s : \n", pl);
     this->IRstring = buf;
-    if (!append)
+    if (!append) {
         appendIR(this);
+    }
 }
 
 IR *IR::appendIR(IR *first, IR *second)
 {
     second->nextIR = first->nextIR;
-    if (first->nextIR != nullptr)
+    if (first->nextIR != nullptr) {
         first->nextIR->preIR = second;
+    }
     second->preIR = first;
     first->nextIR = second;
     //first = second;
@@ -178,8 +183,9 @@ IR *IR::appendIRBlock(IR *place, IR *block)
 
     block->preIR->nextIR = nullptr;
 
-    while (blockEnd->nextIR != nullptr)
+    while (blockEnd->nextIR != nullptr) {
         blockEnd = blockEnd->nextIR;
+    }
     place->nextIR = block;
     block->preIR = place;
     blockEnd->nextIR = placeNext;
@@ -190,11 +196,12 @@ IR *IR::appendIRBlock(IR *place, IR *block)
 }
 
 
-void IR::reSetCurrent(void)
+void IR::reSetCurrent()
 {
     IR *newCur = currentIR;
-    while (newCur->nextIR != nullptr)
+    while (newCur->nextIR != nullptr) {
         newCur = newCur->nextIR;
+    }
     currentIR = newCur;
 }
 
@@ -202,7 +209,8 @@ void IR::reSetCurrent(void)
 IR *IR::reSetCurrentFirst(IR *last)
 {
     IR *newCur = last;
-    while (newCur->preIR != nullptr)
+    while (newCur->preIR != nullptr) {
         newCur = newCur->preIR;
+    }
     return newCur;
 }
