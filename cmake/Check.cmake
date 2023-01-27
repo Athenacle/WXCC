@@ -82,6 +82,7 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQU
         Wshorten-64-to-32)
     if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
         cxx_compiler_check_add(fstack-protector-strong)
+        set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
     endif ()
 endif ()
 

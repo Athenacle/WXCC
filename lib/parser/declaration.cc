@@ -48,10 +48,10 @@ namespace
             return true;
         }
         if (auto exists = findQualifier(t); exists == kw) {
-            mgr->warning(pos, "duplicate storage-class-specifier '{}' found. ignore.", kw);
+            mgr->warning(pos, FMT("duplicate storage-class-specifier '{}' found. ignore."), kw);
         } else {
             mgr->error(pos,
-                       "conflit storage-class-specifier '{}' found, previous is '{}'. ignore.",
+                       FMT("conflit storage-class-specifier '{}' found, previous is '{}'. ignore."),
                        kw,
                        exists);
         }

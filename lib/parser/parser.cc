@@ -17,7 +17,7 @@ void Parser::parseTranslationUnit(TranslationUnit &unit)
     Token tok(next());
     if (tok == T_NONE) {
         // empty translation unit
-        mgr_->info("empty source file: {}", lexer_.filename());
+        mgr_->info(FMT("empty source file: {}"), lexer_.filename());
         return;
     }
     pushback(std::move(tok));

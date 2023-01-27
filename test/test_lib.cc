@@ -115,13 +115,13 @@ namespace test
                     // int
                     if (rm < 50) {
                         // dec
-                        out = out.append(fmt::format("{}", rn >> 8));
+                        out = out.append(fmt::format(FMT("{}"), rn >> 8));
                     } else if (rm < 60) {
                         // oct
-                        out = out.append(fmt::format("{0:#o}", rn >> 8));
+                        out = out.append(fmt::format(FMT("{0:#o}"), rn >> 8));
                     } else if (rm < 70) {
                         // hex
-                        out = out.append(fmt::format("{0:#x}", rn >> 8));
+                        out = out.append(fmt::format(FMT("{0:#x}"), rn >> 8));
                     }
                 }
             } else if (r < 90) {

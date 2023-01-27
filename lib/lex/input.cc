@@ -82,7 +82,7 @@ bool FileLexInputSource::openFile(const char *fn)
 {
     fp = fopen(fn, "rb");
     if (fp == nullptr) {
-        auto msg = fmt::format("open file {} failed: {}", fn, strerror(errno));
+        auto msg = fmt::format(FMT("open file {} failed: {}"), fn, strerror(errno));
         fatalError(msg.c_str());
     }
     fseek(fp, 0, SEEK_SET);

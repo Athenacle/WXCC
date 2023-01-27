@@ -64,6 +64,13 @@
 
 #endif
 
+#if defined ENABLE_FMT_STRING && !defined NDEBUG
+#define FMT(s) FMT_COMPILE(s)
+#include <fmt/compile.h>
+#else
+#define FMT(s) (s)
+#endif
+
 // clang-format off
 
 #define PROJECT_GIT_SHA  "@GIT_HASH@"
@@ -138,6 +145,16 @@
 #if __cplusplus >= 201603L
 #if __has_cpp_attribute(maybe_unused)
 #define MAYBE_UNUSED [[maybe_unused]]
+#endif
+#endif
+
+#if __cplusplus
+#if __cpp_lib_unreachable
+#define UNREACHABLE std::unreachable();
+#elif defined HAVE_BUILTIN_UNREACHABLE
+#define UNREACHABLE __builtin_unreachable();
+#else
+#define UNREACHABLE assert(false);
 #endif
 #endif
 

@@ -38,7 +38,8 @@ FILE* openOutput(const CommandOptions& opt)
     } else {
         ret = fopen(opt.output.c_str(), "wb");
         if (ret == nullptr) {
-            auto msg = fmt::format("open output file {} failed: {}", opt.output, strerror(errno));
+            auto msg =
+                fmt::format(FMT("open output file {} failed: {}"), opt.output, strerror(errno));
             fatalError(msg.c_str());
         }
     }

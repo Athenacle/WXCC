@@ -49,35 +49,34 @@ namespace utils
         virtual ~ErrorManager();
 
         template <class... T>
-        void error(const Position& pos, const char* fmt, T&&... args)
+        void error(const Position& pos, T&&... args)
         {
-            output(ERROR, pos, fmt::format(fmt, std::forward<T>(args)...));
+            output(ERROR, pos, fmt::format(std::forward<T>(args)...));
         }
         template <class... T>
-        void info(const Position& pos, const char* fmt, T&&... args)
+        void info(const Position& pos, T&&... args)
         {
-            output(INFO, pos, fmt::format(fmt, std::forward<T>(args)...));
+            output(INFO, pos, fmt::format(std::forward<T>(args)...));
         }
         template <class... T>
-        void info(const char* fmt, T&&... args)
+        void info(T&&... args)
         {
-            output(INFO, fmt::format(fmt, std::forward<T>(args)...));
+            output(INFO, fmt::format(std::forward<T>(args)...));
         }
         template <class... T>
-        void fatal(const char* fmt, T&&... args)
+        void fatal(T&&... args)
         {
-            output(FATAL, fmt::format(fmt, std::forward<T>(args)...));
+            output(FATAL, fmt::format(std::forward<T>(args)...));
         }
         template <class... T>
-        void fatal(const Position& pos, const char* fmt, T&&... args)
+        void fatal(const Position& pos, T&&... args)
         {
-            output(FATAL, pos, fmt::format(fmt, std::forward<T>(args)...));
+            output(FATAL, pos, fmt::format(std::forward<T>(args)...));
         }
-
         template <class... T>
-        void warning(const Position& pos, const char* fmt, T&&... args)
+        void warning(const Position& pos, T&&... args)
         {
-            output(WARNING, pos, fmt::format(fmt, std::forward<T>(args)...));
+            output(WARNING, pos, fmt::format(std::forward<T>(args)...));
         }
     };
 }  // namespace utils

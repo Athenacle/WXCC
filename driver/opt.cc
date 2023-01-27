@@ -15,7 +15,7 @@ FILE* openOutput(const CommandOptions& opt, utils::ErrorManager& mgr)
     } else {
         ret = fopen(opt.output.c_str(), "wb");
         if (ret == nullptr) {
-            mgr.fatal("open output file {} failed: {}", opt.output, strerror(errno));
+            mgr.fatal(FMT("open output file {} failed: {}"), opt.output, strerror(errno));
         }
     }
     return ret;

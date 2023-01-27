@@ -20,7 +20,7 @@ namespace fmt
         template <typename FormatContext>
         auto format(const Position& t, FormatContext& ctx) const
         {
-            return fmt::format_to(ctx.out(), "(<{}>:{}.{})", *t.filename, t.line, t.place);
+            return fmt::format_to(ctx.out(), FMT("(<{}>:{}.{})"), *t.filename, t.line, t.place);
         }
     };
 }  // namespace fmt
@@ -36,10 +36,10 @@ namespace
     const std::string& levelString(int level)
     {
         static std::vector<std::string> l = {
-            {fmt::format("{}", fmt::styled("FATAL", fmt::fg(fmt::color::red)))},
-            {fmt::format("{}", fmt::styled("ERROR", fmt::fg(fmt::color::red)))},
-            {fmt::format("{}", fmt::styled("WARNING", fmt::fg(fmt::color::yellow)))},
-            {fmt::format("{}", fmt::styled("INFO", fmt::fg(fmt::color::blue)))}};
+            {fmt::format("{}", fmt::styled("fatal", fmt::fg(fmt::color::red)))},
+            {fmt::format("{}", fmt::styled("error", fmt::fg(fmt::color::red)))},
+            {fmt::format("{}", fmt::styled("warning", fmt::fg(fmt::color::yellow)))},
+            {fmt::format("{}", fmt::styled("info", fmt::fg(fmt::color::blue)))}};
 
         return l[level];
     }
@@ -48,7 +48,7 @@ namespace
 
 void ErrorManager::output(int level, std::string&& msg)
 {
-    fmt::print(stderr, " {}: {}\n", levelString(level), msg);
+    fmt::print(stderr, FMT(" {}: {}\n"), levelString(level), msg);
 
     if (unlikely(level == FATAL)) {
         std::exit(1);
@@ -59,7 +59,7 @@ void ErrorManager::output(int level, std::string&& msg)
 
 void ErrorManager::output(int level, const Position& pos, std::string&& msg)
 {
-    fmt::print(stderr, " {}:{}: {}\n", levelString(level), pos, msg);
+    fmt::print(stderr, FMT(" {}:{}: {}\n"), levelString(level), pos, msg);
 
     if (unlikely(level == FATAL)) {
         std::exit(1);

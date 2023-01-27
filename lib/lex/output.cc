@@ -114,11 +114,11 @@ namespace
             case T_INT_CON:
             case T_CHAR_CON:
             case T_FLOAT_CON:
-                return fmt::format("{}", *tok.token_value.numVal);
+                return fmt::format(FMT("{}"), *tok.token_value.numVal);
             case T_KEY:
-                return fmt::format("{}", tok.token_value.keyword);
+                return fmt::format(FMT("{}"), tok.token_value.keyword);
             case T_OPERATOR:
-                return fmt::format("{}", tok.token_value.op);
+                return fmt::format(FMT("{}"), tok.token_value.op);
             default:
                 assert(0);
         }
@@ -168,7 +168,7 @@ namespace fmt
                     assert(0);
             }
             return fmt::format_to(ctx.out(),
-                                  "{:<13}\t{}",
+                                  FMT("{:<13}\t{}"),
                                   numType,
                                   t.type == T_FLOAT_CON ? t.val.d_value : t.val.i_value);
         }
@@ -186,7 +186,7 @@ namespace fmt
         template <typename FormatContext>
         auto format(const Token &t, FormatContext &ctx) const
         {
-            return fmt::format_to(ctx.out(), "{:<20}| {}", tokenType(t), tokenValue(t));
+            return fmt::format_to(ctx.out(), FMT("{:<20}| {}"), tokenType(t), tokenValue(t));
         }
     };
 }  // namespace fmt
@@ -200,7 +200,7 @@ int LexOutput::output()
             break;
         }
         count += 1;
-        fmt::print(fp, "#{:<5}{}\n", count, tok);
+        fmt::print(fp, FMT("#{:<5}{}\n"), count, tok);
     } while (true);
     return 0;
 }
