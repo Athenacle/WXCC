@@ -57,23 +57,23 @@ Type::Type(
     this->sym     = nullptr;
     this->name    = nullptr;
     type_op       = oper;
-    size          = size;
+    this->size    = size;
     base_type     = baseType;
     u.a.nElements = 0;
     u.f.paraList  = nullptr;
     if (oper == TO_CHAR) {
-        size = 1;
+        this->size = 1;
     } else if (oper == TO_DOUBLE) {
-        size = 4;
+        this->size = 4;
     } else if (oper == TO_ARRAY) {
-        size          = arrEls * baseType->size;
+        this->size    = arrEls * baseType->size;
         u.a.nElements = arrEls;
     } else if (oper == TO_FUNCTION) {
-        size         = type_operator::NO_LIMIT;
+        this->size   = type_operator::NO_LIMIT;
         u.f.paraList = list;
     }
-    align = align;
-    sym   = static_cast<Symbol *>(symbol);
+    this->align = align;
+    sym         = static_cast<Symbol *>(symbol);
 }
 
 const TypeException &Type::checkType(const Type &ty, TypeException &te)
@@ -146,7 +146,8 @@ char *Type::print(char *buffer)
                              "%s (*)[%d] ",
                              base_type->base_type->print(ptr),
                              base_type->u.a.nElements);
-        } else if (base_type->type_op == TO_FUNCTION) {
+        }
+        if (base_type->type_op == TO_FUNCTION) {
             char *ptr = buffer;
             ptr       = this->base_type->print(ptr);
             //ptr += sprintf(ptr, "(*)(");
@@ -171,8 +172,9 @@ char *Type::print(char *buffer)
         if (u.f.paraList != nullptr) {
             ptr += sprintf(ptr, ", ");
             return u.f.paraList->print(ptr);
-        } else
+        } else {
             return ptr;
+        }
     } else {
         return buffer + sprintf(buffer, "%s", to2c[type_op]);
     }
@@ -230,9 +232,9 @@ const TypeException &Type::checkPara(const Type &para, TypeException &te)
     if (para.u.f.paraList == nullptr) {
         return te;
     }
-    if (para.u.f.paraList->type_op != TO_FUNCPARA)
+    if (para.u.f.paraList->type_op != TO_FUNCPARA) {
         te.setError("internal error.");
-    else if (para.u.f.paraList->base_type->type_op == TO_FUNCTION) {
+    } else if (para.u.f.paraList->base_type->type_op == TO_FUNCTION) {
         te.setError(typeError[TE_FUNC_NEED_FUNC]);
     }
     Type::checkPara(*para.u.f.paraList, te);

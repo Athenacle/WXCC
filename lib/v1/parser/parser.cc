@@ -49,12 +49,10 @@ bool Parser::need(const OP op) const
     if (matchOP(cur, op)) {
         return true;
     }
-    if (isOP(cur))
+    if (isOP(cur) || isID(cur)) {
         parserError(PAR_ERR_NEED_C_CC, cur.token_pos.line, op2c[op], op2c[cur.token_value.op]);
-    else if (isBaseType(cur)) {
+    } else if (isBaseType(cur)) {
         parserError(PAR_ERR_NEED_C_CS, op2c[op], "type");
-    } else if (isID(cur)) {
-        parserError(PAR_ERR_NEED_C_CC, cur.token_pos.line, op2c[op], op2c[cur.token_value.op]);
     } else {
         parserError(PAR_ERR_NEED_C_CS, op2c[op], "others");
     }
@@ -68,21 +66,19 @@ bool Parser::need(const TYPE _ty) const
     if (is(cur, _ty)) {
         return true;
     }
-    if (isOP(cur))
+    if (isOP(cur)) {
         parserError(PAR_ERR_NEED_C_CS, tp2s[_ty], op2c[cur.token_value.op]);
-    else if (isBaseType(cur)) {
+    } else if (isBaseType(cur)) {
         parserError(PAR_ERR_NEED_SS, tp2s[_ty], tp2s[cur.token_type]);
-    } else
+    } else {
         parserError(PAR_ERR_NEED_C_CS, "others");
+    }
 
     pushBack();
     return false;
 }
 
-Parser::~Parser()
-{
-    //delete
-}
+Parser::~Parser() = default;
 
 void Parser::InitTp2S()
 {

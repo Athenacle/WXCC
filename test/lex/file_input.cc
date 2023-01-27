@@ -20,7 +20,7 @@ protected:
 
     static void TearDownTestSuite() {}
 
-    virtual void SetUp() override
+    void SetUp() override
     {
         buf    = test::randomString(TOTAL_SIZE);
         auto f = fopen(FILENAME, "wb+");
@@ -33,7 +33,7 @@ protected:
         }
     }
 
-    virtual void TearDown() override
+    void TearDown() override
     {
         std::remove(FILENAME);
         delete[] buf;

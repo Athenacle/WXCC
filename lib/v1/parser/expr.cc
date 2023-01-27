@@ -286,7 +286,6 @@ Tree *Parser::c_parser_unary_expr(Env &env) const
                 }
                 break;
             case OP_SEMICOLON:
-                break;
             default:
                 break;
         }
@@ -302,7 +301,6 @@ Tree *Parser::c_parser_postfix_expr(Env &env, Tree *tr) const
     for (;;) {
         switch (cur.token_value.op) {
             case OP_INC:
-                break;
             case OP_DEC:
                 break;
             case OP_LEFTSQBRAC: {
@@ -378,7 +376,6 @@ Tree *Parser::c_parser_primary_expr(Env &env) const
             tp = Tree::CONSTtree(cur.token_value.numVal->val.i_value);
             break;
         case T_FLOAT_CON:
-            break;
         case T_STRING:
             break;
         case T_OPERATOR: {

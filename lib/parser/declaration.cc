@@ -27,11 +27,14 @@ namespace
         }
         if (t.test<Type::Q_EXTERN>()) {
             return KEY_EXTERN;
-        } else if (t.test<Type::Q_REGISTER>()) {
+        }
+        if (t.test<Type::Q_REGISTER>()) {
             return KEY_REGISTER;
-        } else if (t.test<Type::Q_STATIC>()) {
+        }
+        if (t.test<Type::Q_STATIC>()) {
             return KEY_STATIC;
-        } else if (t.test<Type::Q_TYPEDEF>()) {
+        }
+        if (t.test<Type::Q_TYPEDEF>()) {
             return KEY_TYPEDEF;
         }
     }

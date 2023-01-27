@@ -20,11 +20,11 @@ protected:
     test::FlexBison_Lexer* flexin;
 
     FileLexInputSource flis;
-    Lex l;
+    Lex lexer;
 
     static void SetUpTestSuite()
     {
-        tokenCount = test::random(3000) + 2500;
+        tokenCount = test::random(10000) + 5000;
 
         filename   = "flex_bison_random_lexer_test";
 
@@ -48,10 +48,10 @@ protected:
         buf = nullptr;
     }
 
-    virtual void SetUp() override
+    void SetUp() override
     {
         flis.openFile(filename);
-        l.setSource(&flis);
+        lexer.setSource(&flis);
 
         ASSERT_TRUE(test::openFile(yyin, filename));
         flexin     = new test::FlexBison_Lexer(&yyin);
@@ -59,7 +59,7 @@ protected:
         yyfilename = filename;
     }
 
-    virtual void TearDown() override
+    void TearDown() override
     {
         yyReset();
         delete flexin;
@@ -75,15 +75,15 @@ TEST_F(FlexBisonLexer, randomLexer)
     MAYBE_UNUSED uint32_t i = 0;
     while (true) {
         Token fb(flex(flexin));
-        Token lexer(l.getNextToken());
+        Token lexerTok(lexer.getNextToken());
 
-        EXPECT_EQ(fb, lexer);
+        EXPECT_EQ(fb, lexerTok);
 
         if (fb.token_type == constants::T_NONE) {
             break;
         } else {
-            EXPECT_EQ(fb.token_pos.line, lexer.token_pos.line);
-            EXPECT_LE(std::abs(fb.token_pos.place - fb.token_pos.place), 1);
+            EXPECT_EQ(fb.token_pos.line, lexerTok.token_pos.line);
+            EXPECT_LE(std::abs(lexerTok.token_pos.place - fb.token_pos.place), 1);
         }
         i++;
     }

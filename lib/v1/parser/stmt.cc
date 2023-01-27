@@ -275,7 +275,8 @@ Block *Parser::c_parser_iter_statement(Env &env) const
     }
     if (matchKEY(cur, KEY_WHILE)) {
         return c_parser_iter_while(env);
-    } else if (matchKEY(cur, KEY_DO)) {
+    }
+    if (matchKEY(cur, KEY_DO)) {
     }
 
     return ret;

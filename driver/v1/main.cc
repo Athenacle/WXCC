@@ -49,8 +49,9 @@ int main(int argc, const char* argv[])
 {
     CommandOptions opt;
     parseCommandOptions(opt, argc, argv);
-    if (wxccErr == nullptr)
+    if (wxccErr == nullptr) {
         wxccErr = stdout;
+    }
 
     lex::FileLexInputSource input;
     input.openFile(opt.filename.c_str());

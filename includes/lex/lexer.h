@@ -93,14 +93,14 @@ namespace lex
         Token parseCharConstant(void);
         /////  lex functions end.
 
-        void lexerWarning(int warningType, const char *message, ...);
-        void lexerError(int warningType, const char *message, ...);
+        void lexerWarning(int, const char *, ...);
+        void lexerError(int, const char *, ...);
 
     public:
         Lex(LexInputSource *source);
-        Lex() = default;
+        Lex()  = default;
 
-        ~Lex();
+        ~Lex() = default;
 
         Token getNextToken(void);
 

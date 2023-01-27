@@ -3,6 +3,7 @@
 #include "test.h"
 
 USING_V2
+// NOLINTNEXTLINE
 using testing::_;
 
 class DeclarationTest : public testing::Test
@@ -16,20 +17,19 @@ protected:
 
     ErrorManagerMock *m;
 
-protected:
-    DeclarationTest() : mlis(), lexer(&mlis), parser(lexer, &mock_)
+    DeclarationTest() : lexer(&mlis), parser(lexer, &mock_)
     {
         m = nullptr;
     }
 
-    virtual void SetUp() override
+    void SetUp() override
     {
         m = new ErrorManagerMock;
         parser::Parser p(lexer, m);
         parser = std::move(p);
     }
 
-    virtual void TearDown() override
+    void TearDown() override
     {
         delete m;
     }

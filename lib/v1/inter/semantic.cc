@@ -149,7 +149,7 @@ void IR::print(IR *begin, FILE *dest)
             break;
         }
         fprintf(dest, tp->IRstring.c_str(), tp->dest);
-    } while (1);
+    } while (true);
 }
 
 

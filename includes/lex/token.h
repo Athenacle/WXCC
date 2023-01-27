@@ -129,7 +129,7 @@ namespace lex
 
             Token(Token &&) noexcept;
 
-            Token(const Token &tok);
+            Token(const Token &);
 
             Token()
             {

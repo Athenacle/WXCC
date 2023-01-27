@@ -25,7 +25,7 @@ unsigned long utils::strHash(const char* st)
 {
     // Knuth[1973b]: TAOCP Vol2
     unsigned long hash = 1315423911UL;
-    while (auto ch = (size_t)*st++) {
+    while (unsigned long ch = static_cast<unsigned char>(*st++)) {
         hash = ((hash << 13) ^ (hash >> 3)) ^ ch;
     }
     return hash;

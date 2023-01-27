@@ -23,8 +23,6 @@ using namespace types;
 #define BACK      (0)
 #define LOOKAHEAD (1)
 
-Lex::~Lex() = default;
-
 Lex::Lex(LexInputSource* s) : source(s) {}
 
 char Lex::getNextChar(int type)
@@ -117,20 +115,20 @@ int Lex::getAChar(const char* pos, int* length)
                 case '\\':
                     return '\\';
                 case '\'':
-                    return '\\';
+                    return '\'';
                 case '\"':
                     return '\"';
                 case '\?':
                     return '\?';
-                case '0':                              /* oct escape*/
-                    if (isdigit(tc = *(pos + 2)) != 0) /* eg. \01 */
+                case '0':                             /* oct escape*/
+                    if (tc = *(pos + 2); isdigit(tc)) /* eg. \01 */
                     {
                         if (tc == '9') {
                             break;
                         }
                         (*length)++;
                         result = (result << 3) + tc - '0';
-                        if (isdigit(tc = *(pos + 3)) != 0) /* eg. \002 */
+                        if (tc = *(pos + 3); isdigit(tc) != 0) /* eg. \002 */
                         {
                             if (tc == '9') {
                                 break;

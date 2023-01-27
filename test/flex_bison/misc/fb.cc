@@ -84,10 +84,7 @@ namespace
 
     void parseNumber(const char* text)
     {
-        if (yynumber != nullptr) {
-            delete yynumber;
-        }
-
+        delete yynumber;
         yynumber = new FBNumber;
         memset(yynumber, 0, sizeof(struct FBNumber));
         yynumber->is_float = 0;
@@ -108,17 +105,17 @@ namespace
 
         if (postfix.find("ll")) {
             yynumber->is_longlong = 1;
-        } else if (postfix.find("l")) {
+        } else if (postfix.find('l')) {
             yynumber->is_long = 1;
         }
-        if (postfix.find("u")) {
+        if (postfix.find('u')) {
             yynumber->is_unsigned = 1;
         }
 
         yynumber->data.i = ull;
     }
 
-    static std::shared_ptr<std::string> yyf;
+    std::shared_ptr<std::string> yyf;
 
 
     std::shared_ptr<std::string> yyfile()
@@ -155,11 +152,10 @@ void parseOctNumber(const char* yytext)
 {
     parseNumber(yytext);
 }
-void parseFloatNumber(const char*)
+void parseFloatNumber(const char* /*unused*/)
 {
-    if (yynumber != nullptr) {
-        delete yynumber;
-    }
+    delete yynumber;
+
     yynumber = new FBNumber;
     memset(yynumber, 0, sizeof(struct FBNumber));
     yynumber->is_float = 1;
@@ -168,9 +164,9 @@ void parseFloatNumber(const char*)
     auto d = std::stold(s);
     std::transform(s.begin(), s.end(), s.begin(), [](char c) { return std::tolower(c); });
 
-    if (s.find("f")) {
+    if (s.find('f')) {
         yynumber->is_short = 1;
-    } else if (s.find("l")) {
+    } else if (s.find('l')) {
         yynumber->is_long = 1;
     }
 
@@ -227,8 +223,9 @@ Token flex(FlexBison_Lexer* ll)
         tok.token_type = T_STRING;
         auto result    = utils::strdup(yyytext + 1);
         auto ptr       = result;
-        while (*ptr)
+        while (*ptr) {
             ptr += 1;
+        }
         ptr--;
         assert(*ptr == '"');
         *ptr                   = 0;

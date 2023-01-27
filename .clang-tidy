@@ -9,7 +9,7 @@ Checks: '-*,
         performance-*,
         -concurrency-*,
         portability-*,
-        readability-*, -readability-qualified-auto'
+        readability-*, -readability-qualified-auto,-readability-implicit-bool-conversion'
 CheckOptions:
   - key:             readability-identifier-naming.ClassCase
     value:           CamelCase

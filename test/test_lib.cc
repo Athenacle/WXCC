@@ -24,8 +24,9 @@ namespace test
 
         for (uint32_t i = 0; i < length; i++) {
             char c = '\n';
-            for (; c == '\n';)
+            for (; c == '\n';) {
                 c = (rd() % ('~' - '!')) + '!';
+            }
             mem[i] = c;
         }
 
@@ -92,15 +93,16 @@ namespace test
 
             for (uint32_t i = 0; i < leng; i++) {
                 char c = '\n';
-                for (; c == '\n';)
+                for (; c == '\n';) {
                     c = (rd() % ('z' - 'a')) + 'a';
+                }
                 buffer[i] = c;
             }
             buffer[leng] = 0;
         };
 
         std::string out;
-        out.reserve(30 * count);
+        out.reserve(30U * count);
 
         for (uint32_t i = 0; i < count; i++) {
             auto r = test::random(100);
@@ -157,4 +159,4 @@ namespace test
 #endif
 
 
-ErrorManagerMock::~ErrorManagerMock() {}
+ErrorManagerMock::~ErrorManagerMock() = default;
