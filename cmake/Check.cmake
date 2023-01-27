@@ -39,6 +39,14 @@ check_cxx_source_compiles(
     "
     HAVE_CLOCK_REALTIME_COARSE)
 
+check_cxx_source_compiles(
+    "
+    int main(int, char*[]){
+        __builtin_unreachable();
+    }
+    "
+    HAVE_BUILTIN_UNREACHABLE)
+
 check_cxx_source_compiles("int main() {return __builtin_expect(0, 1);}" HAVE_BUILTIN_EXPECT)
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")

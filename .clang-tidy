@@ -4,6 +4,11 @@ Checks: '-*,
         clang-diagnostic-*,
         llvm-*,-llvm-qualified-auto,
         misc-*,-misc-const-correctness,-misc-unused-parameters,-misc-non-private-member-variables-in-classes,-misc-no-recursion,
+        bugprone-*,
+        modernize-*,-modernize-use-trailing-return-type,
+        performance-*,
+        -concurrency-*,
+        portability-*,
         readability-*, -readability-qualified-auto'
 CheckOptions:
   - key:             readability-identifier-naming.ClassCase
@@ -17,13 +22,13 @@ CheckOptions:
   - key:             readability-identifier-naming.FunctionIgnoredRegexp
     value:           "LLVMFuzzerTestOneInput"
   - key:             readability-identifier-naming.MemberCase
-    value:           camelCase
+    value:           camelBack
   - key:             readability-identifier-naming.ParameterCase
-    value:           camelCase
+    value:           camelBack
   - key:             readability-identifier-naming.UnionCase
     value:           CamelCase
   - key:             readability-identifier-naming.VariableCase
-    value:           camelCase
+    value:           camelBack
   - key:             readability-identifier-naming.IgnoreMainLikeFunctions
     value:           1
   - key:             readability-redundant-member-init.IgnoreBaseInCopyConstructors

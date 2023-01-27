@@ -16,7 +16,6 @@ jobs:
     steps:
       - script: |
           brew install flex bison
-          brew install libmicrohttpd
         displayName: "Install Dependencies"
 
       - task: CMake@1
@@ -61,7 +60,9 @@ jobs:
     steps:
       - checkout: self
       - script: |
-          mkdir ./build
+          mkdir ./build \
+          && apt update \
+          && apt install -y libfl-dev
         displayName: "Install Dependencies"
 
       - task: CMake@1
