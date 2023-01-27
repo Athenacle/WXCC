@@ -35,54 +35,54 @@ namespace lex
 	     */
 
         enum KEYWORD {
-            KEY_NONE = 0x00020000,
+            KEY_NONE     = 0x00020000,
 
             /* STORAGE-CLASS-SPECIFIER */
-            KEY_AUTO = 0x00021001,
-            KEY_EXTERN = 0x00021002,
+            KEY_AUTO     = 0x00021001,
+            KEY_EXTERN   = 0x00021002,
             KEY_REGISTER = 0x00021003,
-            KEY_STATIC = 0x00021004,
-            KEY_TYPEDEF = 0x00021005,
+            KEY_STATIC   = 0x00021004,
+            KEY_TYPEDEF  = 0x00021005,
 
             /* TYPE-SPECIFIER */
-            KEY_CHAR = 0x00020101,
-            KEY_FLOAT = 0x00020102,
-            KEY_INT = 0x00020103,
-            KEY_LONG = 0x00020104,
-            KEY_UNION = 0x00020105,
-            KEY_ENUM = 0x00020106,
-            KEY_SIGNED = 0x00020107,
-            KEY_SHORT = 0x00020108,
+            KEY_CHAR     = 0x00020101,
+            KEY_FLOAT    = 0x00020102,
+            KEY_INT      = 0x00020103,
+            KEY_LONG     = 0x00020104,
+            KEY_UNION    = 0x00020105,
+            KEY_ENUM     = 0x00020106,
+            KEY_SIGNED   = 0x00020107,
+            KEY_SHORT    = 0x00020108,
             KEY_UNSIGNED = 0x00020109,
-            KEY_STRUCT = 0x0002010A,
-            KEY_DOUBLE = 0x0002010B,
-            KEY_TVOID = 0x0002010C,
+            KEY_STRUCT   = 0x0002010A,
+            KEY_DOUBLE   = 0x0002010B,
+            KEY_TVOID    = 0x0002010C,
 
             /* TYPE-QUALIFIER */
             KEY_VOLATILE = 0x00020011,
-            KEY_CONST = 0x00020012,
+            KEY_CONST    = 0x00020012,
 
             /* KEYWORD_OTHERS*/
             KEY_CONTINUE = 0x00020001,
-            KEY_DEFAULT = 0x00020002,
-            KEY_DO = 0x00020003,
-            KEY_BREAK = 0x00020004,
-            KEY_CASE = 0x00020005,
-            KEY_ELSE = 0x00020006,
-            KEY_FOR = 0x00020007,
-            KEY_GOTO = 0x00020008,
-            KEY_IF = 0x00020009,
-            KEY_RETURN = 0x0002000A,
-            KEY_SIZEOF = 0x0002000B,
-            KEY_SWITCH = 0x0002000C,
-            KEY_KVOID = 0x0002000D,
-            KEY_WHILE = 0x0002000E,
+            KEY_DEFAULT  = 0x00020002,
+            KEY_DO       = 0x00020003,
+            KEY_BREAK    = 0x00020004,
+            KEY_CASE     = 0x00020005,
+            KEY_ELSE     = 0x00020006,
+            KEY_FOR      = 0x00020007,
+            KEY_GOTO     = 0x00020008,
+            KEY_IF       = 0x00020009,
+            KEY_RETURN   = 0x0002000A,
+            KEY_SIZEOF   = 0x0002000B,
+            KEY_SWITCH   = 0x0002000C,
+            KEY_KVOID    = 0x0002000D,
+            KEY_WHILE    = 0x0002000E,
         };
 
         const unsigned long TYPE_STORAGE_CLASS_SPECIFIER_MASK = 0x00021000;
-        const unsigned long TYPE_SPECIFIER_MASK = 0x00020100;
-        const unsigned long TYPE_QUALIFIER_MASK = 0x00020010;
-        const unsigned long TYPE_SSQ = (0x00021000 | 0x00020100 | 0x00020010);
+        const unsigned long TYPE_SPECIFIER_MASK               = 0x00020100;
+        const unsigned long TYPE_QUALIFIER_MASK               = 0x00020010;
+        const unsigned long TYPE_SSQ     = (0x00021000 | 0x00020100 | 0x00020010);
         const unsigned long KEYWORD_MASK = (0x00020000);
 
         enum OP {
@@ -140,7 +140,7 @@ namespace lex
             OP_SIZEOF,
 
         };
-        const unsigned long OP_MASK = 0x00040000;
+        const unsigned long OP_MASK      = 0x00040000;
         const unsigned long OP_ASGN_MASK = 0x00041000;
 
         /*
@@ -149,14 +149,14 @@ namespace lex
 	    *         FL/INT    U/S	    LONG    INT/CHAR
 	    */
 
-        const uint32_t NT_NONE = 0X0011ffff;
-        const uint32_t NT_SI = 0x00110001; /* SIGNED	INT  */
-        const uint32_t NT_UI = 0x00110101; /* UNSIGNED	INT  */
-        const uint32_t NT_SL = 0x00110011; /* SIGNED	LONG */
-        const uint32_t NT_UL = 0x00110111; /* UNSIGNED	LONG */
-        const uint32_t NT_CH = 0x00110103; /* UNSIGNED	CHAR */
-        const uint32_t NT_FL = 0x00111000; /* FLOAT	     */
-        const uint32_t NT_DB = 0x00111010; /* DOUBLE	     */
+        const uint32_t NT_NONE           = 0X0011ffff;
+        const uint32_t NT_SI             = 0x00110001; /* SIGNED	INT  */
+        const uint32_t NT_UI             = 0x00110101; /* UNSIGNED	INT  */
+        const uint32_t NT_SL             = 0x00110011; /* SIGNED	LONG */
+        const uint32_t NT_UL             = 0x00110111; /* UNSIGNED	LONG */
+        const uint32_t NT_CH             = 0x00110103; /* UNSIGNED	CHAR */
+        const uint32_t NT_FL             = 0x00111000; /* FLOAT	     */
+        const uint32_t NT_DB             = 0x00111010; /* DOUBLE	     */
 
 #define NT_LONG_LONG_MASK   (0x0011'0020)
 #define NT_LONG_MASK        (0x0011'0010)

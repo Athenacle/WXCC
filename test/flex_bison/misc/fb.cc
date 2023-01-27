@@ -92,7 +92,7 @@ namespace
         memset(yynumber, 0, sizeof(struct FBNumber));
         yynumber->is_float = 0;
 
-        auto ptr = text;
+        auto ptr           = text;
         while (isxdigit(*ptr) || *ptr == 'x' || *ptr == 'X') {
             ptr++;
         }
@@ -131,10 +131,10 @@ namespace
 }  // namespace
 
 
-FBNumber* yynumber = nullptr;
+FBNumber* yynumber     = nullptr;
 const char* yyfilename = nullptr;
-const char* yyytext = nullptr;
-uint32_t yyret = 0;
+const char* yyytext    = nullptr;
+uint32_t yyret         = 0;
 
 void yyReset(void)
 {
@@ -193,9 +193,9 @@ Token flex(FlexBison_Lexer* ll)
 
     if (code == FlexBison_Parser::token::token_kind_type::CONSTANT) {
         assert(yynumber != nullptr);
-        tok.token_type = yynumber->is_float ? T_FLOAT_CON : T_INT_CON;
+        tok.token_type         = yynumber->is_float ? T_FLOAT_CON : T_INT_CON;
         tok.token_value.numVal = new Number();
-        auto& num = *tok.token_value.numVal;
+        auto& num              = *tok.token_value.numVal;
         if (yynumber->is_long) {
             num.numberType.setLong();
         } else if (yynumber->is_longlong) {
@@ -213,10 +213,10 @@ Token flex(FlexBison_Lexer* ll)
 
         if (yynumber->is_float) {
             num.type = tok.token_type = T_FLOAT_CON;
-            num.val.d_value = yynumber->data.f;
+            num.val.d_value           = yynumber->data.f;
         } else {
             num.type = tok.token_type = T_INT_CON;
-            num.val.i_value = yynumber->data.i;
+            num.val.i_value           = yynumber->data.i;
         }
         delete yynumber;
         yynumber = nullptr;
@@ -225,22 +225,22 @@ Token flex(FlexBison_Lexer* ll)
         assert(*yyytext == '"');
 
         tok.token_type = T_STRING;
-        auto result = utils::strdup(yyytext + 1);
-        auto ptr = result;
+        auto result    = utils::strdup(yyytext + 1);
+        auto ptr       = result;
         while (*ptr)
             ptr += 1;
         ptr--;
         assert(*ptr == '"');
-        *ptr = 0;
+        *ptr                   = 0;
         tok.token_value.string = result;
     } else if (code == FlexBison_Parser::token::token_kind_type::IDENTIFIER) {
-        tok.token_type = T_ID;
+        tok.token_type          = T_ID;
         tok.token_value.id_name = utils::strdup(yyytext);
     } else if (auto f = keys.find(code); f != keys.end()) {
-        tok.token_type = T_KEY;
+        tok.token_type          = T_KEY;
         tok.token_value.keyword = f->second;
     } else if (auto f = ops.find(code); f != ops.end()) {
-        tok.token_type = T_OPERATOR;
+        tok.token_type     = T_OPERATOR;
         tok.token_value.op = f->second;
     } else if (code == FlexBison_Parser::token::token_kind_type::EoF) {
         tok.token_type = T_NONE;

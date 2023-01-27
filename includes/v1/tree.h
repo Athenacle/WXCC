@@ -9,10 +9,11 @@
 #ifndef TREE_H
 #define TREE_H
 
+#include "system.h"
+
 #include "lex/lexer.h"
 
 #include "environment.h"
-#include "system.h"
 #include "type.h"
 
 NAMESPACE_V1_BEGIN
@@ -85,17 +86,17 @@ public:
         : left(_left), right(_right), resultType(ty), nodeOP(_op)
     {
         conditionT = nullptr;
-        x.i_val = 0;
-        t = nullptr;
+        x.i_val    = 0;
+        t          = nullptr;
     }
 
     Tree(Node_OP _op, const Tree *_left = nullptr, const Tree *_right = nullptr)
         : left(_left), right(_right), resultType(_left->getType()), nodeOP(_op)
     {
         conditionT = nullptr;
-        x.i_val = 0;
-        sign = US_S;
-        t = nullptr;
+        x.i_val    = 0;
+        sign       = US_S;
+        t          = nullptr;
     }
 
     Node_OP getNOP(void) const
@@ -106,13 +107,13 @@ public:
     void setValue(const char *str)
     {
         x.string = str;
-        sign = US_S;
+        sign     = US_S;
     }
 
     void setValue(int i)
     {
         x.i_val = i;
-        sign = US_S;
+        sign    = US_S;
     }
 
     const char *getIDName(void) const
@@ -123,7 +124,7 @@ public:
     void setValue(unsigned int i)
     {
         x.i_val = static_cast<int>(i);
-        sign = US_S;
+        sign    = US_S;
     }
 
     void printTempValue(void) const

@@ -39,7 +39,7 @@ MemoryLexInputSource::MemoryLexInputSource()
     bufsize = 0;
     buf = end = pointer = nullptr;
 
-    file = std::make_shared<std::string>(filename());
+    file                = std::make_shared<std::string>(filename());
 }
 
 
@@ -73,7 +73,7 @@ bool FileLexInputSource::fillBuffer()
 
 bool FileLexInputSource::openStdin()
 {
-    fp = stdin;
+    fp   = stdin;
     file = std::make_shared<std::string>("stdin");
     return true;
 }
@@ -104,7 +104,7 @@ char MemoryLexInputSource::next(LexInputSource::GET_TYPE type)
         if (c == '\n') {
             line++;
             lastCol = column;
-            column = 0;
+            column  = 0;
         } else {
             column++;
         }
@@ -144,20 +144,20 @@ void MemoryLexInputSource::fill(const char *in, size_t s)
         nbs = s;
     } else if (unlikely(pointer == buf)) {
         auto nb = new char[bufsize + s + 1];
-        nbs = bufsize + s;
+        nbs     = bufsize + s;
         memcpy(nb, buf, bufsize);
         memcpy(nb + bufsize, in, s);
         delete[] buf;
         buf = pointer = nb;
-        bufsize = bufsize + s;
-        end = buf + bufsize;
+        bufsize       = bufsize + s;
+        end           = buf + bufsize;
 
     } else {
-        auto c = *pointer;
+        auto c     = *pointer;
 
         auto saved = end - pointer;
-        nbs = saved + s;
-        auto nb = new char[nbs + 1];
+        nbs        = saved + s;
+        auto nb    = new char[nbs + 1];
         memcpy(nb, pointer, saved);
         memcpy(nb + saved, in, s);
 
@@ -167,7 +167,7 @@ void MemoryLexInputSource::fill(const char *in, size_t s)
         pointer = nb;
 
         delete[] buf;
-        buf = nb;
+        buf      = nb;
         buf[nbs] = 0;
         if (c != 0) {
             assert(c == *pointer);
@@ -175,6 +175,6 @@ void MemoryLexInputSource::fill(const char *in, size_t s)
     }
 
     buf[nbs] = '\0';
-    end = pointer + nbs;
-    bufsize = nbs;
+    end      = pointer + nbs;
+    bufsize  = nbs;
 }

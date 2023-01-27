@@ -5,6 +5,8 @@
 *
 */
 
+#include "system.h"
+
 #include <fmt/core.h>
 
 #include "lex/lexer.h"
@@ -13,11 +15,10 @@
 #include "driver.h"
 #include "parser.h"
 #include "symbol.h"
-#include "system.h"
 #include "tools.h"
 #include "type.h"
 
-int errorCount = 0;
+int errorCount   = 0;
 int warningCount = 0;
 
 USING_V1

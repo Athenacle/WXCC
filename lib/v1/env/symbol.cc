@@ -33,13 +33,13 @@ void Symbol::setValue(Token *tok)
 
 Symbol::Symbol(Token *tok, Scope sc, StorageType st, int level, Symbol *sy)
 {
-    tok = tok;
-    sc = sc;
+    tok    = tok;
+    sc     = sc;
     sclass = st;
-    up = sy;
-    ref = 0;
-    level = level;
-    next = nullptr;
+    up     = sy;
+    ref    = 0;
+    level  = level;
+    next   = nullptr;
     setValue(tok);
 }
 

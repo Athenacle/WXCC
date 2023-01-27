@@ -6,16 +6,17 @@
 *
 */
 
+#include "system.h"
+
 #include <cstdarg>
 
 #include "lex/lexer.h"
 
 #include "parser.h"
-#include "system.h"
 
 USING_V1
 int Parser::parserWarningCount = 0;
-int Parser::parserErrorCount = 0;
+int Parser::parserErrorCount   = 0;
 
 namespace
 {
@@ -72,7 +73,7 @@ use_string_warn:
     va_list ap;
     va_start(ap, warningType);
     const char *str = va_arg(ap, const char *);
-    int i = va_arg(ap, int);
+    int i           = va_arg(ap, int);
     fprintf(wxccErr, str, i);
     va_end(ap);
 }
@@ -96,7 +97,7 @@ void Parser::parserError(int errorType, ...)
         case PAR_ERR_NEED_C_CC: {
             va_list ap;
             va_start(ap, errorType);
-            int c1 = va_arg(ap, int);
+            int c1  = va_arg(ap, int);
             char c2 = static_cast<char>(va_arg(ap, int));
             char c3 = static_cast<char>(va_arg(ap, int));
             fprintf(wxccErr, parserErrors[errorType], c1, c2, c3);
@@ -107,9 +108,9 @@ void Parser::parserError(int errorType, ...)
             va_list ap;
 
             va_start(ap, errorType);
-            char c = static_cast<char>(va_arg(ap, int));
+            char c          = static_cast<char>(va_arg(ap, int));
             const char *str = va_arg(ap, const char *);
-            int i = va_arg(ap, int);
+            int i           = va_arg(ap, int);
             fprintf(wxccErr, parserErrors[errorType], c, str, i);
             va_end(ap);
             break;
@@ -117,7 +118,7 @@ void Parser::parserError(int errorType, ...)
         case PAR_ERR_INT_STR: {
             va_list ap;
             va_start(ap, errorType);
-            int i = va_arg(ap, int);
+            int i           = va_arg(ap, int);
             const char *str = va_arg(ap, const char *);
             fprintf(wxccErr, parserErrors[errorType], i, str);
             va_end(ap);
@@ -127,7 +128,7 @@ void Parser::parserError(int errorType, ...)
             va_list ap;
             va_start(ap, errorType);
             const char *str = va_arg(ap, const char *);
-            int i = va_arg(ap, int);
+            int i           = va_arg(ap, int);
             fprintf(wxccErr, str, i);
             va_end(ap);
             break;
@@ -147,7 +148,7 @@ use_string_err:
     va_list ap;
     va_start(ap, errorType);
     const char *str = va_arg(ap, const char *);
-    int i = va_arg(ap, int);
+    int i           = va_arg(ap, int);
     fprintf(wxccErr, str, i);
     va_end(ap);
 }

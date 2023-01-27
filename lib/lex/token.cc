@@ -21,13 +21,13 @@ bool Position::operator==(const Position& other) const
 
 Token::Token(KEYWORD key)
 {
-    token_type = T_KEY;
+    token_type          = T_KEY;
     token_value.keyword = key;
 }
 
 Token::Token(constants::TYPE ty, const char* cc)
 {
-    token_type = ty;
+    token_type         = ty;
     token_value.string = utils::strdup(cc);
 }
 
@@ -43,14 +43,14 @@ Token::Token(Number* n)
 
 Token::Token(constants::OP op)
 {
-    token_type = T_OPERATOR;
+    token_type     = T_OPERATOR;
     token_value.op = op;
 }
 
 Token::Token(Token&& other) noexcept
 {
     token_type = other.token_type;
-    token_pos = std::move(other.token_pos);
+    token_pos  = std::move(other.token_pos);
     memcpy(&token_value, &other.token_value, sizeof(token_value));
     other.token_type = T_NONE;
 }
@@ -58,7 +58,7 @@ Token::Token(Token&& other) noexcept
 Token::Token(const Token& other)
 {
     token_type = other.token_type;
-    token_pos = other.token_pos;
+    token_pos  = other.token_pos;
     if (isNumCon(other)) {
         token_value.numVal = new Number(*other.token_value.numVal);
     } else if (token_type == T_ID || token_type == T_STRING) {

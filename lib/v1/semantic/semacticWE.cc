@@ -41,8 +41,8 @@ void semError(int errType, ...)
             va_start(ap, errType);
             const char *str1 = va_arg(ap, const char *);
             const char *str2 = va_arg(ap, const char *);
-            int i1 = va_arg(ap, int);
-            int i2 = va_arg(ap, int);
+            int i1           = va_arg(ap, int);
+            int i2           = va_arg(ap, int);
             fprintf(wxccErr, str1, str2, i1, i2);
             va_end(ap);
             break;

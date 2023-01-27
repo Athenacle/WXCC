@@ -6,8 +6,9 @@
 */
 #include "semantic.h"
 
-#include "stmt.h"
 #include "system.h"
+
+#include "stmt.h"
 #include "tree.h"
 
 using namespace std;
@@ -21,7 +22,7 @@ int TemportaryVariable::currentID = 0;
 
 TemportaryVariable::TemportaryVariable()
 {
-    tempID = ++TemportaryVariable::currentID;
+    tempID      = ++TemportaryVariable::currentID;
     idString[0] = 't';
     sprintf(idString, "t%d", currentID);
 }
@@ -55,8 +56,8 @@ IR *IR::currentIR = nullptr;
 
 IR::IR()
 {
-    nextIR = nullptr;
-    preIR = nullptr;
+    nextIR    = nullptr;
+    preIR     = nullptr;
     currentIR = this;
 }
 
@@ -92,7 +93,7 @@ IRList *IRList::mergeChain(IRList &irlist, IR *ir)
 IRList *IRList::mergeChain(IRList &irlistFirst, const IRList &irlistSecond)
 {
     int secondCount = irlistSecond.list.size();
-    int i = 0;
+    int i           = 0;
     for (; i < secondCount; i++) {
         IR *ir = irlistSecond.list.at(i);
         irlistFirst.list.push_back(ir);
@@ -104,12 +105,12 @@ IRList *IRList::mergeChain(IRList &irlistFirst, const IRList &irlistSecond)
 
 void IRList::backPatch(IRList &irlist, Label &label)
 {
-    int secondCount = irlist.list.size();
-    int i = 0;
+    int secondCount      = irlist.list.size();
+    int i                = 0;
     const char *labelStr = label.toString();
     MAYBE_UNUSED int len = strlen(labelStr);
     for (; i < secondCount; i++) {
-        IR &ir = *irlist.list.at(i);
+        IR &ir  = *irlist.list.at(i);
         ir.dest = &label;
         //IRList::patch(ir, labelStr, len);
     }
@@ -125,8 +126,8 @@ void IRList::backPatch(IR &ir, Label &la)
 char *IRList::patch(IR &ir, const char *l, int length)
 {
     const char *str = ir.getIRstring();
-    int strLength = strlen(str);
-    char *buffer = new char[strLength + length + 1];
+    int strLength   = strlen(str);
+    char *buffer    = new char[strLength + length + 1];
     sprintf(buffer, str, l);
     ir.reSetString(buffer);
     return buffer;
@@ -155,7 +156,7 @@ void IR::print(IR *begin, FILE *dest)
 IR::IR(Label &l, bool append)
 {
     const char *pl = l.toString();
-    char *buf = new char[strlen(pl) + 10];
+    char *buf      = new char[strlen(pl) + 10];
     sprintf(buf, "%s : \n", pl);
     this->IRstring = buf;
     if (!append) {
@@ -178,18 +179,18 @@ IR *IR::appendIR(IR *first, IR *second)
 
 IR *IR::appendIRBlock(IR *place, IR *block)
 {
-    IR *placeNext = place->nextIR;
-    IR *blockEnd = block;
+    IR *placeNext        = place->nextIR;
+    IR *blockEnd         = block;
 
     block->preIR->nextIR = nullptr;
 
     while (blockEnd->nextIR != nullptr) {
         blockEnd = blockEnd->nextIR;
     }
-    place->nextIR = block;
-    block->preIR = place;
-    blockEnd->nextIR = placeNext;
-    placeNext->preIR = blockEnd;
+    place->nextIR        = block;
+    block->preIR         = place;
+    blockEnd->nextIR     = placeNext;
+    placeNext->preIR     = blockEnd;
     block->preIR->nextIR = nullptr;
     reSetCurrent();
     return block->preIR;

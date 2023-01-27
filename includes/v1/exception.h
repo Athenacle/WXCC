@@ -31,12 +31,12 @@ public:
     virtual void setException(int tp, const char* st)
     {
         exType = tp;
-        ex = st;
+        ex     = st;
     }
 
     void setError(const char* errMsg)
     {
-        this->ex = errMsg;
+        this->ex     = errMsg;
         this->exType = ERROR;
     }
 };

@@ -1,11 +1,11 @@
 #ifndef UTILS_ERROR_MANAGER_H_
 #define UTILS_ERROR_MANAGER_H_
 
+#include "system.h"
+
 #include <fmt/core.h>
 
 #include "lex/lexer.h"
-
-#include "system.h"
 
 
 namespace utils
@@ -19,10 +19,10 @@ namespace utils
         int info_;
 
     public:
-        static constexpr int FATAL = 0;
-        static constexpr int ERROR = 1;
+        static constexpr int FATAL   = 0;
+        static constexpr int ERROR   = 1;
         static constexpr int WARNING = 2;
-        static constexpr int INFO = 3;
+        static constexpr int INFO    = 3;
 
     protected:
         virtual void output(int level, const Position&, std::string&&);

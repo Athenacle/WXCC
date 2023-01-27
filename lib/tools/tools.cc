@@ -7,9 +7,9 @@
 
 #include "tools.h"
 
-#include <cstring>
-
 #include "system.h"
+
+#include <cstring>
 
 FILE* wxccErr;
 
@@ -33,7 +33,7 @@ unsigned long utils::strHash(const char* st)
 
 char* utils::strdup(const char* s)
 {
-    auto l = strlen(s);
+    auto l   = strlen(s);
     auto ret = new char[l + 1];
     strcpy(ret, s);
     return ret;

@@ -6,9 +6,10 @@
 *
 */
 
+#include "system.h"
+
 #include <vector>
 
-#include "system.h"
 #include "tools.h"
 
 #ifndef SEMANTIC_H
@@ -99,9 +100,9 @@ public:
     static IR *appendIR(IR *ir)
     {
         currentIR->nextIR = ir;
-        ir->preIR = currentIR;
-        ir->nextIR = nullptr;
-        currentIR = ir;
+        ir->preIR         = currentIR;
+        ir->nextIR        = nullptr;
+        currentIR         = ir;
         return currentIR;
     }
     static IR *appendIRBlock(IR *, IR *);

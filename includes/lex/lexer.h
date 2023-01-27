@@ -8,11 +8,11 @@
 #ifndef LEX_HEADER
 #define LEX_HEADER
 
+#include "system.h"
+
 #include "lex/constants.h"
 #include "lex/input.h"
 #include "lex/token.h"
-
-#include "system.h"
 
 #define BLOCK_SIZE     4096
 #define LEX_BLOCK_SIZE (BLOCK_SIZE + 2) /* 4098 */
@@ -54,13 +54,13 @@ namespace lex
 {
     class Lex
     {
-        using Token = types::Token;
-        using Number = types::Number;
+        using Token    = types::Token;
+        using Number   = types::Number;
         using Position = types::Position;
 
 
     private:
-        Lex(const Lex &) = delete;
+        Lex(const Lex &)            = delete;
         Lex &operator=(const Lex &) = delete;
 
         LexInputSource *source;

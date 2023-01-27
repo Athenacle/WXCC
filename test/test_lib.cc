@@ -19,7 +19,7 @@ namespace test
 
     const char* randomString(uint32_t length)
     {
-        char* mem = new char[length + 1];
+        char* mem   = new char[length + 1];
         mem[length] = 0;
 
         for (uint32_t i = 0; i < length; i++) {
@@ -87,7 +87,7 @@ namespace test
         char buffer[64];
         uint32_t total = 0;
 
-        auto randID = [&]() {
+        auto randID    = [&]() {
             auto leng = (rd() % 60) + 1;
 
             for (uint32_t i = 0; i < leng; i++) {

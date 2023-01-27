@@ -49,9 +49,9 @@ void Parser::pushback(Token &&tok)
 
 Parser &Parser::operator=(Parser &&p) noexcept
 {
-    lexer_ = std::move(p.lexer_);
+    lexer_     = std::move(p.lexer_);
     lookahead_ = std::move(p.lookahead_);
-    mgr_ = p.mgr_;
+    mgr_       = p.mgr_;
     return *this;
 }
 

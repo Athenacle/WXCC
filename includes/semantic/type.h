@@ -1,9 +1,9 @@
 #ifndef SEMANTIC_TYPE_H_
 #define SEMANTIC_TYPE_H_
 
-#include "utils/bit_container.h"
-
 #include "system.h"
+
+#include "utils/bit_container.h"
 
 NAMESPACE_BEGIN
 
@@ -89,33 +89,33 @@ namespace semantic
          *        4: SPECIFIER_TYPE
          */
         /* BASIC_TYPE        */
-        TO_NONE = 0x01000000,
-        TO_VOID = 0x01000001,
-        TO_CHAR = 0x01000010,
-        TO_INT = 0x01000012,
-        TO_LONG = 0x01000013,
-        TO_SHORT = 0x01000014,
-        TO_FLOAT = 0x01000015,
-        TO_DOUBLE = 0x01000016,
+        TO_NONE     = 0x01000000,
+        TO_VOID     = 0x01000001,
+        TO_CHAR     = 0x01000010,
+        TO_INT      = 0x01000012,
+        TO_LONG     = 0x01000013,
+        TO_SHORT    = 0x01000014,
+        TO_FLOAT    = 0x01000015,
+        TO_DOUBLE   = 0x01000016,
 
         /* AGGREGATE_TYPE    */
-        TO_STRUCT = 0x01000101,
-        TO_UNION = 0x01000102,
-        TO_ARRAY = 0x01000103,
-        TO_ENUM = 0x01000104,
+        TO_STRUCT   = 0x01000101,
+        TO_UNION    = 0x01000102,
+        TO_ARRAY    = 0x01000103,
+        TO_ENUM     = 0x01000104,
 
         /* POINTER_TYPE        */
-        TO_POINTER = 0x01000200,
+        TO_POINTER  = 0x01000200,
 
         /* FUNCTION_TYPE    */
         TO_FUNCTION = 0x01000300,
 
         /* SPECIFIER_TYPE    */
-        TO_CONST = 0x01004001,
+        TO_CONST    = 0x01004001,
         TO_VOLATILE = 0x01004002,
 
 
-        TO_SIGNED = 0x01005001,
+        TO_SIGNED   = 0x01005001,
         TO_UNSIGNED = 0x01005002,
 
         TO_FUNCPARA = 0x01001111
@@ -147,7 +147,7 @@ namespace semantic
 
         } opt_;
 
-        BaseType(const BaseType&) = delete;
+        BaseType(const BaseType&)             = delete;
         BaseType& operator=(const BaseType&&) = delete;
 
 
@@ -169,12 +169,12 @@ namespace semantic
     class Type
     {
     public:
-        using QualifierContainer = utils::BitsContainer<8>;
+        using QualifierContainer           = utils::BitsContainer<8>;
 
-        constexpr static size_t Q_TYPEDEF = 0;
-        constexpr static size_t Q_EXTERN = 1;
-        constexpr static size_t Q_STATIC = 2;
-        constexpr static size_t Q_AUTO = 3;
+        constexpr static size_t Q_TYPEDEF  = 0;
+        constexpr static size_t Q_EXTERN   = 1;
+        constexpr static size_t Q_STATIC   = 2;
+        constexpr static size_t Q_AUTO     = 3;
         constexpr static size_t Q_REGISTER = 4;
 
     private:

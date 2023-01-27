@@ -39,7 +39,7 @@ namespace
     bool checkQualifier(const Token &tok, const Type::QualifierContainer &t, ErrorManager *mgr)
     {
         assert(is(tok, T_KEY));
-        auto kw = tok.token_value.keyword;
+        auto kw   = tok.token_value.keyword;
         auto &pos = tok.token_pos;
         if (t.allZero()) {
             return true;

@@ -1,6 +1,8 @@
 #ifndef PARSER_PARSER_H_
 #define PARSER_PARSER_H_
 
+#include "system.h"
+
 #include <queue>
 
 #include "lex/lexer.h"
@@ -9,17 +11,15 @@
 #include "utils/bit_container.h"
 #include "utils/error_manager.h"
 
-#include "system.h"
-
 NAMESPACE_BEGIN
 namespace parser
 {
 
     class Parser
     {
-        using Token = lex::types::Token;
+        using Token           = lex::types::Token;
         using TranslationUnit = syntax::TranslationUnit;
-        using Type = semantic::Type;
+        using Type            = semantic::Type;
 
         lex::Lex &lexer_;
         utils::ErrorManager *mgr_;

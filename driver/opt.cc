@@ -1,6 +1,4 @@
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include <fmt/core.h>
 
@@ -59,9 +57,9 @@ bool parseCommandOptions(CommandOptions& opt, int argc, const char* argv[])
     } while (false)
 
     try {
-        auto files = prog.get<std::vector<std::string>>("filename");
+        auto files     = prog.get<std::vector<std::string>>("filename");
 
-        opt.filename = files.at(0);
+        opt.filename   = files.at(0);
 
         opt.lexerDebug = prog["--lex-debug"] == true;
 

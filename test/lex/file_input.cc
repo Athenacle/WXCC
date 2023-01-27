@@ -22,7 +22,7 @@ protected:
 
     virtual void SetUp() override
     {
-        buf = test::randomString(TOTAL_SIZE);
+        buf    = test::randomString(TOTAL_SIZE);
         auto f = fopen(FILENAME, "wb+");
         ASSERT_NE(f, nullptr);
 

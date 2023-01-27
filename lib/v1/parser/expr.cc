@@ -6,6 +6,8 @@
 
 #include "expr.h"
 
+#include "system.h"
+
 #include <cstdarg>
 
 #include "lex/lexer.h"
@@ -14,7 +16,6 @@
 #include "environment.h"
 #include "identifier.h"
 #include "parser.h"
-#include "system.h"
 #include "tree.h"
 
 USING_V1
@@ -29,7 +30,7 @@ Expr *Parser::c_parser_expressions(Env &env) const
 
     try {
         Tree *tr = c_parser_base_expressions(env, 0);
-        exprIR = new Expr(tr);
+        exprIR   = new Expr(tr);
         return exprIR;
     }
 
@@ -57,8 +58,8 @@ Tree *Parser::c_parser_base_expressions(Env &env, MAYBE_UNUSED int k) const
 Tree *Parser::c_parser_expressions_1(Env &env, MAYBE_UNUSED int k) const
 //assignment statements.
 {
-    Tree *tp = c_parser_expressions_2(env);
-    OP op = cur.token_value.op;
+    Tree *tp  = c_parser_expressions_2(env);
+    OP op     = cur.token_value.op;
     int level = op2l[op];
     if (op == OP_ASSIGN || (level >= 6 && level <= 8) || (level >= 11 && level <= 13)) {
         if (level == 2) {
@@ -72,11 +73,11 @@ Tree *Parser::c_parser_expressions_1(Env &env, MAYBE_UNUSED int k) const
 Tree *Parser::c_parser_dispatch_comp_assignment(const OP op, Tree *leftT, Env &env) const
 {
     //int  op = op;
-    Tree *tr = nullptr;
+    Tree *tr     = nullptr;
     Tree *rightT = nullptr;
 
 
-    rightT = c_parser_expressions_1(env, 0);
+    rightT       = c_parser_expressions_1(env, 0);
 
     switch (op) {
         case OP_ASSIGN:
@@ -139,7 +140,7 @@ Tree *Parser::c_parser_expressions_2(Env &env) const
         Tree *trueT = c_parser_base_expressions(env, 0);
         need(OP_COLON);
         Tree *falseT = c_parser_expressions_2(env);
-        binT = Tree::CONDtree(binT, trueT, falseT);
+        binT         = Tree::CONDtree(binT, trueT, falseT);
     }
 
     return binT;
@@ -154,22 +155,22 @@ Tree *Parser::c_parser_expressions_3(Env &env, int k) const
     if (cur == T_OPERATOR) {
         for (k1 = op2l[cur.token_value.op]; k1 >= k; k1--) {
             while (op2l[cur.token_value.op] == k1 && !isASSIGN(cur)) {
-                OP op = cur.token_value.op;
-                Tree *rightT = nullptr;
+                OP op                    = cur.token_value.op;
+                Tree *rightT             = nullptr;
                 MAYBE_UNUSED Tree *leftT = nullptr;
                 if (op == OP_LOGOR) {
                     next();
                     Tree *rightT = c_parser_expressions_3(env, 4);
-                    Tree *preT = p;
-                    p = Tree::ORtree(preT, rightT);
+                    Tree *preT   = p;
+                    p            = Tree::ORtree(preT, rightT);
                 } else if (op == OP_LOGAND) {
                     next();
                     Tree *rightT = c_parser_expressions_3(env, 4);
-                    p = Tree::ANDtree(p, rightT);
+                    p            = Tree::ANDtree(p, rightT);
                 } else {
                     next();
                     rightT = c_parser_expressions_3(env, k1 + 1);
-                    p = op2fun(op)(p, rightT);
+                    p      = op2fun(op)(p, rightT);
                 }
             }
         }
@@ -187,8 +188,8 @@ void Parser::c_parser_expression_recover() const
 
 Tree *Parser::c_parser_unary_expr(Env &env) const
 {
-    Tree *tp = nullptr;
-    TYPE ty = cur.token_type;
+    Tree *tp               = nullptr;
+    TYPE ty                = cur.token_type;
     const Type *objectType = nullptr;
     MAYBE_UNUSED size_t size;
     TYPE_OPERATOR to;
@@ -204,10 +205,10 @@ Tree *Parser::c_parser_unary_expr(Env &env) const
                 }
                 objectType = &tp->getType();
 
-                to = objectType->getTYOP();
+                to         = objectType->getTYOP();
                 if (to == TO_ARRAY || to == TO_POINTER) {
                     objectType = &objectType->getBaseType();
-                    tp = Tree::INDRtree(tp, *objectType);
+                    tp         = Tree::INDRtree(tp, *objectType);
                 } else if (to == TO_FUNCTION) {
                     ;  //do nothing.
                 } else {
@@ -226,7 +227,7 @@ Tree *Parser::c_parser_unary_expr(Env &env) const
                     assert(0);
                 } else {
                     Type *newTy = new Type(TO_POINTER, const_cast<Type *>(&tp->getType()));
-                    tp = Tree::LEAtree(tp, *newTy);
+                    tp          = Tree::LEAtree(tp, *newTy);
                 }
                 break;
             case OP_MINUS:
@@ -269,7 +270,7 @@ Tree *Parser::c_parser_unary_expr(Env &env) const
                         next();
                         if (tools::isBaseType(cur)) {
                             Type *ty = c_parser_declaration_type_specifiers(nullptr);
-                            size = ty->getSize();
+                            size     = ty->getSize();
                             delete ty;
                         } else if (cur == T_ID) {
                             Identifier *id = env.findID(cur.token_value.id_name);
@@ -306,9 +307,9 @@ Tree *Parser::c_parser_postfix_expr(Env &env, Tree *tr) const
                 break;
             case OP_LEFTSQBRAC: {
                 next();
-                Tree *sub = c_parser_expressions_1(env, 0);
+                Tree *sub                          = c_parser_expressions_1(env, 0);
                 MAYBE_UNUSED const char *arrayName = tr->getIDName();
-                retTree = Tree::ARRAYtree(retTree, sub);
+                retTree                            = Tree::ARRAYtree(retTree, sub);
                 pushBack();
                 need(OP_RIGHTSQBRAC);
                 break;
@@ -334,7 +335,7 @@ Tree *Parser::c_parser_expr_func_call(Env &env, Tree *funcID) const
     next();
     char buf[20];
     for (; paraList != nullptr; paraList = &paraList->getParaList()) {
-        const Tree *arg = c_parser_expressions_2(env);
+        const Tree *arg       = c_parser_expressions_2(env);
         const char *argString = nullptr;
         if (arg->t != nullptr) {
             argString = arg->t->toString();
@@ -410,7 +411,7 @@ char *ExprExcetion::esprintf(const char *format, ...)
         if (*p == '%') {
             if (*(p + 1) == 's') {
                 const char *s = va_arg(ap, const char *);
-                buf += sprintf(buf, "%s", s);
+                buf           += sprintf(buf, "%s", s);
                 buf--;
                 p++;
                 continue;
@@ -425,7 +426,7 @@ char *ExprExcetion::esprintf(const char *format, ...)
         }
         *buf = *p;
     }
-    *(buf) = '\0';
+    *(buf)    = '\0';
     char *ret = new char[strlen(buffer) + 1];
     strcpy(ret, buffer);
     return ret;

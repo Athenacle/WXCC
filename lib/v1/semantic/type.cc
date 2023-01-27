@@ -26,11 +26,11 @@ NAMESPACE_V1_BEGIN
 
 namespace
 {
-    const int teFuncRetFunc = 3;
-    const int teFuncRetArr = 4;
+    const int teFuncRetFunc     = 3;
+    const int teFuncRetArr      = 4;
     const int TE_FUNC_NEED_FUNC = 5;
-    const int teArrContFunc = 6;
-    const char *typeError[] = {
+    const int teArrContFunc     = 6;
+    const char *typeError[]     = {
         "NULL",
 
         "TE01: Too many types.\n",
@@ -54,26 +54,26 @@ namespace
 Type::Type(
     TYPE_OPERATOR oper, Type *baseType, int arrEls, Type *list, int size, int align, void *symbol)
 {
-    this->sym = nullptr;
-    this->name = nullptr;
-    type_op = oper;
-    size = size;
-    base_type = baseType;
+    this->sym     = nullptr;
+    this->name    = nullptr;
+    type_op       = oper;
+    size          = size;
+    base_type     = baseType;
     u.a.nElements = 0;
-    u.f.paraList = nullptr;
+    u.f.paraList  = nullptr;
     if (oper == TO_CHAR) {
         size = 1;
     } else if (oper == TO_DOUBLE) {
         size = 4;
     } else if (oper == TO_ARRAY) {
-        size = arrEls * baseType->size;
+        size          = arrEls * baseType->size;
         u.a.nElements = arrEls;
     } else if (oper == TO_FUNCTION) {
-        size = type_operator::NO_LIMIT;
+        size         = type_operator::NO_LIMIT;
         u.f.paraList = list;
     }
     align = align;
-    sym = static_cast<Symbol *>(symbol);
+    sym   = static_cast<Symbol *>(symbol);
 }
 
 const TypeException &Type::checkType(const Type &ty, TypeException &te)
@@ -88,12 +88,12 @@ const TypeException &Type::checkType(const Type &ty, TypeException &te)
     }
     //TODO: an array whose element is functions.
 
-    int meetSigned = 0;
-    int meetUSigned = 0;
+    int meetSigned   = 0;
+    int meetUSigned  = 0;
     int meetBaseType = 0;
-    int meetFloat = 0;
+    int meetFloat    = 0;
 
-    const Type *tpp = &ty;
+    const Type *tpp  = &ty;
     for (; tpp != nullptr; tpp = tpp->base_type) {
         if (matchBaseType(*tpp)) {
             meetBaseType++;
@@ -132,15 +132,15 @@ char *Type::print(char *buffer)
     //     return buffer;
     if (type_op == TO_FUNCTION) {
         MAYBE_UNUSED Type *ytp = this->u.f.paraList;
-        char *ptr = this->base_type->print(buffer);
-        ptr += sprintf(ptr, " (*)(");
-        ptr = u.f.paraList->print(ptr);
+        char *ptr              = this->base_type->print(buffer);
+        ptr                    += sprintf(ptr, " (*)(");
+        ptr                    = u.f.paraList->print(ptr);
         return ptr + sprintf(ptr, ").");
     }
     if (type_op == TO_POINTER) {
         if (base_type->type_op == TO_ARRAY) {
             char *ptr = buffer;
-            ptr = base_type->base_type->print(ptr);
+            ptr       = base_type->base_type->print(ptr);
             return ptr
                    + sprintf(ptr,
                              "%s (*)[%d] ",
@@ -148,9 +148,9 @@ char *Type::print(char *buffer)
                              base_type->u.a.nElements);
         } else if (base_type->type_op == TO_FUNCTION) {
             char *ptr = buffer;
-            ptr = this->base_type->print(ptr);
+            ptr       = this->base_type->print(ptr);
             //ptr += sprintf(ptr, "(*)(");
-            Type *ty = this->u.f.paraList;
+            Type *ty  = this->u.f.paraList;
         paraPrint:
             ptr = ty->print(ptr);
             if (ty != nullptr) {
@@ -182,19 +182,19 @@ char *Type::print(char *buffer)
 
 void Type::initTO2c()
 {
-    to2c[TO_CHAR] = "char";
-    to2c[TO_INT] = "int";
-    to2c[TO_LONG] = "long";
-    to2c[TO_SHORT] = "short";
-    to2c[TO_FLOAT] = "float";
-    to2c[TO_ARRAY] = "array";
-    to2c[TO_STRUCT] = "struct";
-    to2c[TO_ENUM] = "enum";
-    to2c[TO_POINTER] = "pointer";
+    to2c[TO_CHAR]     = "char";
+    to2c[TO_INT]      = "int";
+    to2c[TO_LONG]     = "long";
+    to2c[TO_SHORT]    = "short";
+    to2c[TO_FLOAT]    = "float";
+    to2c[TO_ARRAY]    = "array";
+    to2c[TO_STRUCT]   = "struct";
+    to2c[TO_ENUM]     = "enum";
+    to2c[TO_POINTER]  = "pointer";
     to2c[TO_FUNCTION] = "function";
-    to2c[TO_CONST] = "const";
+    to2c[TO_CONST]    = "const";
     to2c[TO_VOLATILE] = "volatile";
-    to2c[TO_SIGNED] = "signed";
+    to2c[TO_SIGNED]   = "signed";
     to2c[TO_UNSIGNED] = "unsigned";
 }
 
@@ -294,24 +294,24 @@ namespace NS_BASE_TYPE
     void InitBaseTypes()
     {
         try {
-            charType = new Type(TO_CHAR, nullptr, 1);
-            ucharType = new Type(TO_UNSIGNED, charType, 1);
-            scharType = new Type(TO_SIGNED, charType, 1);
+            charType   = new Type(TO_CHAR, nullptr, 1);
+            ucharType  = new Type(TO_UNSIGNED, charType, 1);
+            scharType  = new Type(TO_SIGNED, charType, 1);
 
-            shortType = new Type(TO_SHORT);
+            shortType  = new Type(TO_SHORT);
             ushortType = new Type(TO_CHAR);
 
-            intType = new Type(TO_INT);
-            uintType = new Type(TO_UNSIGNED, intType);
+            intType    = new Type(TO_INT);
+            uintType   = new Type(TO_UNSIGNED, intType);
 
-            longType = new Type(TO_LONG);
-            ulongType = new Type(TO_UNSIGNED, longType);
+            longType   = new Type(TO_LONG);
+            ulongType  = new Type(TO_UNSIGNED, longType);
 
-            floatType = new Type(TO_FLOAT);
+            floatType  = new Type(TO_FLOAT);
             doubleType = new Type(TO_DOUBLE, nullptr, 8);
 
-            voidType = new Type(TO_VOID);
-            pvType = new Type(TO_POINTER, voidType);
+            voidType   = new Type(TO_VOID);
+            pvType     = new Type(TO_POINTER, voidType);
         } catch (std::bad_alloc &e) {
             fatalError("new BASE_TYPES error: no more memory.");
         }

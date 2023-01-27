@@ -104,7 +104,7 @@ namespace NS_TABLE
         void rePut()
         {
             item* old = tbl;
-            tbl = new item[tableSize + INCR_SIZE];
+            tbl       = new item[tableSize + INCR_SIZE];
             setZero(tableSize + INCR_SIZE);
             size_t i = 0;
             for (; i < tableSize; i++) {
@@ -143,9 +143,9 @@ namespace NS_TABLE
         {
             if (this->stored == 0)
                 return nullptr;
-            ul hash = THASH::hash(t);
+            ul hash  = THASH::hash(t);
             ul index = hash % tableSize;
-            ul i = index;
+            ul i     = index;
         fi:
             if (*(tbl + index) != nullptr) {
                 if (KHASH::hash(*(tbl + index)) == hash && C::cmp(*(tbl + index), t))
@@ -168,9 +168,9 @@ namespace NS_TABLE
     public:
         explicit Table(size_t _base_size = BASE_SIZE)
         {
-            stored = 0;
+            stored    = 0;
             tableSize = _base_size;
-            tbl = new item[_base_size];
+            tbl       = new item[_base_size];
             setZero(_base_size);
             threshold = (tableSize >> 2) + (tableSize >> 1);  // 3/4
             up = down = nullptr;
@@ -193,7 +193,7 @@ namespace NS_TABLE
         void PutIntoTable(K k, T t)
         {
             ul hashCode = THASH::hash(t);
-            ul index = hashCode % tableSize;
+            ul index    = hashCode % tableSize;
         put:
             if (*(tbl + index) == nullptr)
                 *(tbl + index) = k;
@@ -243,7 +243,7 @@ namespace NS_TABLE
 
         void enterBlock(base* nextTable)
         {
-            this->down = nextTable;
+            this->down    = nextTable;
             nextTable->up = this;
         }
 
@@ -251,7 +251,7 @@ namespace NS_TABLE
         {
             if (this->up != nullptr) {
                 this->up->down = nullptr;
-                this->up = nullptr;
+                this->up       = nullptr;
             }
         }
     };

@@ -26,12 +26,12 @@ protected:
     {
         tokenCount = test::random(3000) + 2500;
 
-        filename = "flex_bison_random_lexer_test";
+        filename   = "flex_bison_random_lexer_test";
 
-        buf = test::randomSourceCode(tokenCount);
-        auto len = strlen(buf);
+        buf        = test::randomSourceCode(tokenCount);
+        auto len   = strlen(buf);
 
-        auto f = fopen(filename, "wb+");
+        auto f     = fopen(filename, "wb+");
         ASSERT_NE(f, nullptr);
 
         if (f) {
@@ -54,7 +54,7 @@ protected:
         l.setSource(&flis);
 
         ASSERT_TRUE(test::openFile(yyin, filename));
-        flexin = new test::FlexBison_Lexer(&yyin);
+        flexin     = new test::FlexBison_Lexer(&yyin);
 
         yyfilename = filename;
     }
@@ -67,7 +67,7 @@ protected:
     }
 };
 const char* FlexBisonLexer::filename;
-const char* FlexBisonLexer::buf = nullptr;
+const char* FlexBisonLexer::buf     = nullptr;
 uint32_t FlexBisonLexer::tokenCount = 0;
 
 TEST_F(FlexBisonLexer, randomLexer)

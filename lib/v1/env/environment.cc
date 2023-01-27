@@ -1,6 +1,8 @@
 //#include "../includes/Env.h"
 
 
+#include "system.h"
+
 #include "lex/lexer.h"
 
 #include "exception.h"
@@ -8,7 +10,6 @@
 #include "parser.h"
 #include "semantic.h"
 #include "symbol.h"
-#include "system.h"
 #include "table.h"
 #include "type.h"
 
@@ -18,7 +19,7 @@ using namespace scope;
 
 namespace
 {
-    const int teErrRedecl = 1;
+    const int teErrRedecl    = 1;
 
     const char* tableError[] = {
         "NULL",
@@ -31,7 +32,7 @@ namespace
 
 Env& Env::ExitEnv()
 {
-    Env* ret = this->up;
+    Env* ret   = this->up;
     this->down = nullptr;
     if (this->up != nullptr) {
         this->up->down = nullptr;
@@ -75,7 +76,7 @@ void Env::newIdentifier(Identifier* id)
 
 Env& Env::EnterEnv(Env& downEnv)
 {
-    down = &downEnv;
+    down       = &downEnv;
     downEnv.up = this;
 
     localFunc.enterBlock(&(downEnv.localFunc));

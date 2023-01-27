@@ -4,6 +4,8 @@
  * April 4, 2013
  */
 
+#include "system.h"
+
 #include "lex/lexer.h"
 #include "lex/tools.h"
 
@@ -11,7 +13,6 @@
 #include "identifier.h"
 #include "parser.h"
 #include "symbol.h"
-#include "system.h"
 #include "type.h"
 
 USING_V1
@@ -24,12 +25,12 @@ using namespace type_operator;
 
 namespace
 {
-    const int deNeedComma = 1;
-    const int deInvalidDecl = 2;
+    const int deNeedComma        = 1;
+    const int deInvalidDecl      = 2;
     const int deMoreDeclWithFunc = 3;
-    const int deLackFuncProto = 4;
+    const int deLackFuncProto    = 4;
 
-    const char *declError[] = {
+    const char *declError[]      = {
         "NULL",
 
         "DE01. Line %d: may lose comma in the function prototype.\n",
@@ -45,7 +46,7 @@ namespace
         // DE_LACK_FUNC_PROTO
     };
 
-    const int dwLackParaList = 1;
+    const int dwLackParaList  = 1;
     const char *declWarning[] = {"NULL",
 
                                  "DW01. Line %d: lack of parameter list. Assert as void.\n"};
@@ -54,8 +55,8 @@ namespace
 int Parser::c_parser_translation_unit(Env &env) const
 {
     int lexRet;
-    int n = 0;
-    lexRet = next();
+    int n       = 0;
+    lexRet      = next();
     Env *curEnv = &env;
     for (; lexRet != EOT; n++) {
         if (matchQualifier(cur) || isBaseType(cur)) {
@@ -75,10 +76,10 @@ int Parser::c_parser_translation_unit(Env &env) const
 int Parser::c_parser_declaration(Env &env, scope::Scope sc) const
 {
     int declared = 0;
-    isFinish = false;
+    isFinish     = false;
     pushBack();
     Type *ty = c_parser_declaration_specifiers(nullptr);
-    ST *nST = nullptr;
+    ST *nST  = nullptr;
 meet_comma:
     nST = c_parser_declarator(ty);
     if (nST == nullptr) {
@@ -87,7 +88,7 @@ meet_comma:
     } else {
         nST->first->setScope(sc, env.getLevel());
         const TypeException &tyChk = Type::check(*nST->second);
-        Identifier *id = nullptr;
+        Identifier *id             = nullptr;
         if (tyChk.no_exception()) {
             id = new Identifier(*nST->first, nST->second);
             env.newIdentifier(id);
@@ -140,7 +141,7 @@ Type *Parser::c_parser_declaration_type_specifiers_opt(Type *ty) const
     next();
     if (isBaseType(cur)) {
         Type *nextType = c_parser_declaration_type_specifiers_opt(ty);
-        ty = new Type(key2to[cur.token_value.keyword], nextType);
+        ty             = new Type(key2to[cur.token_value.keyword], nextType);
     } else {
         pushBack();
     }
@@ -156,8 +157,8 @@ Type *Parser::c_parser_declaration_type_specifiers(Type *ty) const
     {
         parserError(PAR_ERR_NEED_TYPE);
     } else {
-        Type *nextType = c_parser_declaration_type_specifiers_opt(ty);
-        Type *retType = new Type(key2to[to.token_value.keyword], nextType);
+        Type *nextType                = c_parser_declaration_type_specifiers_opt(ty);
+        Type *retType                 = new Type(key2to[to.token_value.keyword], nextType);
         const TypeException &checkRet = Type::check(*retType);
         if (checkRet.no_exception()) {
             return retType;
@@ -170,7 +171,7 @@ Type *Parser::c_parser_declaration_type_specifiers(Type *ty) const
 ST *Parser::c_parser_declarator(Type *ty) const
 {
     Type *newTy = c_parser_pointer(ty);
-    ST *retST = c_parser_direct_declarator(newTy);
+    ST *retST   = c_parser_direct_declarator(newTy);
 
     return retST;
 }
@@ -216,21 +217,21 @@ cptql:
 
 ST *Parser::c_parser_direct_declarator(Type *ty) const
 {
-    ST *retST = nullptr;
+    ST *retST   = nullptr;
     Type *retTY = nullptr;
     next();
     if (isID(cur)) {
         Token curTo = cur;
         //curTo = mkToken();
-        retTY = c_parser_direct_declatator_opt(ty);
-        auto *sy = new Symbol(&curTo, S_GLOBAL, ST_AUTO, S_GLOBAL);
-        retST = new ST(sy, retTY);
+        retTY       = c_parser_direct_declatator_opt(ty);
+        auto *sy    = new Symbol(&curTo, S_GLOBAL, ST_AUTO, S_GLOBAL);
+        retST       = new ST(sy, retTY);
     } else {
         if (matchOP(cur, OP_LEFTBRACK)) {
             retST = c_parser_declarator(ty);
             need(OP_RIGHTBRACK);
-            retTY = c_parser_direct_declatator_opt(ty);
-            retTY = new Type(retST->second->getTYOP(), retTY);
+            retTY         = c_parser_direct_declatator_opt(ty);
+            retTY         = new Type(retST->second->getTYOP(), retTY);
             retST->second = retTY;
         } else if (matchOP(cur, OP_LEFTBRACK)) {
             retTY = c_parser_parameter_type_list();
@@ -248,15 +249,15 @@ Type *Parser::c_parser_direct_declatator_opt(Type *ty) const
     {
         if (need(T_INT_CON)) {
             int arrSize = cur.token_value.numVal->val.i_value;
-            retTY = new Type(TO_ARRAY, ty, arrSize);
+            retTY       = new Type(TO_ARRAY, ty, arrSize);
         }
         need(OP_RIGHTSQBRAC);
         retTY = c_parser_direct_declatator_opt(retTY);
     } else if (matchOP(cur, OP_LEFTBRACK))  // DD' -> '('
     {
         Type *funcType = retTY;
-        retTY = c_parser_parameter_type_list();
-        retTY = new Type(TO_FUNCTION, funcType, 0, retTY, NO_LIMIT);
+        retTY          = c_parser_parameter_type_list();
+        retTY          = new Type(TO_FUNCTION, funcType, 0, retTY, NO_LIMIT);
     } else {
         retTY = ty;
         pushBack();
@@ -287,7 +288,7 @@ Type *Parser::c_parser_parameter_type_list() const
             pushBack();
         paraList:
             Type *retTY = c_parser_declaration_specifiers(nullptr);
-            ST *retST = c_parser_declarator(retTY);
+            ST *retST   = c_parser_declarator(retTY);
             if (retST != nullptr) {
                 retST->second =
                     new Type(TO_FUNCPARA, retST->second, 0, parameterList, 4, 4, retST->first);

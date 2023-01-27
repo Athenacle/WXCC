@@ -7,6 +7,8 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
+#include "system.h"
+
 #include "lex/lexer.h"
 
 #include "environment.h"
@@ -14,7 +16,6 @@
 #include "identifier.h"
 #include "parser.h"
 #include "symbol.h"
-#include "system.h"
 #include "type.h"
 NAMESPACE_V1_BEGIN
 
@@ -39,9 +40,9 @@ public:
     {
         IR();
         assert(id.ty->getTYOP() == TO_FUNCTION);
-        chain = nullptr;
-        isVar = false;
-        parameterList = &id.ty->getParaList();
+        chain          = nullptr;
+        isVar          = false;
+        parameterList  = &id.ty->getParaList();
         parameterCount = parseParameters();
         fprintf(wxccErr, "\n");
     }

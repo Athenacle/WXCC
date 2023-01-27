@@ -1,10 +1,10 @@
 #ifndef ENVIRONMENT_IDENTIFIER_H_
 #define ENVIRONMENT_IDENTIFIER_H_
 
+#include "system.h"
+
 #include "lex/token.h"
 #include "semantic/type.h"
-
-#include "system.h"
 
 NAMESPACE_BEGIN
 
@@ -12,9 +12,9 @@ namespace environment
 {
     class Identifier
     {
-        using Type = semantic::BaseType;
+        using Type     = semantic::BaseType;
         using Position = lex::types::Position;
-        using Token = lex::types::Token;
+        using Token    = lex::types::Token;
 
     private:
         std::string idName_;

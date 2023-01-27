@@ -65,19 +65,19 @@ public:
 
     Symbol(const Symbol &sy)
     {
-        tok = sy.tok;
-        sc = sy.sc;
-        sclass = sy.sclass;
-        level = sy.level;
-        up = sy.up;
-        ref = sy.ref;
+        tok       = sy.tok;
+        sc        = sy.sc;
+        sclass    = sy.sclass;
+        level     = sy.level;
+        up        = sy.up;
+        ref       = sy.ref;
         value.i_v = sy.value.i_v;
     }
 
     virtual ~Symbol();
     void setScope(scope::Scope _sc, int _lev)
     {
-        sc = _sc;
+        sc    = _sc;
         level = _lev;
     }
 
@@ -88,12 +88,12 @@ public:
 
     Symbol &operator=(Symbol &sy)
     {
-        tok = sy.tok;
-        sc = sy.sc;
-        sclass = sy.sclass;
-        level = sy.level;
-        up = sy.up;
-        ref = sy.ref;
+        tok       = sy.tok;
+        sc        = sy.sc;
+        sclass    = sy.sclass;
+        level     = sy.level;
+        up        = sy.up;
+        ref       = sy.ref;
         value.i_v = sy.value.i_v;
         return *this;
     }

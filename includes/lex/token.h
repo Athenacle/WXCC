@@ -23,8 +23,8 @@ namespace lex
 
             Number(const Number &num) : Number()
             {
-                type = num.type;
-                numberType = num.numberType;
+                type        = num.type;
+                numberType  = num.numberType;
                 val.d_value = num.val.d_value;
             }
 
@@ -59,11 +59,11 @@ namespace lex
             {
             }
 
-            Position(Position &&) = default;
+            Position(Position &&)                 = default;
 
             Position &operator=(const Position &) = default;
 
-            Position &operator=(Position &&) = default;
+            Position &operator=(Position &&)      = default;
 
             bool operator==(const Position &) const;
         };
@@ -133,7 +133,7 @@ namespace lex
 
             Token()
             {
-                token_type = constants::T_NONE;
+                token_type          = constants::T_NONE;
                 token_value.id_name = nullptr;
             }
 

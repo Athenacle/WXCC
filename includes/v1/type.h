@@ -27,36 +27,36 @@ namespace type_operator
     *   4: SPECIFIER_TYPE
     */
     enum TYPE_OPERATOR {
-        TO_VOID = 0x01000000,
+        TO_VOID     = 0x01000000,
         /* BASIC_TYPE        */
-        TO_CHAR = 0x01000001,
-        TO_INT = 0x01000012,
-        TO_LONG = 0x01000013,
-        TO_SHORT = 0x01000014,
-        TO_FLOAT = 0x01000015,
-        TO_DOUBLE = 0x01000016,
+        TO_CHAR     = 0x01000001,
+        TO_INT      = 0x01000012,
+        TO_LONG     = 0x01000013,
+        TO_SHORT    = 0x01000014,
+        TO_FLOAT    = 0x01000015,
+        TO_DOUBLE   = 0x01000016,
         /* AGGREGATE_TYPE    */
-        TO_STRUCT = 0x01000101,
-        TO_UNION = 0x01000102,
-        TO_ARRAY = 0x01000103,
-        TO_ENUM = 0x01000104,
+        TO_STRUCT   = 0x01000101,
+        TO_UNION    = 0x01000102,
+        TO_ARRAY    = 0x01000103,
+        TO_ENUM     = 0x01000104,
         /* POINTER_TYPE        */
-        TO_POINTER = 0x01000200,
+        TO_POINTER  = 0x01000200,
         /* FUNCTION_TYPE    */
         TO_FUNCTION = 0x01000300,
         /* SPECIFIER_TYPE    */
-        TO_CONST = 0x01004001,
+        TO_CONST    = 0x01004001,
         TO_VOLATILE = 0x01004002,
 
-        TO_SIGNED = 0x01005001,
+        TO_SIGNED   = 0x01005001,
         TO_UNSIGNED = 0x01005002,
 
         TO_FUNCPARA = 0x01001111
     };
 
     const unsigned long BASE_TYPE_MASK = 0x01000010u;
-    const unsigned long SIGNED_MASK = 0x01005000u;
-    const unsigned long NO_LIMIT = 0x7fffffffu;
+    const unsigned long SIGNED_MASK    = 0x01005000u;
+    const unsigned long NO_LIMIT       = 0x7fffffffu;
     /* because the sizeof operator cannot be operated on a function.
     *    i.e. the size of a function cannot be calculated.
     *    so, set the size field of the function type to NO_LIMIT.
@@ -133,12 +133,12 @@ class Type
 
 public:
     explicit Type(type_operator::TYPE_OPERATOR = type_operator::TO_VOID,
-                  Type * = nullptr,
-                  int = 0,
-                  Type * = nullptr,
-                  int = 4,
-                  int = 4,
-                  void * = nullptr);
+                  Type                       * = nullptr,
+                  int                          = 0,
+                  Type                       * = nullptr,
+                  int                          = 4,
+                  int                          = 4,
+                  void                       * = nullptr);
 
     int getSize(void) const
     {

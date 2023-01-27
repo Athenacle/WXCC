@@ -51,11 +51,11 @@ public:
                scope::Scope _sc,
                scope::StorageType _st,
                int _level,
-               Type* _ty = NS_BASE_TYPE::voidType,
+               Type* _ty   = NS_BASE_TYPE::voidType,
                Symbol* _sy = nullptr)
         : Symbol(_tok, _sc, _st, _level, _sy), TemportaryVariable()
     {
-        ty = _ty;
+        ty   = _ty;
 
         name = _tok->token_value.id_name;
     }

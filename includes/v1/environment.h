@@ -46,13 +46,13 @@ public:
     Env(Env* _up = nullptr, Env* _down = nullptr, Scope _sc = S_LOCAL, int _level = 0)
         : localID(), localFunc()
     {
-        up = _up;
-        down = _down;
-        sc = _sc;
+        up          = _up;
+        down        = _down;
+        sc          = _sc;
         scope_level = _level + 1;
 
-        idCounts = 0;
-        funcCounts = 0;
+        idCounts    = 0;
+        funcCounts  = 0;
     }
 
     Env& EnterEnv(Env& downEnv);
@@ -64,7 +64,7 @@ public:
     void setGlobal(void)
     {
         this->scope_level = 0;
-        this->sc = S_GLOBAL;
+        this->sc          = S_GLOBAL;
     }
 
     bool isGlobal(void)

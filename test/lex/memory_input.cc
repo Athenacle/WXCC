@@ -102,8 +102,8 @@ TEST(MemoryInput, RandomFill)
             auto nb = test::randomString(512);
             mlis.fill(nb, 512);
             auto pos = ptr - str.c_str();
-            str = str.append(nb);
-            ptr = str.c_str() + pos;
+            str      = str.append(nb);
+            ptr      = str.c_str() + pos;
             delete[] nb;
         }
 

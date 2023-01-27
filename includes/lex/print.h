@@ -1,14 +1,14 @@
 #ifndef LEX_PRINT_H_
 #define LEX_PRINT_H_
 
+#include "system.h"
+
 #include <fmt/core.h>
 
 #include <unordered_map>
 
 #include "lex/constants.h"
 #include "lex/token.h"
-
-#include "system.h"
 
 namespace lex
 {

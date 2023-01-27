@@ -10,9 +10,7 @@
 #ifndef SYSTEM_H_
 #define SYSTEM_H_
 
-#if defined HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #define USING_SYSTEM_MM_CALL
 #define USING_STDERR
@@ -64,11 +62,11 @@ NAMESPACE_END
 
 class NoneCopyable
 {
-    NoneCopyable(const NoneCopyable &) = delete;
+    NoneCopyable(const NoneCopyable &)            = delete;
     NoneCopyable &operator=(const NoneCopyable &) = delete;
 
 protected:
-    NoneCopyable() = default;
+    NoneCopyable()  = default;
     ~NoneCopyable() = default;
 };
 

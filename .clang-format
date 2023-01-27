@@ -3,7 +3,12 @@ Language:        Cpp
 BasedOnStyle:  Google
 AccessModifierOffset: -4
 AlignAfterOpenBracket: Align
-AlignConsecutiveAssignments: false
+AlignConsecutiveAssignments: 
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+  AlignCompound: true
+  PadOperators: true
 AlignConsecutiveDeclarations: false
 AlignConsecutiveMacros:
   Enabled: true
@@ -62,18 +67,22 @@ ForEachMacros:
   - foreach
   - BOOST_FOREACH
 IncludeCategories:
-  - Regex:           '^<windows.h>'
+  - Regex:           '"system.h"'
     Priority:        1
-  - Regex:           '^<.*\.h>'
+  - Regex:           '"config.h"'
     Priority:        2
-  - Regex:           '^<.*>'
+  - Regex:           '^<windows.h>'
     Priority:        3
-  - Regex:           '^".*/.*\.h"'
-    Priority:        4    
-  - Regex:           '^".*\.h"'
+  - Regex:           '^<.*\.h>'
+    Priority:        4
+  - Regex:           '^<.*>'
     Priority:        5
+  - Regex:           '^".*/.*\.h"'
+    Priority:        6    
+  - Regex:           '^".*\.h"'
+    Priority:        7
   - Regex:           '.*'
-    Priority:        6
+    Priority:        8
 IncludeIsMainRegex: '([-_](test|unittest))?$'
 IndentCaseLabels: true
 IndentWidth:     4

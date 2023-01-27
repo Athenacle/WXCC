@@ -66,8 +66,8 @@ private:
     void lookAHead(void) const
     {
         prepre = pre;
-        pre = cur;
-        cur = theLexer.getNextToken();
+        pre    = cur;
+        cur    = theLexer.getNextToken();
         //cur = theLexer.getNextToken();
     }
 
@@ -77,7 +77,7 @@ private:
             pre = cur;
         } else if (!prepre) {
             prepre = pre;
-            pre = cur;
+            pre    = cur;
         } else
             assert(0);
         cur = nullptr;

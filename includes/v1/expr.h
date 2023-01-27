@@ -16,7 +16,7 @@ class Expr : public Block
 public:
     Expr(Tree *tree = nullptr) : Block()
     {
-        exprTree = tree;
+        exprTree       = tree;
         /*const char *pc = Label::nextLabel();
 		char *buf = new char[strlen(pc) + 5];
 		sprintf(buf, "%s : \n", pc);

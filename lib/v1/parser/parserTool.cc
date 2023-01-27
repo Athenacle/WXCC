@@ -4,10 +4,11 @@
 * Feb 9, 2013
 *
 */
+#include "system.h"
+
 #include "lex/lexer.h"
 
 #include "parser.h"
-#include "system.h"
 
 USING_V1
 using namespace lex;
