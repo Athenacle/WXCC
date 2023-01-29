@@ -3,9 +3,12 @@
 #include <cstring>
 #include <map>
 
+#include "utils/utils.h"
+
 #include "fb_fwd.h"
 #include "flex_bison.h"
-#include "tools.h"
+
+USING_V2
 
 using namespace lex;
 using namespace lex ::constants;

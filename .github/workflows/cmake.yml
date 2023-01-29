@@ -1,40 +1,158 @@
-name: CMake
+name: WXCC_CI
 
 on:
   push:
-    branches: [ "feature/*", "develop", "master" ]
+    branches: [master, develop, "feature/*"]
   pull_request:
-    branches: [ "feature/*", "develop", "master" ]
+    branches: [master]
 
 env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Debug
+  RUN_ID: "GitHubActions-0.0.0-ci-$GITHUB_EVENT_NAME-$GITHUB_REF_NAME-$GITHUB_SHA-$RUNNER_ARCH"
 
 jobs:
-  build:
-    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
-    # You can convert this to a matrix build if you need cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: ubuntu-latest
+  unix:
+    name: ${{matrix.buildname}}
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            ostype: macos
+            buildname: "macos/clang"
+            triplet: x64-osx
+            compiler: clang_64
+
+          - os: ubuntu-latest
+            buildname: "ubuntu-latest/clang"
+            ostype: ubuntu
+            triplet: x64-linux
+            compiler: clang_64
+
+          - os: ubuntu-latest
+            buildname: "ubuntu-latest/gcc"
+            ostype: ubuntu
+            triplet: x64-linux
+            compiler: gcc_64
+
+          - os: ubuntu-latest
+            buildname: "ubuntu-latest/gcc"
+            ostype: ubuntu
+            triplet: x64-linux
+            compiler: gcc_64
+
+          - os: ubuntu-latest
+            buildname: "ubuntu-latest/gcc-12"
+            ostype: ubuntu
+            triplet: x64-linux
+            compiler: gcc_64
 
     steps:
-    - uses: actions/checkout@v3
+      - name: "[All]-Checkout source code"
+        uses: actions/checkout@v3
+        with:
+          submodules: false
+          fetch-depth: 0
 
-    - name: Install Dependencies
-      run: sudo apt update && sudo apt install -y libfl-dev
+      - name: "[MacOS]-Install dependencies"
+        if: runner.os == 'macOS'
+        run: |
+          brew install flex bison
 
-    - name: Configure CMake
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - name: "[Linux]-Install dependencies"
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install libfl-dev
 
-    - name: Build
-      # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      - name: "[Linux]-Install gcc-12 if required"
+        if: matrix.buildname == 'ubuntu-latest/gcc-12'
+        run: |
+          sudo apt install gcc-12 g++-12
 
-    - name: Test
-      working-directory: ${{github.workspace}}/build
-      # Execute tests defined by the CMake configuration.
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest -C ${{env.BUILD_TYPE}}  --test-dir ${{github.workspace}}/build/test
+      - name: "[All]-Create build directory"
+        run: |
+          mkdir build
+          mkdir test-project
 
+      - name: "[Linux]-CMake configure"
+        working-directory: ./build
+        shell: bash
+        if: matrix.compiler == 'gcc_64'
+        run: |
+          cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCODE_COVERAGE=OFF -DSANITIZE_ADDRESS=ON -G 'Unix Makefiles' -DRUN_ID=${{ env.THIS_ID }}
+        env:
+          THIS_ID: ${{ env.RUN_ID }}-Linux-$GITHUB_RUN_NUMBER
+
+      - name: "[MacOS]-CMake configure"
+        working-directory: ./build
+        shell: bash
+        if: ${{ matrix.compiler == 'clang_64' && runner.os == 'macOS' }}
+        run: |
+          cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCODE_COVERAGE=OFF -DSANITIZE_UNDEFINED=ON -G 'Unix Makefiles' -DRUN_ID=${{ env.THIS_ID }} 
+        env:
+          CC: clang
+          CXX: clang++
+          THIS_ID: ${{ env.RUN_ID }}-Darwin-$GITHUB_RUN_NUMBER
+
+      - name: "[Linux]-CMake configure [Clang]"
+        working-directory: ./build
+        shell: bash
+        if: ${{ matrix.compiler == 'clang_64' && runner.os == 'Linux' }}
+        run: |
+          cmake .. -DCMAKE_BUILD_TYPE=Debug -DCODE_COVERAGE=ON -DLLVM_COV_PATH=$(which llvm-cov-14) -DLLVM_PROFDATA_PATH=$(which llvm-profdata-14) -G 'Unix Makefiles' -DRUN_ID=${{ env.THIS_ID }}
+        env:
+          CC: clang-14
+          CXX: clang++-14
+          THIS_ID: ${{ env.RUN_ID }}-Linux-$GITHUB_RUN_NUMBER
+
+      - name: "[Linux]-CMake configure [GCC-12]"
+        working-directory: ./build
+        if: matrix.buildname == 'ubuntu-latest/gcc-12'
+        run: |
+          cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCODE_COVERAGE=OFF -DSANITIZE_ADDRESS=ON -G 'Unix Makefiles' -DRUN_ID=${{ env.THIS_ID }}
+        env:
+          CC: gcc-12
+          CXX: g++12
+          THIS_ID: ${{ env.RUN_ID }}-Linux-$GITHUB_RUN_NUMBER
+
+      - name: "[All]-Build"
+        working-directory: ./build
+        run: |
+          cmake --build . -- all 
+        env:
+          VERBOSE: 1
+
+      - name: "[All]-Test"
+        working-directory: ./build
+        run: |
+          cmake --build . -- run-unittest
+        env:
+          ASAN_OPTIONS: detect_container_overflow=0
+          UBSAN_OPTIONS: print_stacktrace=1
+
+      - name: "[Linux]-Clang-coverage"
+        working-directory: ./build
+        if: matrix.buildname == 'ubuntu-latest/clang'
+        run: |
+          cmake --build . -- ccov-wxcc_all_in_one
+          cmake --build . -- ccov-all
+          cmake --build . -- ccov-export-wxcc_all_in_one
+
+      - name: "[Linux]-Clang-coverage-upload"
+        if: matrix.buildname == 'ubuntu-latest/clang'
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ${{ github.workspace }}/build/ccov/
+          files: wxcc_all_in_one.json
+          flags: unittest
+
+      # - name: "[Linux]-Clang-coverage-upload-codacy"
+      #   if: matrix.buildname == 'ubuntu-latest/clang'
+      #   uses: codacy/codacy-coverage-reporter-action@1.0.0
+      #   with:
+      #     project-token: ${{ secrets.CODACY_TOKEN }}
+      #     coverage-reports: ${{ github.workspace }}/build/coverage/lcov.info

@@ -7,6 +7,7 @@
 
 #include "lex/lexer.h"
 
+NAMESPACE_BEGIN
 
 namespace utils
 {
@@ -17,6 +18,7 @@ namespace utils
         int err_;
         int warning_;
         int info_;
+        bool color_;
 
     public:
         static constexpr int FATAL   = 0;
@@ -32,6 +34,10 @@ namespace utils
 
 
     public:
+        void setColor(bool c)
+        {
+            color_ = c;
+        }
         int errorCount() const
         {
             return err_;
@@ -48,6 +54,11 @@ namespace utils
         ErrorManager();
         virtual ~ErrorManager();
 
+        template <class... T>
+        void output(int level, const Position& pos, T&&... args)
+        {
+            output(level, pos, fmt::format(std::forward<T>(args)...));
+        }
         template <class... T>
         void error(const Position& pos, T&&... args)
         {
@@ -81,5 +92,6 @@ namespace utils
     };
 }  // namespace utils
 
+NAMESPACE_END
 
 #endif

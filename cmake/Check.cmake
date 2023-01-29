@@ -92,4 +92,27 @@ endif ()
 
 find_program(GIT_COMMAND git)
 execute_process(COMMAND ${GIT_COMMAND} rev-parse HEAD RESULT_VARIABLE result
-                OUTPUT_VARIABLE GIT_HASH OUTPUT_STRIP_TRAILING_WHITESPACE)
+                OUTPUT_VARIABLE GIT_HASH_OUTPUT OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+if (NOT "${GIT_HASH_OUTPUT}" STREQUAL "")
+    set(GIT_HASH "${GIT_HASH_OUTPUT}")
+    set(HAVE_GIT_SHA ON)
+endif ()
+
+get_cmake_property(CACHE_VARS CACHE_VARIABLES)
+foreach (CACHE_VAR ${CACHE_VARS})
+    get_property(CACHE_VAR_HELPSTRING CACHE ${CACHE_VAR} PROPERTY HELPSTRING)
+    if (CACHE_VAR_HELPSTRING STREQUAL "No help, variable specified on the command line.")
+        get_property(CACHE_VAR_TYPE CACHE ${CACHE_VAR} PROPERTY TYPE)
+        if (CACHE_VAR_TYPE STREQUAL "UNINITIALIZED")
+            set(CACHE_VAR_TYPE)
+        else ()
+            set(CACHE_VAR_TYPE :${CACHE_VAR_TYPE})
+        endif ()
+        set(CMAKE_ARGS "${CMAKE_ARGS} -D${CACHE_VAR}${CACHE_VAR_TYPE}=\"${${CACHE_VAR}}\"")
+    endif ()
+endforeach ()
+
+string(REPLACE "\"" "\\\"" CMAKE_ARGS_REPLACED "${CMAKE_ARGS}")
+
+string(TIMESTAMP CONFIGURE_TIME "%Y-%m-%dT%H:%M:%S" UTC)

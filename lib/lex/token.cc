@@ -4,8 +4,7 @@
 
 #include "lex/lexer.h"
 #include "lex/tools.h"
-
-#include "tools.h"
+#include "utils/utils.h"
 
 using namespace lex;
 using namespace lex::types;
@@ -28,7 +27,7 @@ Token::Token(KEYWORD key)
 Token::Token(constants::TYPE ty, const char* cc)
 {
     token_type         = ty;
-    token_value.string = utils::strdup(cc);
+    token_value.string = V2::utils::strdup(cc);
 }
 
 Token::Token(Number* n)
@@ -62,7 +61,7 @@ Token::Token(const Token& other)
     if (isNumCon(other)) {
         token_value.numVal = new Number(*other.token_value.numVal);
     } else if (token_type == T_ID || token_type == T_STRING) {
-        token_value.string = utils::strdup(other.token_value.string);
+        token_value.string = V2::utils::strdup(other.token_value.string);
     } else {
         memcpy(&token_value, &other.token_value, sizeof(token_value));
     }

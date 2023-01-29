@@ -5,11 +5,13 @@
 *
 */
 
-#include "tools.h"
-
 #include "system.h"
 
 #include <cstring>
+
+#include "utils/utils.h"
+
+USING_V2
 
 FILE* wxccErr;
 

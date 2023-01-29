@@ -39,7 +39,7 @@ extern int warningCount;
 void fatalError(const char *);
 
 
-#define V1 v1
+#define V1 wxcc_v1
 
 #define NAMESPACE_V1_BEGIN \
     namespace V1           \
@@ -53,12 +53,15 @@ NAMESPACE_V1_BEGIN
 class Function;
 NAMESPACE_END
 
+#define V2 wxcc_v2
+
+
 #define NAMESPACE_V2_BEGIN \
-    namespace wxcc_v2      \
+    namespace V2           \
     {
 #define NAMESPACE_BEGIN NAMESPACE_V2_BEGIN
 
-#define USING_V2        using namespace wxcc_v2;
+#define USING_V2        using namespace V2;
 
 class NoneCopyable
 {

@@ -54,7 +54,7 @@ public:
     static const char *nextLabel()
     {
         labelNum--;
-        return utils::strdup(Label().toString());
+        return ::utils::strdup(Label().toString());
     }
 
     void print(FILE *fp = wxccErr) const;

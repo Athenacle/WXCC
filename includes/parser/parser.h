@@ -32,13 +32,13 @@ namespace parser
         void pushback(Token &&);
 
         // declarations
-        Type *parseDeclarationSpecifiers(TranslationUnit &);
+        Type parseDeclarationSpecifiers(TranslationUnit &);
         void parseExternalDeclaration(TranslationUnit &);
 
         void parseTranslationUnit(TranslationUnit &);
 
     public:
-        Parser(lex::Lex &l, utils::ErrorManager *m) : lexer_(l), mgr_(m) {}
+        Parser(lex::Lex &l, V2::utils::ErrorManager *m) : lexer_(l), mgr_(m) {}
 
         Parser &operator=(Parser &&) noexcept;
 

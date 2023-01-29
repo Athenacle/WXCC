@@ -25,6 +25,7 @@ if (${FLEX_FOUND} AND ${BISON_FOUND})
 endif ()
 
 add_library(test STATIC ${TEST_LIB_SRC})
+add_sanitizers(test)
 
 target_link_libraries(test PRIVATE GTest::GTest GTest::GMock libs)
 target_include_directories(
@@ -41,6 +42,7 @@ macro (add_subdirectory_test)
         target_link_libraries(${TN} PRIVATE GTest::GTest GTest::GMock GTest::GMockMain libs test)
         target_include_directories(${TN} PRIVATE ${CMAKE_SOURCE_DIR}/lib)
         add_test(${TN} ${TN} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+        add_sanitizers(${TN})
     endforeach ()
 endmacro ()
 
@@ -53,6 +55,7 @@ if (${FLEX_FOUND} AND ${BISON_FOUND})
     add_subdirectory_test(flex_bison)
     add_executable(flex_bison_runner ${CMAKE_CURRENT_SOURCE_DIR}/flex_bison/misc/main.cc)
     target_link_libraries(flex_bison_runner PRIVATE libs test)
+    add_sanitizers(flex_bison_runner)
 endif ()
 
 add_executable(${TEST_NAME} ${LIBS})
@@ -67,3 +70,4 @@ target_compile_definitions(
 add_custom_target(run-unittest COMMAND "$<TARGET_FILE:${TEST_NAME}>")
 
 target_code_coverage(${TEST_NAME} EXCLUDE test/*)
+add_sanitizers(${TEST_NAME})

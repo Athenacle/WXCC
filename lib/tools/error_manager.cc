@@ -4,6 +4,8 @@
 
 #include <vector>
 
+USING_V2
+
 using namespace utils;
 using namespace lex::types;
 
@@ -27,28 +29,27 @@ namespace fmt
 
 namespace
 {
-    /*
-        static constexpr int FATAL = 0;
-        static constexpr int ERROR = 1;
-        static constexpr int WARNING = 2;
-        static constexpr int INFO = 3;
-    */
-    const std::string& levelString(int level)
+
+    const std::string& levelString(int level, bool color)
     {
         static std::vector<std::string> l = {
             {fmt::format("{}", fmt::styled("fatal", fmt::fg(fmt::color::red)))},
             {fmt::format("{}", fmt::styled("error", fmt::fg(fmt::color::red)))},
             {fmt::format("{}", fmt::styled("warning", fmt::fg(fmt::color::yellow)))},
             {fmt::format("{}", fmt::styled("info", fmt::fg(fmt::color::blue)))}};
+        static std::vector<std::string> nc = {"fatal", "error", "warning", "info"};
 
-        return l[level];
+        if (color) {
+            return l[level];
+        }
+        return nc[level];
     }
 }  // namespace
 
 
 void ErrorManager::output(int level, std::string&& msg)
 {
-    fmt::print(stderr, FMT(" {}: {}\n"), levelString(level), msg);
+    fmt::print(stderr, FMT(" {}: {}\n"), levelString(level, color_), msg);
 
     if (unlikely(level == FATAL)) {
         std::exit(1);
@@ -59,7 +60,7 @@ void ErrorManager::output(int level, std::string&& msg)
 
 void ErrorManager::output(int level, const Position& pos, std::string&& msg)
 {
-    fmt::print(stderr, FMT(" {}:{}: {}\n"), levelString(level), pos, msg);
+    fmt::print(stderr, FMT(" {}:{}: {}\n"), levelString(level, color_), pos, msg);
 
     if (unlikely(level == FATAL)) {
         std::exit(1);
@@ -87,6 +88,11 @@ void ErrorManager::addCounter(int l)
 ErrorManager::ErrorManager()
 {
     err_ = warning_ = info_ = 0;
+#ifdef NDEBUG
+    color_ = true;
+#else
+    color_ = false;
+#endif
 }
 
 ErrorManager::~ErrorManager() = default;

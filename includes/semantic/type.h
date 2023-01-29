@@ -3,6 +3,10 @@
 
 #include "system.h"
 
+#include <list>
+#include <tuple>
+#include <vector>
+
 #include "utils/bit_container.h"
 
 NAMESPACE_BEGIN
@@ -77,7 +81,7 @@ NAMESPACE_BEGIN
 
 namespace semantic
 {
-    enum class TypeOperator {
+    enum class TypeOperator : uint32_t {
 
         /* enum type_operator
          * 0x0100
@@ -88,21 +92,26 @@ namespace semantic
          *        3: FUNCTION_TYPE
          *        4: SPECIFIER_TYPE
          */
+
+        TO_NONE     = 0x00000000,
+
         /* BASIC_TYPE        */
-        TO_NONE     = 0x01000000,
-        TO_VOID     = 0x01000001,
-        TO_CHAR     = 0x01000010,
-        TO_INT      = 0x01000012,
-        TO_LONG     = 0x01000013,
-        TO_SHORT    = 0x01000014,
-        TO_FLOAT    = 0x01000015,
-        TO_DOUBLE   = 0x01000016,
+        TO_VOID     = 0x1100'0000,
+
+        TO_CHAR     = 0x0100'0010,
+        TO_INT      = 0x0100'0020,
+
+        TO_LONG     = 0x0100'0100,
+        TO_SHORT    = 0x0100'0200,
+
+        TO_FLOAT    = 0x0100'1400,
+        TO_DOUBLE   = 0x0100'1800,
 
         /* AGGREGATE_TYPE    */
-        TO_STRUCT   = 0x01000101,
-        TO_UNION    = 0x01000102,
-        TO_ARRAY    = 0x01000103,
-        TO_ENUM     = 0x01000104,
+        TO_STRUCT   = 0x0100'1100,
+        TO_UNION    = 0x0100'1200,
+        TO_ARRAY    = 0x0100'1400,
+        TO_ENUM     = 0x0100'1800,
 
         /* POINTER_TYPE        */
         TO_POINTER  = 0x01000200,
@@ -111,12 +120,12 @@ namespace semantic
         TO_FUNCTION = 0x01000300,
 
         /* SPECIFIER_TYPE    */
-        TO_CONST    = 0x01004001,
-        TO_VOLATILE = 0x01004002,
+        TO_CONST    = 0x0100'4001,
+        TO_VOLATILE = 0x0100'4002,
 
 
-        TO_SIGNED   = 0x01005001,
-        TO_UNSIGNED = 0x01005002,
+        TO_SIGNED   = 0x0100'8001,
+        TO_UNSIGNED = 0x0100'8002,
 
         TO_FUNCPARA = 0x01001111
 
@@ -127,43 +136,14 @@ namespace semantic
     {
         friend class Type;
 
-        TypeOperator op_; /* enum type_operator     */
-        BaseType* base_;  /* operand/return type    */
-
-        union {
-            struct function_para {
-                BaseType* paraList;
-                /* the function type. parameter sequential list, which is
-                 * terminated by a ((struct type *)NULL) pointer.
-                 *
-                 * when the function has a variadic parameter, the end of the
-                 * list should contain the TO_VOID, then the NULL.
-                 */
-            } functionArgs_;
-
-            struct array_nElement {
-                int nElements_;
-            } arrayLength;
-
-        } opt_;
-
-        BaseType(const BaseType&)             = delete;
-        BaseType& operator=(const BaseType&&) = delete;
-
+        TypeOperator operator_; /* enum type_operator     */
 
     public:
-        BaseType(BaseType&&);
+        ~BaseType();
 
-        BaseType& operator=(BaseType&&);
+        BaseType(TypeOperator op) : operator_(op) {}
 
-        BaseType(TypeOperator op, BaseType* b) : op_(op), base_(b)
-        {
-            opt_.functionArgs_.paraList = nullptr;
-        }
-
-        BaseType() : BaseType(TypeOperator::TO_NONE, nullptr) {}
-
-        void addBaseType(BaseType&&);
+        BaseType() : BaseType(TypeOperator::TO_NONE) {}
     };
 
     class Type
@@ -176,14 +156,38 @@ namespace semantic
         constexpr static size_t Q_STATIC   = 2;
         constexpr static size_t Q_AUTO     = 3;
         constexpr static size_t Q_REGISTER = 4;
+        constexpr static size_t Q_CONST    = 5;
+        constexpr static size_t Q_VOLATILE = 6;
+        constexpr static size_t Q_RESTRICT = 7;
 
     private:
-        BaseType base_;
+        std::list<BaseType> base_;
 
         QualifierContainer bits_;
 
     public:
+        Type();
+
+        ~Type();
+
+        bool empty() const
+        {
+            return base_.empty();
+        }
+
         void addBaseType(TypeOperator op);
+
+        const auto& qualifierContainer() const
+        {
+            return bits_;
+        }
+
+        auto& qualifierContainer()
+        {
+            return bits_;
+        }
+
+        std::vector<std::tuple<int, std::string>> checkType() const;
     };
 
 }  // namespace semantic

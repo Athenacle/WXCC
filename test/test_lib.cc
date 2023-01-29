@@ -1,8 +1,11 @@
 #include <random>
+#include <regex>
+
+#include "utils/utils.h"
 
 #include "test.h"
-#include "tools.h"
 
+USING_V2
 namespace
 {
     std::random_device rd;
@@ -152,7 +155,7 @@ namespace test
         }
         count = total;
 
-        return utils::strdup(out.c_str());
+        return V2::utils::strdup(out.c_str());
     }
 }  // namespace test
 
@@ -160,3 +163,32 @@ namespace test
 
 
 ErrorManagerMock::~ErrorManagerMock() = default;
+
+void ErrorManagerRegexMatcherAction::Perform(
+    const std::tuple<int, const lex::types::Position&, std::string&&>& args)
+{
+    auto level = std::get<0>(args);
+    auto msg   = std::get<2>(args);
+
+
+    EXPECT_EQ(this->level, level);
+
+    if (regex.length() > 0) {
+        std::regex r(regex);
+        std::smatch match;
+        ASSERT_TRUE(std::regex_search(msg, match, r));
+        ASSERT_EQ(match.position(0), 0);
+    }
+}
+
+
+testing::Action<OutputMethod> ErrorMessageMatcher(int l, const std::string& reg)
+{
+    return ::testing::MakeAction(new ErrorManagerRegexMatcherAction(l, reg));
+}
+
+ErrorManagerRegexMatcherAction::ErrorManagerRegexMatcherAction(int l, const std::string& reg)
+{
+    level = l;
+    regex = reg;
+}

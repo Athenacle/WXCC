@@ -62,6 +62,11 @@ namespace lex
 
         virtual char next(GET_TYPE) override;
 
+        void fill(const std::string &in)
+        {
+            return fill(in.c_str(), in.length());
+        }
+
         void fill(const char *, size_t);
 
         void fill(const char *str)

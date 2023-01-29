@@ -118,7 +118,7 @@ public:
 
     unsigned long getHash(void)
     {
-        return utils::strHash(this->getIDName());
+        return ::utils::strHash(this->getIDName());
     }
 };
 NAMESPACE_END

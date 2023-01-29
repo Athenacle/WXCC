@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 
 #include <fstream>
+#include <functional>
 #include <queue>
 
 #include "utils/error_manager.h"
@@ -26,15 +27,28 @@ namespace test
 #endif
 }  // namespace test
 
-class ErrorManagerMock : public utils::ErrorManager
+class ErrorManagerMock : public V2::utils::ErrorManager
 {
     std::queue<std::tuple<int, std::string>> msg;
 
 public:
     virtual ~ErrorManagerMock();
-    /*
-    virtual void output(int level, const Position&, std::string&&);
-        virtual void output(int level, std::string&&);
-    */
+
     MOCK_METHOD(void, output, (int, const lex::types::Position&, std::string&&), (override));
 };
+
+// using OutputMethod = std::function<void(int, const lex::types::Position&, std::string&&)>;
+typedef void OutputMethod(int, const lex::types::Position&, std::string&&);
+
+class ErrorManagerRegexMatcherAction : public ::testing::ActionInterface<OutputMethod>
+{
+    std::string regex;
+    int level;
+
+public:
+    void Perform(const std::tuple<int, const lex::types::Position&, std::string&&>& args) override;
+
+    ErrorManagerRegexMatcherAction(int l, const std::string& reg);
+};
+
+testing::Action<OutputMethod> ErrorMessageMatcher(int l, const std::string& reg);

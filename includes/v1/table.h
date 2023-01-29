@@ -37,7 +37,7 @@ namespace NS_TABLE
     public:
         static unsigned long hash(const char* t)
         {
-            return utils::strHash(t);
+            return ::utils::strHash(t);
         }
     };
 

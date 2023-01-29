@@ -6,6 +6,9 @@
 
 #include "utils/error_manager.h"
 
+USING_V1
+USING_V2
+
 struct CommandOptions {
     /// lexer
     bool lexerDebug;

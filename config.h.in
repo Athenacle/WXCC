@@ -1,5 +1,5 @@
-#ifndef WXAC_CONFIG_H_
-#define WXAC_CONFIG_H_
+#ifndef WXCC_CONFIG_H_
+#define WXCC_CONFIG_H_
 
 #cmakedefine UNIX_HAVE_GETOPTLONG
 
@@ -73,7 +73,11 @@
 
 // clang-format off
 
+#cmakedefine HAVE_GIT_SHA
+
+#ifdef HAVE_GIT_SHA
 #define PROJECT_GIT_SHA  "@GIT_HASH@"
+#endif
 
 #define PROJECT_NAME "@PROJECT_NAME@"
 
@@ -85,12 +89,17 @@
 
 #define PROJECT_VERSION_HEX ((((PROJECT_MAJOR_VERSION) << 16) | ((PROJECT_MINOR_VERSION) << 8) | ((PROJECT_PATCH_VERSION))))
 
-#define PROJECT_SERVER_HEADER PROJECT_NAME "/" PROJECT_VERSION_STRING
-
 #define PROJECT_VERSION_STRING "@PROJECT_VERSION@"
 
-#define SRC_ROOT "@SRC_ROOT@"
+#ifdef PROJECT_GIT_SHA
+#define VERSION PROJECT_VERSION_STRING "-" PROJECT_GIT_SHA
+#else 
+#define VERSION PROJECT_VERSION_STRING
+#endif
 
+#define CMAKE_ARGS "@CMAKE_ARGS_REPLACED@"
+
+#define CONFIGURE_TIME "@CONFIGURE_TIME@"
 
 // clang-format on
 
@@ -119,10 +128,10 @@
 #endif
 
 #if defined __GNUC__ || defined __clang__
-#define GCC_COMPLIABLE
+#define GCC_COMPILABLE
 #endif
 
-#ifdef GCC_COMPLIABLE
+#ifdef GCC_COMPILABLE
 #define FLATTEN __attribute__((flatten))
 #else
 #define FLATTEN
@@ -134,7 +143,7 @@
 #endif
 #endif
 
-#if !defined NORETURN && defined GCC_COMPLIABLE
+#if !defined NORETURN && defined GCC_COMPILABLE
 #define NORETURN __attribute__((noreturn))
 #endif
 
@@ -142,7 +151,7 @@
 #define NORETURN
 #endif
 
-#if __cplusplus >= 201603L
+#ifdef __cplusplus
 #if __has_cpp_attribute(maybe_unused)
 #define MAYBE_UNUSED [[maybe_unused]]
 #endif
@@ -158,7 +167,7 @@
 #endif
 #endif
 
-#if !defined MAYBE_UNUSED && defined GCC_COMPLIABLE
+#if !defined MAYBE_UNUSED && defined GCC_COMPILABLE
 #define MAYBE_UNUSED __attribute__((unused))
 #endif
 
@@ -168,6 +177,14 @@
 
 #ifdef ON_WINDOWS
 #define NOMINMAX
+#endif
+
+#if __cplusplus
+#if __cpp_consteval
+#define CONSTEVAL consteval
+#else
+#define CONSTEVAL constexpr
+#endif
 #endif
 
 #endif

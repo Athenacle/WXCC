@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <type_traits>
 
+NAMESPACE_BEGIN
 namespace utils
 {
     template <uint32_t BITS>
@@ -31,7 +32,7 @@ namespace utils
         __Container<BITS / 32 + 1> c;
 
     public:
-        bool allZero() const
+        bool none() const
         {
             bool ret   = true;
             uint32_t i = 0;
@@ -41,17 +42,44 @@ namespace utils
             }
             return ret;
         }
+        bool all()
+        {
+            for (size_t i = 0; i < BITS; i++) {
+                if (!test(i)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        bool any() const
+        {
+            for (size_t i = 0; i < BITS; i++) {
+                if (test(i)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        size_t count() const
+        {
+            size_t c = 0;
+            for (size_t i = 0; i < BITS; i++) {
+                if (test(i)) {
+                    c++;
+                }
+            }
+            return c;
+        }
         constexpr size_t size() const
         {
             return BITS;
         }
 
-        template <size_t offset>
-        void set(typename std::enable_if<offset <= BITS, bool>::type value)
+        void set(size_t offset, bool value)
         {
-            constexpr size_t int_offset = offset / 32;
-            constexpr size_t bit_offset = offset % 32;
-            constexpr uint32_t mask     = 1 << bit_offset;
+            const size_t int_offset = offset / 32;
+            const size_t bit_offset = offset % 32;
+            const uint32_t mask     = 1 << bit_offset;
             if (value) {
                 // set to 1
                 *(c.buffer_ + int_offset) |= (mask);
@@ -61,22 +89,26 @@ namespace utils
         }
 
         template <size_t offset>
+        void set(typename std::enable_if<offset <= BITS, bool>::type value)
+        {
+            set(offset, value);
+        }
+
+        bool test(size_t offset) const
+        {
+            const size_t int_offset = offset / 32;
+            const size_t bit_offset = offset % 32;
+            uint32_t v              = *(c.buffer_ + int_offset) >> bit_offset;
+            return (v & 1) == 1;
+        }
+
+        template <size_t offset>
         typename std::enable_if<offset <= BITS, bool>::type test() const
         {
-            constexpr size_t int_offset = offset / 32;
-            constexpr size_t bit_offset = offset % 32;
-            uint32_t v                  = *(c.buffer_ + int_offset) >> bit_offset;
-            return (v & 1) == 1;
+            return test(offset);
         }
     };
 
-    template <class ENUM, class... ARGS>
-    class EnumCheck
-    {
-        using tuple = std::tuple<ARGS...>;
-        tuple tt;
-    };
-
 }  // namespace utils
-
+NAMESPACE_END
 #endif

@@ -23,7 +23,7 @@ namespace test{
 #include "config.h"
 #endif
 
-#if defined GCC_COMPLIABLE
+#if defined GCC_COMPILABLE
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #endif
 
