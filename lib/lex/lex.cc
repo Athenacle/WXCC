@@ -314,9 +314,9 @@ parseFloatError:
     return *dest;
 }
 
-NumberType& constants::operator|=(NumberType& nt, unsigned long mask)
+NumberType& constants::operator|=(NumberType& nt, uint32_t mask)
 {
-    auto ult = static_cast<unsigned long>(nt.type());
+    auto ult = static_cast<uint32_t>(nt.type());
     ult      = ult | mask;
     nt       = static_cast<NumberType>(ult);
     return nt;

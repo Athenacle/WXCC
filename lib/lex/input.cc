@@ -137,7 +137,7 @@ char FileLexInputSource::next(LexInputSource::GET_TYPE type)
 
 void MemoryLexInputSource::fill(const char *in, size_t s)
 {
-    uint32_t nbs = 0;
+    size_t nbs = 0;
     if (unlikely(buf == nullptr)) {
         buf = pointer = new char[s + 1];
         memcpy(pointer, in, s);

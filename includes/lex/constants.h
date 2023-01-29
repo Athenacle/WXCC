@@ -246,7 +246,7 @@ namespace lex
             }
         };
 
-        NumberType &operator|=(NumberType &, unsigned long);
+        NumberType &operator|=(NumberType &, uint32_t);
 
     }  // namespace constants
 }  // namespace lex

@@ -78,7 +78,7 @@ namespace
             "else",   "enum",     "extern", "float",    "for",      "goto",     "if",     "int",
             "long",   "register", "return", "short",    "signed",   "sizeof",   "static", "struct",
             "switch", "typedef",  "union",  "unsigned", "void",     "volatile", "while"};
-        auto r = test::random(keys.size());
+        auto r = test::random(static_cast<uint32_t>(keys.size()));
         return keys[r];
     }
 }  // namespace

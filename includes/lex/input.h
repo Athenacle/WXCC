@@ -52,7 +52,7 @@ namespace lex
         char *buf;
         char *end;
         char *pointer;
-        uint32_t bufsize;
+        size_t bufsize;
         int lastCol;
 
     public:
