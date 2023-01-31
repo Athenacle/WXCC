@@ -22,7 +22,7 @@ void Parser::parseTranslationUnit(TranslationUnit &unit)
     }
     pushback(std::move(tok));
 
-    auto specifier = parseDeclarationSpecifiers(unit);
+    parseDeclarations(unit);
 }
 
 bool Parser::parse(TranslationUnit &unit)

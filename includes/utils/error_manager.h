@@ -6,6 +6,7 @@
 #include <fmt/core.h>
 
 #include "lex/lexer.h"
+#include "utils/utils.h"
 
 NAMESPACE_BEGIN
 

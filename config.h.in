@@ -99,7 +99,7 @@
 
 #define CMAKE_ARGS "@CMAKE_ARGS_REPLACED@"
 
-#define CONFIGURE_TIME "@CONFIGURE_TIME@"
+// #define CONFIGURE_TIME "@CONFIGURE_TIME@"
 
 // clang-format on
 

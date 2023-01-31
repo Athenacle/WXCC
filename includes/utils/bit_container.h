@@ -13,9 +13,13 @@ namespace utils
     template <uint32_t BITS>
     class BitsContainer
     {
+        using STORAGE_TYPE  = uint8_t;
+        using STORAGE_COUNT = std::integral_constant<uint32_t, (BITS / sizeof(STORAGE_TYPE) + 1)>;
+        using STORAGE_BITS  = std::integral_constant<uint32_t, (sizeof(STORAGE_TYPE) * 8)>;
+
         template <uint32_t RAW_COUNT>
         struct __Container {
-            uint32_t buffer_[RAW_COUNT];
+            STORAGE_TYPE buffer_[RAW_COUNT];
 
         public:
         public:
@@ -29,14 +33,14 @@ namespace utils
             ~__Container() {}
         };
 
-        __Container<BITS / 32 + 1> c;
+        __Container<STORAGE_COUNT::value> c;
 
     public:
         bool none() const
         {
             bool ret   = true;
             uint32_t i = 0;
-            while (ret && i < BITS / 32 + 1) {
+            while (ret && i < STORAGE_COUNT::value) {
                 ret = ret && c.buffer_[i] == 0;
                 i   += 1;
             }
@@ -77,9 +81,10 @@ namespace utils
 
         void set(size_t offset, bool value)
         {
-            const size_t int_offset = offset / 32;
-            const size_t bit_offset = offset % 32;
-            const uint32_t mask     = 1 << bit_offset;
+            const size_t int_offset = offset / STORAGE_BITS::value;
+            const size_t bit_offset = offset % STORAGE_BITS::value;
+            const STORAGE_TYPE mask = 1 << bit_offset;
+
             if (value) {
                 // set to 1
                 *(c.buffer_ + int_offset) |= (mask);
@@ -96,8 +101,8 @@ namespace utils
 
         bool test(size_t offset) const
         {
-            const size_t int_offset = offset / 32;
-            const size_t bit_offset = offset % 32;
+            const size_t int_offset = offset / STORAGE_BITS::value;
+            const size_t bit_offset = offset % STORAGE_BITS::value;
             uint32_t v              = *(c.buffer_ + int_offset) >> bit_offset;
             return (v & 1) == 1;
         }

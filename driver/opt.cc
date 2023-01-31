@@ -2,8 +2,6 @@
 
 #include <fmt/core.h>
 
-#include <argparse/argparse.hpp>
-
 #include "driver.h"
 
 FILE* openOutput(const CommandOptions& opt, utils::ErrorManager& mgr)
@@ -23,6 +21,7 @@ FILE* openOutput(const CommandOptions& opt, utils::ErrorManager& mgr)
 
 bool parseCommandOptions(CommandOptions& opt, int argc, const char* argv[])
 {
+    /*
     argparse::ArgumentParser prog(PROJECT_NAME,
                                   PROJECT_VERSION_STRING
 #ifdef PROJECT_GIT_SHA
@@ -70,6 +69,6 @@ bool parseCommandOptions(CommandOptions& opt, int argc, const char* argv[])
         std::cerr << prog;
         std::exit(1);
     }
-
+    */
     return true;
 }

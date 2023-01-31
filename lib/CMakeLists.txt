@@ -21,11 +21,13 @@ add_library(
     parser/parser.cc
     parser/declaration.cc
     semantic/type.cc
-    tools/error_manager.cc
-    tools/tools.cc)
+    utils/arg.cc
+    utils/error_manager.cc
+    utils/tools.cc)
 
 target_include_directories(libs PUBLIC ${CMAKE_SOURCE_DIR}/includes ${CMAKE_SOURCE_DIR}/includes/v1)
 target_link_libraries(libs PUBLIC Fmt)
 
 target_code_coverage(libs)
 add_sanitizers(libs)
+add_target_compile_flags(libs)

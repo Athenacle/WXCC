@@ -3,6 +3,8 @@
 
 #include "system.h"
 
+#include <vector>
+
 NAMESPACE_BEGIN
 
 namespace utils
@@ -28,6 +30,9 @@ namespace utils
     unsigned long strHash(const char *);
 
     char *strdup(const char *);
+
+    std::string join(const std::vector<std::string> &, const std::string &);
+
 
 }  // namespace utils
 

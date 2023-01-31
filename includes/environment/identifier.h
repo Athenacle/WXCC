@@ -12,7 +12,7 @@ namespace environment
 {
     class Identifier
     {
-        using Type     = semantic::BaseType;
+        using BaseType = semantic::BaseType;
         using Position = lex::types::Position;
         using Token    = lex::types::Token;
 
@@ -21,22 +21,22 @@ namespace environment
 
         Position pos_;
 
-        Type idType_;
+        // BaseType* idType_;
 
     public:
         Identifier() = default;
 
-        Identifier(const Token& tok, Type&& t);
+        // Identifier(const Token& tok, Type&& t);
 
-        const Type& type() const
-        {
-            return idType_;
-        }
+        // const BaseType& type() const
+        // {
+        //     return idType_;
+        // }
 
-        Type& type()
-        {
-            return idType_;
-        }
+        // BaseType& type()
+        // {
+        //     return idType_;
+        // }
         const Position& position() const
         {
             return pos_;

@@ -88,11 +88,7 @@ void ErrorManager::addCounter(int l)
 ErrorManager::ErrorManager()
 {
     err_ = warning_ = info_ = 0;
-#ifdef NDEBUG
-    color_ = true;
-#else
-    color_ = false;
-#endif
+    color_                  = true;
 }
 
 ErrorManager::~ErrorManager() = default;

@@ -8,10 +8,12 @@
 #include "system.h"
 
 #include <cstring>
+#include <numeric>
 
 #include "utils/utils.h"
 
 USING_V2
+using namespace std;
 
 FILE* wxccErr;
 
@@ -39,4 +41,20 @@ char* utils::strdup(const char* s)
     auto ret = new char[l + 1];
     strcpy(ret, s);
     return ret;
+}
+
+
+string utils::join(const vector<string>& in, const string& deli)
+{
+    if (in.empty()) {
+        return "";
+    }
+    string out;
+    accumulate(
+        next(in.begin()), in.end(), out, [&deli](auto&& a, auto&& b) -> auto& {
+            a += deli;
+            a += b;
+            return a;
+        });
+    return out;
 }

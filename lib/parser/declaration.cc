@@ -1,4 +1,5 @@
 
+#include "environment/identifier.h"
 #include "lex/print.h"
 #include "lex/tools.h"
 #include "parser/parser.h"
@@ -14,43 +15,22 @@ using semantic::TypeOperator;
 using namespace lex;
 using namespace lex::types;
 using namespace lex::constants;
+using namespace environment;
 using namespace lex::tools;
 
 
 namespace
 {
-    KEYWORD findQualifier(const Type::QualifierContainer &t)
-    {
-        assert(!t.none());
-        if (t.test<Type::Q_AUTO>()) {
-            return KEY_AUTO;
-        }
-        if (t.test<Type::Q_EXTERN>()) {
-            return KEY_EXTERN;
-        }
-        if (t.test<Type::Q_REGISTER>()) {
-            return KEY_REGISTER;
-        }
-        if (t.test<Type::Q_STATIC>()) {
-            return KEY_STATIC;
-        }
-        if (t.test<Type::Q_TYPEDEF>()) {
-            return KEY_TYPEDEF;
-        }
-        UNREACHABLE
-        return KEY_NONE;
-    }
-
-    bool checkQualifier(const Token &tok, const Type::QualifierContainer &t, ErrorManager *mgr)
+    bool checkQualifier(const Token &tok, const Type *t, ErrorManager *mgr)
     {
         assert(is(tok, T_KEY));
         auto kw   = tok.token_value.keyword;
         auto &pos = tok.token_pos;
-        if (t.none()) {
+        if (t->qualifierContainer().none()) {
             return true;
         }
 
-        if (auto exists = findQualifier(t); exists == kw) {
+        if (auto exists = t->findQualifier(); exists == kw) {
             mgr->warning(pos, FMT("duplicate storage-class-specifier '{}' found. ignore."), kw);
         } else {
             mgr->error(
@@ -92,12 +72,23 @@ namespace
         }
         return TypeOperator::TO_NONE;
     }
+
+    class Declarator
+    {
+        PointerType *pointer_;
+    };
+
 }  // namespace
 
-Type Parser::parseDeclarationSpecifiers(TranslationUnit & /*unused*/)
+void Parser::parseDeclarations(TranslationUnit &unit)
 {
-    Type ret;
-    auto &ttl = ret.qualifierContainer();
+    auto specifier = parseDeclarationSpecifiers(unit);
+}
+
+Type *Parser::parseDeclarationSpecifiers(TranslationUnit & /*unused*/)
+{
+    Type *ret = new Type;
+    auto &ttl = ret->qualifierContainer();
     Position pos;
 
 
@@ -113,33 +104,33 @@ Type Parser::parseDeclarationSpecifiers(TranslationUnit & /*unused*/)
         auto kw = peek.token_value.keyword;
 
         if ((matchQualifier(peek) || isStorageClassSpecifier(peek))
-            && checkQualifier(peek, ttl, mgr_)) {
+            && checkQualifier(peek, ret, mgr_)) {
             if (kw == KEY_CONST) {
-                ttl.set<Type::Q_CONST>(true);
+                ttl.set<Q_CONST>(true);
             } else if (kw == KEY_VOLATILE) {
-                ttl.set<Type::Q_VOLATILE>(true);
+                ttl.set<Q_VOLATILE>(true);
             } else if (kw == KEY_TYPEDEF) {
-                ttl.set<Type::Q_TYPEDEF>(true);
+                ttl.set<Q_TYPEDEF>(true);
             } else if ((peek == KEY_EXTERN)) {
-                ttl.set<Type::Q_EXTERN>(true);
+                ttl.set<Q_EXTERN>(true);
             } else if ((peek == KEY_STATIC)) {
-                ttl.set<Type::Q_STATIC>(true);
+                ttl.set<Q_STATIC>(true);
             } else if ((peek == KEY_AUTO)) {
-                ttl.set<Type::Q_AUTO>(true);
+                ttl.set<Q_AUTO>(true);
             } else if ((peek == KEY_REGISTER)) {
-                ttl.set<Type::Q_REGISTER>(true);
+                ttl.set<Q_REGISTER>(true);
             } else {
                 UNREACHABLE
             }
         } else if (isBaseType(peek)) {
-            ret.addBaseType(keywordToTypeOperator(kw));
+            ret->addBaseType(keywordToTypeOperator(kw));
         } else {
             pushback(std::move(peek));
             break;
         }
     }
 
-    auto msgs = ret.checkType();
+    auto msgs = ret->checkType();
 
     for (const auto &msg : msgs) {
         const auto &[level, str] = msg;

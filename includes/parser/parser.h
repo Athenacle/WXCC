@@ -14,6 +14,7 @@
 NAMESPACE_BEGIN
 namespace parser
 {
+    class Declarator;
 
     class Parser
     {
@@ -32,8 +33,12 @@ namespace parser
         void pushback(Token &&);
 
         // declarations
-        Type parseDeclarationSpecifiers(TranslationUnit &);
+        Type *parseDeclarationSpecifiers(TranslationUnit &);
+        void parseDeclarations(TranslationUnit &);
         void parseExternalDeclaration(TranslationUnit &);
+        void parseDeclarator(TranslationUnit &, Type *);
+        void parseInitDeclaratorList(TranslationUnit &, Type *);
+        void parsePointer(TranslationUnit &, Type *, Declarator *);
 
         void parseTranslationUnit(TranslationUnit &);
 
